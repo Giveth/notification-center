@@ -1,0 +1,25 @@
+# node modules
+node_modules
+
+# builded sources
+dist
+public
+
+# coverage reports
+coverage
+
+# IntelliJ stuffs
+.idea/
+
+# parcel cache
+.cache
+
+config/development.env
+config/staging.env
+config/production.env
+.vscode/settings.json
+
+*.rdb
+
+*.log
+*.log.*
