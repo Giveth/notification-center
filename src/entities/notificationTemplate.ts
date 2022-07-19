@@ -22,11 +22,11 @@ export class NotificationTemplate extends BaseEntity {
   // So use string here to support both of them
   @Column('text')
   projectId: string
-  @Column('title')
+  @Column('text')
   title ?: string
-  @Column('title')
+  @Column('text')
   type : string
-  @Column('title')
+  @Column('text')
   description : string
 
 }

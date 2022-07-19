@@ -5,7 +5,6 @@ import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
-import { addLog } from './middlewares/addLog';
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
@@ -33,8 +32,6 @@ export const initServer = async () => {
       },
     }),
   );
-  app.use(addLog);
-
 
   app.use(v1Router);
 

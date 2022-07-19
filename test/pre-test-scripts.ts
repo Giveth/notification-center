@@ -2,11 +2,7 @@ import dotenv from 'dotenv';
 import * as path from 'path';
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
-import { assert } from 'chai';
-import { Organization } from '../src/entities/organization';
-import { SEED_DATA } from './testUtils';
-import { Application } from '../src/entities/application';
-import { findOrganizationById } from '../src/repositories/organizationRepository';
+
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
@@ -51,16 +47,6 @@ async function runMigrations() {
   console.log('Migrations has been executed successfully');
 }
 
-const seedOrganizations = async () => {
-  await Organization.create({ ...SEED_DATA.firstOrganization }).save();
-};
-const seedApplications = async () => {
-  const applicationData: any = { ...SEED_DATA.firstApplication };
-  applicationData.organization = await findOrganizationById(
-    applicationData.organizationId,
-  );
-  await Application.create(applicationData).save();
-};
 const seedDb = async () => {
   //
 };

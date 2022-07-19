@@ -1,11 +1,5 @@
 import { assert } from 'chai';
-import { scopeLabels } from '../src/services/scopeService';
-import { findApplicationById } from '../src/repositories/applicationRepository';
-import { generateAccessToken } from '../src/services/tokenServie';
-import { Application } from 'express';
-import { Notification } from '../src/entities/accessToken';
-import { findActiveTokenByValue } from '../src/repositories/accessTokenRepository';
-import { AdminRole } from "../src/entities/admin";
+import { Notification } from '../src/entities/notification';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -74,20 +68,3 @@ export const SEED_DATA = {
 
 };
 
-export const createAccessTokenForTest = async (params: {
-  scopes: string[];
-  applicationId: number;
-}): Promise<Notification> => {
-  const application = await findApplicationById(params.applicationId);
-  if (!application) {
-    throw new Error('Application not found');
-  }
-  const { accessToken } = await generateAccessToken({
-    application,
-    scopes: params.scopes,
-  });
-  const fetchedAccessToken = (await findActiveTokenByValue(
-    accessToken,
-  )) as Notification;
-  return fetchedAccessToken;
-};
