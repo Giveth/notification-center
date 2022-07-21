@@ -8,7 +8,6 @@ import {
   RelationId,
 } from 'typeorm';
 
-
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
 export class NotificationTemplate extends BaseEntity {
@@ -21,12 +20,11 @@ export class NotificationTemplate extends BaseEntity {
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
   @Column('text')
-  projectId: string
+  projectId: string;
   @Column('text')
-  title ?: string
+  title?: string;
   @Column('text')
-  type : string
+  type: string;
   @Column('text')
-  description : string
-
+  description: string;
 }

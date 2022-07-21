@@ -1,4 +1,4 @@
-import {Response} from "express";
+import { Response } from 'express';
 
 export const sendStandardResponse = (
   data: {
@@ -9,5 +9,5 @@ export const sendStandardResponse = (
 ) => {
   const { res, result } = data;
   const trackId = res?.locals?.trackId;
-  res.status(httpStatusCode).json({result,trackId});
+  res.status(httpStatusCode).json({ result, trackId });
 };

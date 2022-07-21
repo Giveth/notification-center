@@ -3,7 +3,6 @@ import * as path from 'path';
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
 
-
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });

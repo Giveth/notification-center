@@ -55,7 +55,7 @@ In localhost and test we put logs in console and file but in production and stag
 #### Create new Migration file
 
 ```
-typeorm migration:create ./migrations/createAccessTokenTable
+typeorm migration:create ./migrations/createNotificationTable
 ```
 
 

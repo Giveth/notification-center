@@ -2,8 +2,8 @@ import axios from 'axios';
 import { SEED_DATA, serverUrl } from '../../../test/testUtils';
 import { assert } from 'chai';
 import { createBasicAuthentication } from '../../utils/authorizationUtils';
-import {SendNotificationRequest} from "../../types/requestResponses";
-import {x} from "joi";
+import { SendNotificationRequest } from '../../types/requestResponses';
+import { x } from 'joi';
 
 describe('/notifications POST test cases', sendNotification);
 

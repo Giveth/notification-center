@@ -1,4 +1,4 @@
-import Joi, {number, ObjectSchema, ValidationResult} from 'joi';
+import Joi, { number, ObjectSchema, ValidationResult } from 'joi';
 import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 
@@ -22,16 +22,23 @@ const throwHttpErrorIfJoiValidatorFails = (
   }
 };
 
-
 export const sendNotificationValidator = Joi.object({
-  userId:Joi.string().required(),
+  userId: Joi.string().required(),
   projectId: Joi.string().required(),
   notificationType: Joi.string().required(),
-  walletAddress :  Joi.string().pattern(ethereumWalletAddressRegex).required(),
+  walletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
   metadata: Joi.object({
     amount: Joi.number(),
     currency: Joi.string(),
 
     name: Joi.string(),
-  })
+  }),
+});
+
+export const getNotificationsValidator = Joi.object({
+  // TODO should fill it
+});
+
+export const readSingleNotificationsValidator = Joi.object({
+  // TODO should fill it
 });
