@@ -7,8 +7,7 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
-import {NotificationTemplate} from "./notificationTemplate";
-
+import { NotificationTemplate } from './notificationTemplate';
 
 export class NotificationMetadata {
   // name of recipient
@@ -40,25 +39,26 @@ export class Notification extends BaseEntity {
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
   @Column('text')
-  projectId: string
+  projectId: string;
 
   // waitingForSend | sent | noNeedToSend
   @Column('text')
-  emailStatus: string
-
-
-  @Column('text')
-  email ?: string
+  emailStatus: string;
 
   @Column('text')
-  emailContent ?: string
+  email?: string;
 
   @Column('text')
-  content : string
+  emailContent?: string;
+
+  @Column('text')
+  content: string;
+
+  @Column({ default: false })
+  isRead?: boolean;
 
   @Column('jsonb', { nullable: true })
   metadata: NotificationMetadata;
-
 
   @Index()
   @ManyToOne(() => NotificationTemplate)
