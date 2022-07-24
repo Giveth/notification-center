@@ -33,16 +33,16 @@ notificationRouter.get(
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.getNotifications({
-        user,
-        microService,
-      },
-          req.query.projectId as string,
-          req.query.limit as string,
-          req.query.offset as string,
-          req.query.isRead as string,
-
-          );
+      const result = await notificationController.getNotifications(
+        {
+          user,
+          microService,
+        },
+        req.query.projectId as string,
+        req.query.limit as string,
+        req.query.offset as string,
+        req.query.isRead as string,
+      );
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);
@@ -57,10 +57,13 @@ notificationRouter.put(
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.readNotification(req.params.notificationId, {
-        user,
-        microService,
-      });
+      const result = await notificationController.readNotification(
+        req.params.notificationId,
+        {
+          user,
+          microService,
+        },
+      );
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);

@@ -1,4 +1,4 @@
-import {Notification} from "../entities/notification";
+import { Notification } from '../entities/notification';
 
 export type SendNotificationRequest = {
   /**
@@ -39,19 +39,18 @@ export type SendNotificationRequest = {
   sendEmail: boolean;
 };
 
-
 export type SendNotificationResponse = {
   success: boolean;
 };
 export type GetNotificationsResponse = {
-  notifications: Notification[]
-  count: number
+  notifications: Notification[];
+  count: number;
 };
 
 export type ReadSingleNotificationResponse = {
-  notification: Notification
+  notification: Notification;
 };
 
 export type ReadAllNotificationsResponse = {
-  success:boolean
+  success: boolean;
 };
