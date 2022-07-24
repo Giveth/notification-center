@@ -39,29 +39,6 @@ export type SendNotificationRequest = {
   sendEmail: boolean;
 };
 
-export type GetNotificationsRequest = {
-  /**
-   * @example "1"
-   */
-  projectId?: string;
-
-  /**
-   * @example "50"
-   * @default "50"
-   */
-  limit?: string;
-
-  /**
-   * @example "0"
-   * @default "0"
-   */
-  offset?: string;
-
-  /**
-   * @example "true"
-   */
-  isRead?: string;
-};
 
 export type SendNotificationResponse = {
   success: boolean;
