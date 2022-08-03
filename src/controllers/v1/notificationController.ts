@@ -63,7 +63,7 @@ export class NotificationController {
    * @example limit "20"
    * @example offset "0"
    * @example isRead "true"
-   * @example isRead "false"
+   * @example startTime "1659356987"
    */
   @Get('/')
   @Security('JWT')
@@ -77,6 +77,9 @@ export class NotificationController {
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
     @Query('isRead') isRead?: string,
+
+    // User can say I want notifications after this specific time
+    @Query('startTime') startTime?: string,
   ): Promise<GetNotificationsResponse> {
     const { user } = params;
     try {
