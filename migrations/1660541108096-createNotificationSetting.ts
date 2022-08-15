@@ -1,4 +1,10 @@
-import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+  TableIndex,
+} from 'typeorm';
 
 export class createNotificationSetting1660541108096
   implements MigrationInterface
@@ -60,11 +66,57 @@ export class createNotificationSetting1660541108096
       true,
     );
 
+    await queryRunner.createForeignKey(
+      'notification_setting',
+      new TableForeignKey({
+        columnNames: ['typeId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'notification_type',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'notification_setting',
+      new TableForeignKey({
+        columnNames: ['templateId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'notification_template',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'notification_setting',
+      new TableForeignKey({
+        columnNames: ['userAddressId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'user_address',
+        onDelete: 'CASCADE',
+      }),
+    );
+
     await queryRunner.createIndex(
-      'notification_type',
+      'notification_setting',
       new TableIndex({
-        name: 'IDX_NOTY_TYPE_NAME',
-        columnNames: ['name'],
+        name: 'IDX_NOTY_SET_TYPE_ID',
+        columnNames: ['typeId'],
+      }),
+    );
+
+    await queryRunner.createIndex(
+      'notification_setting',
+      new TableIndex({
+        name: 'IDX_NOTY_SET_TEMP_ID',
+        columnNames: ['templateId'],
+      }),
+    );
+
+    await queryRunner.createIndex(
+      'notification_setting',
+      new TableIndex({
+        name: 'IDX_NOTY_SET_USER_ID',
+        columnNames: ['userAddressId'],
       }),
     );
   }
