@@ -56,7 +56,6 @@ export class NotificationController {
     }
   }
 
-
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
   /**
    * @example projectId "1"

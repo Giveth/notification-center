@@ -1,13 +1,17 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
+  UpdateDateColumn,
 } from 'typeorm';
 import { NotificationTemplate } from './notificationTemplate';
+import { NotificationType } from './notificationType';
+import { UserAddress } from './userAddress';
 
 export class NotificationMetadata {
   // name of recipient
@@ -27,23 +31,19 @@ export class Notification extends BaseEntity {
   // Giveth.io users have integer id (Postgres), Trace users have string id (Mongo)
   // So use string here to support both of them
   @Column('text')
-  userId: string;
+  userId?: string;
 
   @Column('text')
-  // trace, giveth.io, ...
-  microService: string;
-
-  @Column('text')
-  walletAddress: string;
+  walletAddress?: string;
 
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
   @Column('text')
-  projectId: string;
+  projectId?: string;
 
   // waitingForSend | sent | noNeedToSend
   @Column('text')
-  emailStatus: string;
+  emailStatus?: string;
 
   @Column('text')
   email?: string;
@@ -57,7 +57,11 @@ export class Notification extends BaseEntity {
   @Column({ default: false })
   isRead?: boolean;
 
-  @Column('jsonb', { nullable: true })
+  // dynamic data considering segment structures, and validate with joi schema
+  @Column('jsonb', { nullable: true, default: {} })
+  data: string;
+
+  @Column('jsonb', { nullable: true, default: {} })
   metadata: NotificationMetadata;
 
   @Index()
@@ -65,4 +69,22 @@ export class Notification extends BaseEntity {
   template: NotificationTemplate;
   @RelationId((notification: Notification) => notification.template)
   templateId: number;
+
+  @Index()
+  @ManyToOne(() => NotificationType)
+  notificationType: NotificationType;
+  @RelationId((notification: Notification) => notification.notificationType)
+  typeId: number;
+
+  @Index()
+  @ManyToOne(() => UserAddress)
+  userAddress: UserAddress;
+  @RelationId((notification: Notification) => notification.userAddress)
+  userAddressId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

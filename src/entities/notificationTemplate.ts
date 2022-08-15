@@ -1,30 +1,40 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
+  UpdateDateColumn,
 } from 'typeorm';
+import { NotificationType } from './notificationType';
 
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
 export class NotificationTemplate extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
-  @Column()
-  userId: number;
-  @Column('text')
-  walletAddress: string;
-  // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
-  // So use string here to support both of them
-  @Column('text')
-  projectId: string;
   @Column('text')
   title?: string;
-  @Column('text')
-  type: string;
+
+  // replaceable text
   @Column('text')
   description: string;
+
+  @Index()
+  @ManyToOne(type => NotificationType, { eager: true })
+  notificationType: NotificationType;
+  @RelationId(
+    (notificationTemplate: NotificationTemplate) =>
+      notificationTemplate.notificationType,
+  )
+  typeId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,8 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
-import { decodeBasicAuthentication } from '../utils/authorizationUtils';
+import {
+  decodeBasicAuthentication,
+  decodeMicroServiceToken,
+} from '../utils/authorizationUtils';
 import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 import { MICRO_SERVICES } from '../utils/utils';
+import axios from 'axios';
+import {
+  createNewUserAddress,
+  findUserByWalletAddress,
+} from '../repositories/userAddressRepository';
+import { ServiceToken } from '../entities/serviceToken';
+import { findMicroserviceByToken } from '../repositories/serviceTokenRepository';
 
 const givethIoUsername = process.env.GIVETHIO_USERNAME;
 const givethIoPassword = process.env.GIVETHIO_PASSWORD;
@@ -38,6 +48,31 @@ export const authenticateThirdPartyBasicAuth = async (
   }
 };
 
+export const authenticateThirdPartyServiceToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const authorization = req.headers['X-AUTH-MICROSERVICE'] as string;
+    if (!authorization) {
+      throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
+    }
+    const { token } = decodeMicroServiceToken(authorization);
+    const serviceEntity = await findMicroserviceByToken(token);
+
+    if (!serviceEntity) {
+      throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
+    }
+
+    res.locals.microService = serviceEntity.microService;
+    next();
+  } catch (e) {
+    console.log('authenticateThirdPartyBasicAuth error', e);
+    next(e);
+  }
+};
+
 export const authenticateUser = async (
   req: Request,
   res: Response,
@@ -53,6 +88,42 @@ export const authenticateUser = async (
       email: '',
     };
     res.locals.microservice = '';
+    next();
+  } catch (e) {
+    console.log('authenticateThirdPartyBasicAuth error', e);
+    next(e);
+  }
+};
+
+export const validateAuthMicroserviceJwt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const authorizationHeader = req.headers.authorization as string;
+  const token = authorizationHeader.split(' ')[1].toString();
+
+  const authorizationRoute = process.env
+    .AUTH_MICROSERVICE_AUTHORIZATION_URL as string;
+  try {
+    const result = await axios.post(
+      authorizationRoute,
+      {
+        jwt: token,
+      },
+      {
+        headers: { 'Content-Type': `application/json` },
+      },
+    );
+
+    const userAddress = result.data.publicAddress.toLowerCase();
+
+    let user = await findUserByWalletAddress(userAddress);
+
+    if (!user) {
+      user = await createNewUserAddress(userAddress);
+    }
+
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);
