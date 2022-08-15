@@ -124,6 +124,8 @@ export const validateAuthMicroserviceJwt = async (
       user = await createNewUserAddress(userAddress);
     }
 
+    res.locals.user = user;
+
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);
