@@ -79,16 +79,6 @@ export class createNotificationSetting1660541108096
     await queryRunner.createForeignKey(
       'notification_setting',
       new TableForeignKey({
-        columnNames: ['templateId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'notification_template',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'notification_setting',
-      new TableForeignKey({
         columnNames: ['userAddressId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'user_address',
@@ -101,14 +91,6 @@ export class createNotificationSetting1660541108096
       new TableIndex({
         name: 'IDX_NOTY_SET_TYPE_ID',
         columnNames: ['typeId'],
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'notification_setting',
-      new TableIndex({
-        name: 'IDX_NOTY_SET_TEMP_ID',
-        columnNames: ['templateId'],
       }),
     );
 
