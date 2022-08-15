@@ -73,7 +73,7 @@ export class createNotification1660546929601 implements MigrationInterface {
           {
             name: 'templateId',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'typeId',
