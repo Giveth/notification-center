@@ -23,13 +23,6 @@ export class UserAddress extends BaseEntity {
   @Column('text', { nullable: false })
   walletAddress: string;
 
-  // General Notification Settings see design: https://www.figma.com/file/nVoinu0tgJ565enN5R4WDE/Giveth.io-%26-GIVeconomy?node-id=9820%3A181611
-  @Column('boolean', { default: true, nullable: false })
-  allowEmailNotifications: boolean;
-
-  @Column('boolean', { default: true, nullable: false })
-  allowDappPushNotifications: boolean;
-
   @OneToMany(type => Notification, notification => notification.userAddress)
   notifications?: Notification[];
 

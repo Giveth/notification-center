@@ -14,18 +14,6 @@ export class createUserAddress1660539566228 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'allowEmailNotifications',
-            type: 'boolean',
-            isNullable: false,
-            default: true,
-          },
-          {
-            name: 'allowDappPushNotifications',
-            type: 'boolean',
-            isNullable: false,
-            default: true,
-          },
-          {
             name: 'createdAt',
             type: 'timestamp without time zone',
             isNullable: false,
