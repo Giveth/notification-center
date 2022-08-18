@@ -32,6 +32,8 @@ export class UserAddress extends BaseEntity {
   )
   settings?: NotificationSetting[];
 
+  // need to define push notifier logic (device address???)
+
   @CreateDateColumn()
   createdAt: Date;
 

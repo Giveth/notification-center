@@ -1,4 +1,5 @@
 import { UserAddress } from '../entities/userAddress';
+import { createNotificationSettingsForNewUser } from './notificationSettingRepository';
 
 export const findUserByWalletAddress = async (
   walletAddress: string,
@@ -19,6 +20,10 @@ export const createNewUserAddress = async (
   const query = UserAddress.create({
     walletAddress: walletAddress,
   });
+  const user = await query.save();
 
-  return query.save();
+  // Create user Settings
+  await createNotificationSettingsForNewUser(user);
+
+  return user;
 };

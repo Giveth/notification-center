@@ -18,6 +18,9 @@ export class NotificationSetting extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
+  @Column('boolean', { default: false })
+  isGlobalSetting?: boolean;
+
   // has more importance over the other two.
   @Column('boolean', { default: true, nullable: false })
   allowNotifications: string;
@@ -29,16 +32,16 @@ export class NotificationSetting extends BaseEntity {
   allowDappPushNotification: boolean;
 
   @Index()
-  @ManyToOne(type => NotificationType, { eager: true })
-  notificationType: NotificationType;
+  @ManyToOne(type => NotificationType, { eager: true, nullable: true })
+  notificationType?: NotificationType;
   @RelationId(
     (notificationSetting: NotificationSetting) =>
       notificationSetting.notificationType,
   )
-  typeId: number;
+  typeId?: number | null;
 
   @Index()
-  @ManyToOne(type => UserAddress, { eager: true })
+  @ManyToOne(type => UserAddress, { eager: true, nullable: false })
   userAddress: UserAddress;
   @RelationId(
     (notificationSetting: NotificationSetting) =>

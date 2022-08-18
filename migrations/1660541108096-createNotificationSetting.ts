@@ -22,6 +22,12 @@ export class createNotificationSetting1660541108096
             generationStrategy: 'increment',
           },
           {
+            name: 'isGlobalSetting',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
             name: 'allowNotifications',
             type: 'boolean',
             isNullable: false,
@@ -42,7 +48,7 @@ export class createNotificationSetting1660541108096
           {
             name: 'typeId',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'userAddressId',

@@ -23,8 +23,8 @@ export class NotificationType extends BaseEntity {
 
   // trace, giveth.io, ...
   @Index()
-  @Column('text')
-  microService: string;
+  @Column('text', { nullable: true })
+  microService?: string;
 
   @Index()
   @Column('text', { nullable: false })
@@ -34,21 +34,29 @@ export class NotificationType extends BaseEntity {
   description: string;
 
   // PROJECT_SAVED, PROJECT_DELETED, etc
-  @Column('text', { nullable: false })
-  schemaValidator: string;
+  // If no validator present it's a default message like WELCOME notification
+  @Column('text', { nullable: true })
+  schemaValidator?: string | null;
 
-  // GivEconomy, Project, Trace
+  // GivEconomy, Project, Trace, General, Donations
   @Index()
-  @Column('text', { nullable: false })
-  resourceType: string;
+  @Column('text', { nullable: true })
+  resourceType?: string | null;
 
   // Segment or other service
   @Column('text', { nullable: true })
-  thirdPartyEmailNotifier: string;
+  emailNotifierService?: string | null;
+
+  // for segment or any related event
+  @Column('text', { nullable: true })
+  emailNotificationId?: string | null;
 
   // any push notification service
   @Column('text', { nullable: true })
-  thirdPartyPushNotifier: string;
+  pushNotifierService?: string | null;
+
+  @Column('boolean', { nullable: false, default: false })
+  requiresTemplate: boolean;
 
   @OneToMany(
     type => NotificationSetting,

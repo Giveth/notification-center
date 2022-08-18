@@ -16,7 +16,7 @@ export class createNotificationType1660540253547 implements MigrationInterface {
           {
             name: 'microService',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'name',
@@ -31,21 +31,31 @@ export class createNotificationType1660540253547 implements MigrationInterface {
           {
             name: 'schemaValidator',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'resourceType',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
-            name: 'thirdPartyEmailNotifier',
+            name: 'emailNotifierService',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
-            name: 'thirdPartyPushNotifier',
+            name: 'emailNotificationId',
+            type: 'varchar', // events are strings
+            isNullable: true,
+          },
+          {
+            name: 'pushNotifierService',
             type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'requiresTemplate',
+            type: 'boolean',
             isNullable: false,
           },
           {

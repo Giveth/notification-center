@@ -8,13 +8,21 @@ export const generateRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
+export const NETWORK_IDS = {
+  MAIN_NET: 1,
+  ROPSTEN: 3,
+  XDAI: 100,
+  BSC: 56,
+};
+
 export const MICRO_SERVICES = {
   givethio: 'givethio',
   trace: 'trace',
 };
 
 // Need to define trace, blockchain and miscellaneos events
-export const eventTriggers = {
+// Segment handles titles as keys
+export const GIVETH_IO_EVENTS = {
   WELCOME: 'Welcome',
   INCOMPLETE_PROFILE: 'Profile completion required',
   COMPLETE_PROFILE: 'Profile completed',
@@ -38,4 +46,15 @@ export const eventTriggers = {
   UPDATED_PROFILE: 'Updated profile',
   GET_DONATION_PRICE_FAILED: 'Get Donation Price Failed',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: 'Verification form got draft by admin',
+};
+
+export const THIRD_PARTY_EMAIL_SERVICES = {
+  SEGMENT: 'Segment',
+  DAPP_MAILER: 'Giveth Dapp mailer',
+};
+
+export const NOTIFICATION_RESOURCE_TYPES = {
+  GENERAL: 'General',
+  PROJECT_ACTIVITIES: 'Project activities',
+  GIVECONOMY: 'GIVeconomy activities',
 };
