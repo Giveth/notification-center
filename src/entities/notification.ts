@@ -8,6 +8,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { NotificationTemplate } from './notificationTemplate';
+import {NOTIFICATION_CATEGORY} from "../types/general";
 
 export class NotificationMetadata {
   // name of recipient
@@ -16,12 +17,6 @@ export class NotificationMetadata {
   // For donation emails it's needed
   amount?: string;
   currency?: string;
-}
-
-export enum NOTIFICATION_CATEGORY {
-  PROJECT_RELATED = 'projectRelated',
-  GENERAL = 'general',
-  GIV_ECONOMY = 'givEconomy',
 }
 
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
@@ -45,7 +40,7 @@ export class Notification extends BaseEntity {
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
   @Column('text')
-  projectId: string;
+  projectId ?: string;
 
   // waitingForSend | sent | noNeedToSend
   @Column('text')
@@ -69,6 +64,8 @@ export class Notification extends BaseEntity {
   @Column({
     type: 'enum',
     enum: NOTIFICATION_CATEGORY,
+    default: NOTIFICATION_CATEGORY.PROJECT_RELATED
+
   })
   category: NOTIFICATION_CATEGORY;
 
