@@ -18,6 +18,12 @@ export class NotificationMetadata {
   currency?: string;
 }
 
+export enum NOTIFICATION_CATEGORY {
+  PROJECT_RELATED = 'projectRelated',
+  GENERAL = 'general',
+  GIV_ECONOMY = 'givEconomy',
+}
+
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
 export class Notification extends BaseEntity {
@@ -59,6 +65,12 @@ export class Notification extends BaseEntity {
 
   @Column('jsonb', { nullable: true })
   metadata: NotificationMetadata;
+
+  @Column({
+    type: 'enum',
+    enum: NOTIFICATION_CATEGORY,
+  })
+  category: NOTIFICATION_CATEGORY;
 
   @Index()
   @ManyToOne(() => NotificationTemplate)

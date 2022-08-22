@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
+import {NOTIFICATION_CATEGORY} from "./notification";
 
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
@@ -27,4 +28,10 @@ export class NotificationTemplate extends BaseEntity {
   type: string;
   @Column('text')
   description: string;
+
+  @Column({
+    type: 'enum',
+    enum: NOTIFICATION_CATEGORY,
+  })
+  category: NOTIFICATION_CATEGORY;
 }

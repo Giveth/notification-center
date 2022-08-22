@@ -20,6 +20,7 @@ import {
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
 import {
+  CountUnreadNotificationsResponse,
   GetNotificationsResponse,
   ReadAllNotificationsResponse,
   ReadSingleNotificationResponse,
@@ -92,6 +93,25 @@ export class NotificationController {
     }
   }
 
+  @Get('/countUnread')
+  @Security('JWT')
+  public async countUnreadNotifications(
+    @Inject()
+    params: {
+      user: User;
+      microService: string;
+    },
+  ): Promise<CountUnreadNotificationsResponse> {
+    const { user } = params;
+    try {
+      // TODO get notifications from db
+      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+    } catch (e) {
+      logger.error('getNotifications() error', e);
+      throw e;
+    }
+  }
+
   /**
    * @example notificationId "1"
    */
@@ -130,7 +150,7 @@ export class NotificationController {
   ): Promise<ReadAllNotificationsResponse> {
     const { user, microService } = params;
     try {
-      // TODO update notifications from db
+      // TODO get user's unread notifications count
       throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
     } catch (e) {
       logger.error('readNotification() error', e);

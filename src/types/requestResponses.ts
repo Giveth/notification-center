@@ -47,6 +47,13 @@ export type GetNotificationsResponse = {
   count: number;
 };
 
+export type CountUnreadNotificationsResponse = {
+  total: number;
+  projectsRelated: number;
+  givEconomyRelated: number;
+  general : number;
+};
+
 export type ReadSingleNotificationResponse = {
   notification: Notification;
 };

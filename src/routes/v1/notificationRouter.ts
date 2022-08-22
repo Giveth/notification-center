@@ -70,3 +70,43 @@ notificationRouter.put(
     }
   },
 );
+
+notificationRouter.put(
+  '/notifications/readAll',
+  authenticateUser,
+  async (req: Request, res: Response, next) => {
+    const { microService, user } = res.locals;
+
+    try {
+      const result = await notificationController.readAllUnreadNotifications(
+        {
+          user,
+          microService,
+        },
+      );
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+notificationRouter.get(
+  '/notifications/countUnread',
+  authenticateUser,
+  async (req: Request, res: Response, next) => {
+    const { microService, user } = res.locals;
+
+    try {
+      const result = await notificationController.readAllUnreadNotifications(
+        {
+          user,
+          microService,
+        },
+      );
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
