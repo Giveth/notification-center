@@ -1,0 +1,90 @@
+import {
+  Route,
+  Tags,
+  Post,
+  Body,
+  Security,
+  Inject,
+  Get,
+  Query,
+  Put,
+  Path,
+  Example,
+} from 'tsoa';
+import { logger } from '../../utils/logger';
+
+import {
+  getNotificationsValidator,
+  readSingleNotificationsValidator,
+  sendNotificationValidator,
+  validateWithJoiSchema,
+} from '../../validators/schemaValidators';
+import {
+  GetNotificationsResponse,
+  ReadAllNotificationsResponse,
+  ReadSingleNotificationResponse,
+  SendNotificationRequest,
+  SendNotificationResponse,
+} from '../../types/requestResponses';
+import { errorMessagesEnum } from '../../utils/errorMessages';
+import { StandardError } from '../../types/StandardError';
+import { User } from '../../types/general';
+
+@Route('/v1/notification_settings')
+@Tags('NotificationSettings')
+export class NotificationSettingsController {
+  @Put('/')
+  @Security('basicAuth')
+  public async updateNotificationSetting(
+    @Body()
+    body: SendNotificationRequest,
+    @Inject()
+    params: {
+      microService: string;
+    },
+  ): Promise<SendNotificationResponse> {
+    const { microService } = params;
+    try {
+      validateWithJoiSchema(body, sendNotificationValidator);
+      // TODO insert notification in DB
+      // TODO send segment event, email , ...
+      // TODO update notification record
+      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+    } catch (e) {
+      logger.error('sendNotification() error', e);
+      throw e;
+    }
+  }
+
+  // https://tsoa-community.github.io/docs/examples.html#parameter-examples
+  /**
+   * @example projectId "1"
+   * @example limit "20"
+   * @example offset "0"
+   * @example isRead "true"
+   * @example isRead "false"
+   */
+  @Get('/')
+  @Security('JWT')
+  public async getNotificationSettings(
+    @Inject()
+    params: {
+      user: User;
+      microService: string;
+    },
+    @Query('projectId') projectId?: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('isRead') isRead?: string,
+  ): Promise<GetNotificationsResponse> {
+    const { user } = params;
+    try {
+      validateWithJoiSchema({ projectId }, getNotificationsValidator);
+      // TODO get notifications from db
+      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+    } catch (e) {
+      logger.error('getNotifications() error', e);
+      throw e;
+    }
+  }
+}

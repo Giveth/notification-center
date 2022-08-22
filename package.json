@@ -30,6 +30,11 @@
     }
   },
   "dependencies": {
+    "@adminjs/express": "4.1.0",
+    "@adminjs/typeorm": "3.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.10",
+    "adminjs": "5.10.0",
     "axios": "0.27.2",
     "body-parser": "^1.20.0",
     "bunyan": "^1.8.15",
@@ -43,6 +48,7 @@
     "ioredis": "^4.28.5",
     "joi": "17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "pg": "8.5.1",
     "reflect-metadata": "0.1.13",
     "swagger-ui-express": "4.3.0",

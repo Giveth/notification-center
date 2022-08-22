@@ -32,7 +32,7 @@ import { User } from '../../types/general';
 
 @Route('/v1/notifications')
 @Tags('Notification')
-export class NotificationController {
+export class NotificationsController {
   @Post('/')
   @Security('basicAuth')
   public async sendNotification(

@@ -3,12 +3,12 @@ import {
   authenticateThirdPartyBasicAuth,
   authenticateUser,
 } from '../../middlewares/authentication';
-import { NotificationController } from '../../controllers/v1/notificationController';
+import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 
 export const notificationRouter = express.Router();
 
-const notificationController = new NotificationController();
+const notificationsController = new NotificationsController();
 notificationRouter.post(
   '/notifications',
   authenticateThirdPartyBasicAuth,
@@ -16,7 +16,7 @@ notificationRouter.post(
     const { microService } = res.locals;
 
     try {
-      const result = await notificationController.sendNotification(req.body, {
+      const result = await notificationsController.sendNotification(req.body, {
         microService,
       });
       return sendStandardResponse({ res, result });
@@ -33,7 +33,7 @@ notificationRouter.get(
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.getNotifications(
+      const result = await notificationsController.getNotifications(
         {
           user,
           microService,
@@ -57,7 +57,7 @@ notificationRouter.put(
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.readNotification(
+      const result = await notificationsController.readNotification(
         req.params.notificationId,
         {
           user,
