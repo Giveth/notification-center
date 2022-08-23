@@ -39,7 +39,7 @@ export class HtmlTemplate {
     }
    */
   icon?: string;
-  content : { type: string, content: string, href?: string }[];
+  content: { type: string; content: string; href?: string }[];
   quote: string;
 }
 

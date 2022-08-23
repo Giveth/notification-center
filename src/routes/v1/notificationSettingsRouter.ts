@@ -2,23 +2,31 @@ import express, { Request, Response } from 'express';
 import {
   authenticateThirdPartyBasicAuth,
   authenticateUser,
+  validateAuthMicroserviceJwt,
 } from '../../middlewares/authentication';
 import { NotificationSettingsController } from '../../controllers/v1/notificationSettingsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 
 export const notificationRouter = express.Router();
 
-const notificationController = new NotificationSettingsController();
-notificationRouter.put(
-  '/notification_settings/:id',
-  authenticateThirdPartyBasicAuth,
+const notificationSettingsController = new NotificationSettingsController();
+
+notificationRouter.get(
+  '/notification_settings',
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
-    const { microService } = res.locals;
+    const { user } = res.locals;
 
     try {
-      const result = await notificationController.updateNotificationSetting(req.body, {
-        microService,
-      });
+      const result =
+        await notificationSettingsController.getNotificationSettings(
+          {
+            user,
+          },
+          req.query.category as string,
+          req.query.limit as string,
+          req.query.offset as string,
+        );
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);
@@ -26,23 +34,20 @@ notificationRouter.put(
   },
 );
 
-notificationRouter.get(
-  '/notification_settings',
-  authenticateUser,
+notificationRouter.put(
+  '/notification_settings/:id',
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
+    const { user } = res.locals;
 
     try {
-      const result = await notificationController.getNotificationSettings(
-        {
-          user,
-          microService,
-        },
-        req.query.projectId as string,
-        req.query.limit as string,
-        req.query.offset as string,
-        req.query.isRead as string,
-      );
+      const result =
+        await notificationSettingsController.updateNotificationSetting(
+          req.body,
+          {
+            user,
+          },
+        );
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);

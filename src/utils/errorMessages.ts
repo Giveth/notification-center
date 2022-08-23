@@ -64,6 +64,7 @@ export const errorMessages = {
   SOCIAL_NETWORK_IS_DIFFERENT_WITH_CLAIMED_ONE:
     'Social network is different with claimed one',
   SOCIAL_PROFILE_NOT_FOUND: 'Social profile not gound',
+  NOTIFICATION_SETTING_NOT_FOUND: 'Notification Setting not found',
   CHANGE_API_TITLE_OR_EIN_NOT_PRECISE:
     'Please query the exact project title or EIN ID from the ChangeAPI site',
   YOU_ARE_NOT_OWNER_OF_THIS_DONATION: 'You are not owner of this donation',

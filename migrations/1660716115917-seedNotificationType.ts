@@ -1,5 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { NotificationType, SCHEMA_VALIDATORS_NAMES } from '../src/entities/notificationType';
+import {
+  NotificationType,
+  SCHEMA_VALIDATORS_NAMES,
+} from '../src/entities/notificationType';
 import {
   MICRO_SERVICES,
   NOTIFICATION_RESOURCE_TYPES,

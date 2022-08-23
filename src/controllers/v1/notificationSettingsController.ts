@@ -1,34 +1,10 @@
-import {
-  Route,
-  Tags,
-  Post,
-  Body,
-  Security,
-  Inject,
-  Get,
-  Query,
-  Put,
-  Path,
-  Example,
-} from 'tsoa';
+import { Route, Tags, Body, Security, Inject, Get, Query, Put } from 'tsoa';
 import { logger } from '../../utils/logger';
-
 import {
-  getNotificationsValidator,
-  readSingleNotificationsValidator,
-  sendNotificationValidator,
-  validateWithJoiSchema,
-} from '../../validators/schemaValidators';
-import {
-  GetNotificationsResponse,
-  ReadAllNotificationsResponse,
-  ReadSingleNotificationResponse,
-  SendNotificationRequest,
-  SendNotificationResponse,
-} from '../../types/requestResponses';
-import { errorMessagesEnum } from '../../utils/errorMessages';
-import { StandardError } from '../../types/StandardError';
-import { User } from '../../types/general';
+  getUserNotificationSettings,
+  updateUserNotificationSetting,
+} from '../../repositories/notificationSettingRepository';
+import { UserAddress } from '../../entities/userAddress';
 
 @Route('/v1/notification_settings')
 @Tags('NotificationSettings')
@@ -37,53 +13,74 @@ export class NotificationSettingsController {
   @Security('basicAuth')
   public async updateNotificationSetting(
     @Body()
-    body: SendNotificationRequest,
+    body: {
+      id: number;
+      allowNotifications?: string;
+      allowEmailNotification?: string;
+      allowDappPushNotification?: string;
+    },
     @Inject()
     params: {
-      microService: string;
+      user: UserAddress;
     },
-  ): Promise<SendNotificationResponse> {
-    const { microService } = params;
+  ) {
+    const { user } = params;
+    const {
+      id,
+      allowNotifications,
+      allowEmailNotification,
+      allowDappPushNotification,
+    } = body;
     try {
-      validateWithJoiSchema(body, sendNotificationValidator);
-      // TODO insert notification in DB
-      // TODO send segment event, email , ...
-      // TODO update notification record
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+      const updatedNotification = await updateUserNotificationSetting(
+        id,
+        user.id,
+        allowNotifications,
+        allowEmailNotification,
+        allowDappPushNotification,
+      );
+
+      return updatedNotification;
     } catch (e) {
-      logger.error('sendNotification() error', e);
+      logger.error('updateNotificationSetting() error', e);
       throw e;
     }
   }
 
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
   /**
-   * @example projectId "1"
+   * @example category "1"
    * @example limit "20"
    * @example offset "0"
-   * @example isRead "true"
-   * @example isRead "false"
    */
   @Get('/')
   @Security('JWT')
   public async getNotificationSettings(
     @Inject()
     params: {
-      user: User;
-      microService: string;
+      user: UserAddress;
     },
-    @Query('projectId') projectId?: string,
+    @Query('category') category?: string,
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
-    @Query('isRead') isRead?: string,
-  ): Promise<GetNotificationsResponse> {
+  ) {
     const { user } = params;
     try {
-      validateWithJoiSchema({ projectId }, getNotificationsValidator);
-      // TODO get notifications from db
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+      const take = limit ? Number(limit) : 20;
+      const skip = offset ? Number(offset) : 0;
+      const [notificationSettings, count] = await getUserNotificationSettings(
+        take,
+        skip,
+        user.id,
+        category,
+      );
+
+      return {
+        notificationSettings,
+        count,
+      };
     } catch (e) {
-      logger.error('getNotifications() error', e);
+      logger.error('getNotificationSettings() error', e);
       throw e;
     }
   }

@@ -23,7 +23,7 @@ export class NotificationSetting extends BaseEntity {
 
   // has more importance over the other two.
   @Column('boolean', { default: true, nullable: false })
-  allowNotifications: string;
+  allowNotifications: boolean;
 
   @Column('boolean', { default: true, nullable: false })
   allowEmailNotification: boolean;
