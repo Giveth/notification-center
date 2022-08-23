@@ -40,6 +40,7 @@ export class NotificationsController {
     body: SendNotificationRequest,
     @Inject()
     params: {
+      // flag for sending email or just save in front
       microService: string;
     },
   ): Promise<SendNotificationResponse> {

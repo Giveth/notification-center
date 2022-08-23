@@ -11,8 +11,32 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { NOTIFICATION_CATEGORY } from '../types/general';
 import { NotificationSetting } from './notificationSetting';
 import { NotificationTemplate } from './notificationTemplate';
+
+// Export Object with Schemas to N1 lookup
+export const SCHEMA_VALIDATORS_NAMES = {
+  DRAFTED_PROJECT_ACTIVATED: 'draftedProjectValidator',
+  PROJECT_LISTED: 'projectListed',
+  PROJECT_UNLISTED: 'projectUnlisted',
+  PROJECT_EDITED: 'projectEdited',
+  PROJECT_BADGE_REVOKED: 'projectBadgeRevoked',
+  PROJECT_VERIFIED: 'projectVerified',
+  PROJECT_REJECTED: 'projectRejected',
+  PROJECT_UNVERIFIED: 'projectUnverified',
+  PROJECT_ACTIVATED: 'projectActivated',
+  PROJECT_DEACTIVATED: 'projectDeactivated',
+  PROJECT_CANCELLED: 'projectCancelled',
+  SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation', // verificationForm,
+  MADE_DONATION: 'madeDonation',
+  DONATION_RECEIVED: 'donationReceived',
+  PROJECT_UPDATED_DONOR: 'projectUpdatedDonor',
+  PROJECT_UPDATED_OWNER: 'projectUpdatedOwner',
+  PROJECT_CREATED: 'projectCreated',
+  GET_DONATION_PRICE_FAILED: 'getDonationPriceFailed',
+  VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: 'verificationFormDrafted',
+};
 
 // This table needs to be prefilled with all notifications in the design
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
@@ -40,10 +64,10 @@ export class NotificationType extends BaseEntity {
 
   // GivEconomy, Project, Trace, General, Donations
   @Index()
-  @Column('text', { nullable: true })
-  resourceType?: string | null;
+  @Column('text', { nullable: true, default: NOTIFICATION_CATEGORY.PROJECT_RELATED })
+  category?: string | null;
 
-  // Segment or other service
+  // Segment or other service, our own
   @Column('text', { nullable: true })
   emailNotifierService?: string | null;
 
@@ -55,7 +79,7 @@ export class NotificationType extends BaseEntity {
   @Column('text', { nullable: true })
   pushNotifierService?: string | null;
 
-  @Column('boolean', { nullable: false, default: false })
+  @Column('boolean', { nullable: true, default: true })
   requiresTemplate: boolean;
 
   @OneToMany(

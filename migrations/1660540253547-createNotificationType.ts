@@ -34,7 +34,7 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'resourceType',
+            name: 'category',
             type: 'varchar',
             isNullable: true,
           },
@@ -57,6 +57,7 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             name: 'requiresTemplate',
             type: 'boolean',
             isNullable: false,
+            default: true,
           },
           {
             name: 'createdAt',
@@ -87,7 +88,7 @@ export class createNotificationType1660540253547 implements MigrationInterface {
       'notification_type',
       new TableIndex({
         name: 'IDX_NOTY_TYPE_RES',
-        columnNames: ['resourceType'],
+        columnNames: ['category'],
       }),
     );
 

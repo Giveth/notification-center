@@ -32,6 +32,11 @@ export class createNotificationTemplate1660543232675
             isNullable: true,
           },
           {
+            name: 'htmlTemplate',
+            type: 'jsonb',
+            isNullable: true,
+          },
+          {
             name: 'createdAt',
             type: 'timestamp without time zone',
             isNullable: false,
