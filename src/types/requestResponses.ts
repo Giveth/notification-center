@@ -52,6 +52,9 @@ export type CountUnreadNotificationsResponse = {
   projectsRelated: number;
   givEconomyRelated: number;
   general : number;
+
+  // user's last notificationId, then frontend will know should update notificationList or not
+  lastNotificationId : number;
 };
 
 export type ReadSingleNotificationResponse = {

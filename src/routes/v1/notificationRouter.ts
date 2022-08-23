@@ -98,7 +98,7 @@ notificationRouter.get(
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.readAllUnreadNotifications(
+      const result = await notificationController.countUnreadNotifications(
         {
           user,
           microService,
