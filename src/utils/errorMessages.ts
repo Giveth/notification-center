@@ -52,6 +52,7 @@ export const errorMessages = {
   CHANGE_API_INVALID_TITLE_OR_EIN:
     'ChangeAPI title or EIN not found or invalid',
   INVALID_SOCIAL_NETWORK: 'Invalid social network',
+  NOTIFICATION_NOT_FOUND: 'Notification not found',
   IT_SHOULD_HAVE_ONE_OR_TWO_ADDRESSES_FOR_RECIPIENT:
     'It should have one or two wallet recipient addresses',
   NOT_IMPLEMENTED: 'Not implemented',
@@ -88,8 +89,7 @@ export const errorMessages = {
   JUST_ACTIVE_PROJECTS_ACCEPT_DONATION: 'Just active projects accept donation',
   CATEGORIES_LENGTH_SHOULD_NOT_BE_MORE_THAN_FIVE:
     'Please select no more than 5 categories',
-  INVALID_NOTIFICATION_TYPE:
-    'Notification type invalid',
+  INVALID_NOTIFICATION_TYPE: 'Notification type invalid',
   CATEGORIES_MUST_BE_FROM_THE_FRONTEND_SUBSELECTION:
     'This category is not valid',
   INVALID_TX_HASH: 'Invalid txHash',

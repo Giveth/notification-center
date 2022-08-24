@@ -73,28 +73,6 @@ export const authenticateThirdPartyServiceToken = async (
   }
 };
 
-export const authenticateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const authorization = req.headers.authorization as string;
-    // TODO check with Authentication micro service
-    res.locals.user = {
-      userIdInGiveth: '',
-      userIdInTrace: '',
-      walletAddress: '',
-      email: '',
-    };
-    res.locals.microservice = '';
-    next();
-  } catch (e) {
-    console.log('authenticateThirdPartyBasicAuth error', e);
-    next(e);
-  }
-};
-
 export const validateAuthMicroserviceJwt = async (
   req: Request,
   res: Response,
@@ -118,14 +96,9 @@ export const validateAuthMicroserviceJwt = async (
 
     const userAddress = result.data.publicAddress.toLowerCase();
 
-    let user = await findUserByWalletAddress(userAddress);
-
-    if (!user) {
-      user = await createNewUserAddress(userAddress);
-    }
-
-    res.locals.user = user;
-
+    res.locals.user =
+      (await findUserByWalletAddress(userAddress)) ||
+      (await createNewUserAddress(userAddress));
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);

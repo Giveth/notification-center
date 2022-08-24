@@ -14,7 +14,6 @@ export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
   throwHttpErrorIfJoiValidatorFails(validationResult);
 };
 
-
 // Using Analytics structure for all notifications
 
 // Define all joi schemas here
@@ -257,7 +256,8 @@ export const SCHEMA_VALIDATORS = {
   getDonationPriceFailed: getDonationPriceFailed,
   verificationFormDrafted: verificationFormDrafted,
 };
-function throwHttpErrorIfJoiValidatorFails(validationResult: Joi.ValidationResult<any>) {
+function throwHttpErrorIfJoiValidatorFails(
+  validationResult: Joi.ValidationResult<any>,
+) {
   throw new Error('Function not implemented.');
 }
-

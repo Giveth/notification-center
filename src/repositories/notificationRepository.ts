@@ -5,14 +5,15 @@ import { Notification } from '../entities/notification';
 import { errorMessages } from '../utils/errorMessages';
 import { query } from 'express';
 import { NOTIFICATION_CATEGORY } from '../types/general';
+import { CountUnreadNotificationsResponse } from '../types/requestResponses';
 
 export const markNotificationGroupAsRead = async (
   user: UserAddress,
   category?: string,
-) => {
+): Promise<void> => {
   let query = Notification.createQueryBuilder('notification')
-    .select('notification.id')
     .innerJoinAndSelect('notification."notificationType"', 'notificationType')
+    .update<Notification>(Notification, { isRead: true })
     .where('notification."userAddressId" = :userAddressId', {
       userAddressId: user.id,
     })
@@ -23,19 +24,15 @@ export const markNotificationGroupAsRead = async (
       category: category,
     });
   }
-  const notifications = await query.getMany();
-
-  const notificationsIds = notifications.map(notification => notification.id);
-  const updateQuery = await markNotificationsAsRead(notificationsIds);
-
-  return updateQuery.raw;
+  await query.execute();
 };
 
 // returns raw data as array always
 export const markNotificationsAsRead = async (
   ids: number[],
   userAddressId?: number,
-) => {
+): Promise<Notification[]> => {
+  // TODO as I changed markNotificationGroupAsRead, we should change this function to just get one id and update that notificaiton
   let updateQuery = Notification.createQueryBuilder('notification')
     .update<Notification>(Notification, { isRead: true })
     .where('notification.id IN (:...ids)');
@@ -47,30 +44,33 @@ export const markNotificationsAsRead = async (
     );
   }
 
-  return updateQuery
+  const result = await updateQuery
     .setParameter('ids', ids)
     .returning('*')
     .updateEntity(true)
     .execute();
+  return result.raw;
 };
 
-export const countUnreadNotifications = async (user: UserAddress) => {
-  const [, total] = await baseNotificationQuery(user).getManyAndCount();
-  const [, projectsRelated] = await baseNotificationQuery(user)
+export const countUnreadNotifications = async (
+  user: UserAddress,
+): Promise<CountUnreadNotificationsResponse> => {
+  const total = await baseNotificationQuery(user).getCount();
+  const projectsRelated = await baseNotificationQuery(user)
     .andWhere('notificationType.category = :category', {
       category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     })
-    .getManyAndCount();
-  const [, givEconomyRelated] = await baseNotificationQuery(user)
+    .getCount();
+  const givEconomyRelated = await baseNotificationQuery(user)
     .andWhere('notificationType.category = :category', {
       category: NOTIFICATION_CATEGORY.GENERAL,
     })
-    .getManyAndCount();
-  const [, general] = await baseNotificationQuery(user)
+    .getCount();
+  const general = await baseNotificationQuery(user)
     .andWhere('notificationType.category = :category', {
       category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     })
-    .getManyAndCount();
+    .getCount();
 
   return {
     total,
@@ -133,4 +133,4 @@ export const createNotification = async (
   metadata?: any,
 ) => {
   // TODO implement this logic
-}
+};

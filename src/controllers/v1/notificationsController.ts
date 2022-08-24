@@ -57,11 +57,15 @@ export class NotificationsController {
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
     try {
-      const notificationType = await getNotificationTypeByEventName(body.eventName);
+      const notificationType = await getNotificationTypeByEventName(
+        body.eventName,
+      );
 
-      if (!notificationType) throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
+      if (!notificationType)
+        throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
 
-      const schemaValidator = SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
+      const schemaValidator =
+        SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
 
       validateWithJoiSchema(body.data, schemaValidator);
       // TODO insert notification in DB
@@ -148,12 +152,15 @@ export class NotificationsController {
   ): Promise<ReadSingleNotificationResponse> {
     try {
       const user = params.user;
-      const notification = await markNotificationsAsRead(
+      const [notification] = await markNotificationsAsRead(
         [Number(notificationId)],
         user.id,
       );
+      if (!notification) {
+        throw new Error(errorMessages.NOTIFICATION_NOT_FOUND);
+      }
       return {
-        notification: notification.raw[0],
+        notification,
       };
     } catch (e) {
       logger.error('readNotification() error', e);
@@ -174,9 +181,8 @@ export class NotificationsController {
     try {
       // in case mark as read all is limited per category
       await markNotificationGroupAsRead(user, params.category);
-      const notificationCounts = await countUnreadNotifications(user);
 
-      return notificationCounts;
+      return countUnreadNotifications(user);
     } catch (e) {
       logger.error('readNotification() error', e);
       throw e;
