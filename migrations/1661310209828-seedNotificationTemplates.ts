@@ -8,5 +8,7 @@ export class seedNotificationTemplates1661310209828
     // https://www.figma.com/file/nVoinu0tgJ565enN5R4WDE/Giveth.io-%26-GIVeconomy?node-id=9820%3A181611
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    //
+  }
 }
