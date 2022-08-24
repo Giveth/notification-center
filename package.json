@@ -32,9 +32,11 @@
   "dependencies": {
     "@adminjs/express": "4.1.0",
     "@adminjs/typeorm": "3.0.0",
+    "@types/analytics-node": "^3.1.9",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.10",
     "adminjs": "5.10.0",
+    "analytics-node": "^6.2.0",
     "axios": "0.27.2",
     "body-parser": "^1.20.0",
     "bunyan": "^1.8.15",

@@ -1,8 +1,5 @@
 import express, { Request, Response } from 'express';
-import {
-  authenticateThirdPartyBasicAuth,
-  authenticateUser,
-} from '../../middlewares/authentication';
+import { validateAuthMicroserviceJwt } from '../../middlewares/authentication';
 import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 
@@ -11,7 +8,7 @@ export const notificationRouter = express.Router();
 const notificationsController = new NotificationsController();
 notificationRouter.post(
   '/notifications',
-  authenticateThirdPartyBasicAuth,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService } = res.locals;
 
@@ -28,7 +25,7 @@ notificationRouter.post(
 
 notificationRouter.get(
   '/notifications',
-  authenticateUser,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService, user } = res.locals;
 
@@ -52,7 +49,7 @@ notificationRouter.get(
 
 notificationRouter.put(
   '/notifications/read/:notificationId',
-  authenticateUser,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService, user } = res.locals;
 

@@ -34,7 +34,6 @@ import { User } from '../../types/general';
 @Tags('Notification')
 export class NotificationsController {
   @Post('/')
-  @Security('basicAuth')
   public async sendNotification(
     @Body()
     body: SendNotificationRequest,
@@ -66,7 +65,6 @@ export class NotificationsController {
    * @example isRead "false"
    */
   @Get('/')
-  @Security('JWT')
   public async getNotifications(
     @Inject()
     params: {
@@ -93,7 +91,6 @@ export class NotificationsController {
    * @example notificationId "1"
    */
   @Put('/read/:notificationId')
-  @Security('JWT')
   public async readNotification(
     @Path() notificationId: string,
     @Inject()
