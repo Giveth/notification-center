@@ -20,6 +20,7 @@ import {
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
 import {
+  CountUnreadNotificationsResponse,
   GetNotificationsResponse,
   ReadAllNotificationsResponse,
   ReadSingleNotificationResponse,
@@ -29,6 +30,13 @@ import {
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { StandardError } from '../../types/StandardError';
 import { User } from '../../types/general';
+import {
+  countUnreadNotifications,
+  getNotifications,
+  markNotificationGroupAsRead,
+  markNotificationsAsRead,
+} from '../../repositories/notificationRepository';
+import { UserAddress } from '../../entities/userAddress';
 
 @Route('/v1/notifications')
 @Tags('Notification')
@@ -40,6 +48,7 @@ export class NotificationsController {
     @Inject()
     params: {
       // flag for sending email or just save in front
+      user: UserAddress;
       microService: string;
     },
   ): Promise<SendNotificationResponse> {
@@ -68,19 +77,49 @@ export class NotificationsController {
   public async getNotifications(
     @Inject()
     params: {
-      user: User;
-      microService: string;
+      user: UserAddress;
     },
+    @Query('category') category?: string,
     @Query('projectId') projectId?: string,
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
     @Query('isRead') isRead?: string,
   ): Promise<GetNotificationsResponse> {
     const { user } = params;
+    const take = limit ? Number(limit) : 10;
+    const skip = offset ? Number(offset) : 0;
+
     try {
-      validateWithJoiSchema({ projectId }, getNotificationsValidator);
-      // TODO get notifications from db
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+      const [notifications, count] = await getNotifications(
+        user.id,
+        category,
+        projectId,
+        take,
+        skip,
+        isRead,
+      );
+      return {
+        notifications,
+        count,
+      };
+    } catch (e) {
+      logger.error('getNotifications() error', e);
+      throw e;
+    }
+  }
+
+  @Get('/countUnread')
+  @Security('JWT')
+  public async countUnreadNotifications(
+    @Inject()
+    params: {
+      user: UserAddress;
+    },
+  ): Promise<CountUnreadNotificationsResponse> {
+    const { user } = params;
+    try {
+      const notificationCounts = await countUnreadNotifications(user);
+      return notificationCounts;
     } catch (e) {
       logger.error('getNotifications() error', e);
       throw e;
@@ -88,25 +127,25 @@ export class NotificationsController {
   }
 
   /**
-   * @example notificationId "1"
+   *
    */
   @Put('/read/:notificationId')
   public async readNotification(
     @Path() notificationId: string,
     @Inject()
     params: {
-      user: User;
-      microService: string;
+      user: UserAddress;
     },
   ): Promise<ReadSingleNotificationResponse> {
-    const { user, microService } = params;
     try {
-      validateWithJoiSchema(
-        { notificationId },
-        readSingleNotificationsValidator,
+      const user = params.user;
+      const notification = await markNotificationsAsRead(
+        [Number(notificationId)],
+        user.id,
       );
-      // TODO update notifications from db
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+      return {
+        notification: notification.raw[0],
+      };
     } catch (e) {
       logger.error('readNotification() error', e);
       throw e;
@@ -114,18 +153,21 @@ export class NotificationsController {
   }
 
   @Put('/readAll')
-  @Security('JWT')
   public async readAllUnreadNotifications(
     @Inject()
     params: {
-      user: User;
-      microService: string;
+      user: UserAddress;
+      category?: string;
     },
-  ): Promise<ReadAllNotificationsResponse> {
-    const { user, microService } = params;
+  ): Promise<CountUnreadNotificationsResponse> {
+    const user = params.user;
+
     try {
-      // TODO update notifications from db
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
+      // in case mark as read all is limited per category
+      await markNotificationGroupAsRead(user, params.category);
+      const notificationCounts = await countUnreadNotifications(user);
+
+      return notificationCounts;
     } catch (e) {
       logger.error('readNotification() error', e);
       throw e;

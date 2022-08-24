@@ -1,5 +1,7 @@
 import { Notification } from '../entities/notification';
 
+export type SendNotificationTypeRequest = {};
+
 export type SendNotificationRequest = {
   /**
    * @example "1"
@@ -53,4 +55,11 @@ export type ReadSingleNotificationResponse = {
 
 export type ReadAllNotificationsResponse = {
   success: boolean;
+};
+
+export type CountUnreadNotificationsResponse = {
+  total: number;
+  projectsRelated: number;
+  givEconomyRelated: number;
+  general: number;
 };
