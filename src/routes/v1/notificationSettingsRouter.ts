@@ -1,9 +1,5 @@
 import express, { Request, Response } from 'express';
-import {
-  authenticateThirdPartyBasicAuth,
-  authenticateUser,
-  validateAuthMicroserviceJwt,
-} from '../../middlewares/authentication';
+import { validateAuthMicroserviceJwt } from '../../middlewares/authentication';
 import { NotificationSettingsController } from '../../controllers/v1/notificationSettingsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 

@@ -52,6 +52,7 @@ export const errorMessages = {
   CHANGE_API_INVALID_TITLE_OR_EIN:
     'ChangeAPI title or EIN not found or invalid',
   INVALID_SOCIAL_NETWORK: 'Invalid social network',
+  NOTIFICATION_NOT_FOUND: 'Notification not found',
   IT_SHOULD_HAVE_ONE_OR_TWO_ADDRESSES_FOR_RECIPIENT:
     'It should have one or two wallet recipient addresses',
   NOT_IMPLEMENTED: 'Not implemented',
