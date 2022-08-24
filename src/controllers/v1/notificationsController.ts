@@ -41,10 +41,10 @@ import { UserAddress } from '../../entities/userAddress';
 import { getNotificationTypeByEventName } from '../../repositories/notificationTypeRepository';
 import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
 
-@Route('/v1/notifications')
+@Route('/v1')
 @Tags('Notification')
 export class NotificationsController {
-  @Post('/')
+  @Post('/thirdParty/notifications')
   public async sendNotification(
     @Body()
     body: SendNotificationTypeRequest,
@@ -82,7 +82,7 @@ export class NotificationsController {
    * @example isRead "true"
    * @example isRead "false"
    */
-  @Get('/')
+  @Get('/notifications/')
   public async getNotifications(
     @Inject()
     params: {
@@ -117,7 +117,7 @@ export class NotificationsController {
     }
   }
 
-  @Get('/countUnread')
+  @Get('/notifications/countUnread')
   @Security('JWT')
   public async countUnreadNotifications(
     @Inject()
@@ -138,7 +138,7 @@ export class NotificationsController {
   /**
    *
    */
-  @Put('/read/:notificationId')
+  @Put('/notifications/read/:notificationId')
   public async readNotification(
     @Path() notificationId: string,
     @Inject()
@@ -161,7 +161,7 @@ export class NotificationsController {
     }
   }
 
-  @Put('/readAll')
+  @Put('/notifications/readAll')
   public async readAllUnreadNotifications(
     @Inject()
     params: {

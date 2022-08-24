@@ -7,7 +7,7 @@ export const notificationRouter = express.Router();
 
 const notificationsController = new NotificationsController();
 notificationRouter.post(
-  '/notifications',
+  '/thirdParty/notifications',
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService, user } = res.locals;
