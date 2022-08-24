@@ -1,6 +1,26 @@
 import { Notification } from '../entities/notification';
 
-export type SendNotificationTypeRequest = {};
+export type SendNotificationTypeRequest = {
+  eventName: string;
+  analyticsUserId: string;
+  anonymousId: string;
+  sendEmail: boolean;
+  email: string;
+  projectId?: string;
+  userId?: string;
+  data: any; // this is validated with joi schemas
+  metadata: {
+    /**
+     * @example 10
+     */
+    amount?: number;
+
+    /**
+     * @example "GIV"
+     */
+    currency?: string;
+  };
+};
 
 export type SendNotificationRequest = {
   /**

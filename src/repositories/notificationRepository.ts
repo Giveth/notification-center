@@ -123,3 +123,14 @@ export const getNotifications = async (
 
   return query.take(limit).skip(offset).getManyAndCount();
 };
+
+export const createNotification = async (
+  user: UserAddress,
+  emailStatus?: string,
+  email?: string,
+  emailContent?: string,
+  data?: any,
+  metadata?: any,
+) => {
+  // TODO implement this logic
+}

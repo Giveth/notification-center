@@ -26,8 +26,9 @@ import {
   ReadSingleNotificationResponse,
   SendNotificationRequest,
   SendNotificationResponse,
+  SendNotificationTypeRequest,
 } from '../../types/requestResponses';
-import { errorMessagesEnum } from '../../utils/errorMessages';
+import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { StandardError } from '../../types/StandardError';
 import { User } from '../../types/general';
 import {
@@ -37,6 +38,8 @@ import {
   markNotificationsAsRead,
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
+import { getNotificationTypeByEventName } from '../../repositories/notificationTypeRepository';
+import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
 
 @Route('/v1/notifications')
 @Tags('Notification')
@@ -44,7 +47,7 @@ export class NotificationsController {
   @Post('/')
   public async sendNotification(
     @Body()
-    body: SendNotificationRequest,
+    body: SendNotificationTypeRequest,
     @Inject()
     params: {
       // flag for sending email or just save in front
@@ -54,7 +57,13 @@ export class NotificationsController {
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
     try {
-      validateWithJoiSchema(body, sendNotificationValidator);
+      const notificationType = await getNotificationTypeByEventName(body.eventName);
+
+      if (!notificationType) throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
+
+      const schemaValidator = SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
+
+      validateWithJoiSchema(body.data, schemaValidator);
       // TODO insert notification in DB
       // TODO send segment event, email , ...
       // TODO update notification record

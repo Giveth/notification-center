@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { ObjectSchema } from 'joi';
 import { errorMessages } from '../errorMessages';
 import { GIVETH_IO_EVENTS, NETWORK_IDS } from '../utils';
 
@@ -8,6 +8,12 @@ const filterDateRegex = new RegExp('^[0-9]{8} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
 const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
 const tokenSymbolRegex = /^[a-zA-Z0-9]{3,10}$/;
+
+export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
+  const validationResult = schema.validate(data);
+  throwHttpErrorIfJoiValidatorFails(validationResult);
+};
+
 
 // Using Analytics structure for all notifications
 
@@ -230,7 +236,7 @@ const verificationFormDrafted = Joi.object({
   anonymousId: Joi.string(),
 });
 
-export const schemaValidators = {
+export const SCHEMA_VALIDATORS = {
   draftedProjectValidator: draftedProjectValidator,
   projectListed: projectListed,
   projectUnlisted: projectUnlisted,
@@ -251,3 +257,7 @@ export const schemaValidators = {
   getDonationPriceFailed: getDonationPriceFailed,
   verificationFormDrafted: verificationFormDrafted,
 };
+function throwHttpErrorIfJoiValidatorFails(validationResult: Joi.ValidationResult<any>) {
+  throw new Error('Function not implemented.');
+}
+
