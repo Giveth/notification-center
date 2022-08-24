@@ -115,9 +115,8 @@ export const getNotifications = async (
   }
 
   if (isRead) {
-    let hasBeenRead = isRead === 'true' ? true : false;
     query = query.andWhere('notification."isRead" = :isRead', {
-      isRead: hasBeenRead,
+      isRead: isRead === 'true',
     });
   }
 
@@ -133,4 +132,4 @@ export const createNotification = async (
   metadata?: any,
 ) => {
   // TODO implement this logic
-}
+};

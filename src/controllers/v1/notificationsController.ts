@@ -57,11 +57,15 @@ export class NotificationsController {
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
     try {
-      const notificationType = await getNotificationTypeByEventName(body.eventName);
+      const notificationType = await getNotificationTypeByEventName(
+        body.eventName,
+      );
 
-      if (!notificationType) throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
+      if (!notificationType)
+        throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
 
-      const schemaValidator = SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
+      const schemaValidator =
+        SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
 
       validateWithJoiSchema(body.data, schemaValidator);
       // TODO insert notification in DB

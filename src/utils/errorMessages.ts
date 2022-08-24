@@ -88,8 +88,7 @@ export const errorMessages = {
   JUST_ACTIVE_PROJECTS_ACCEPT_DONATION: 'Just active projects accept donation',
   CATEGORIES_LENGTH_SHOULD_NOT_BE_MORE_THAN_FIVE:
     'Please select no more than 5 categories',
-  INVALID_NOTIFICATION_TYPE:
-    'Notification type invalid',
+  INVALID_NOTIFICATION_TYPE: 'Notification type invalid',
   CATEGORIES_MUST_BE_FROM_THE_FRONTEND_SUBSELECTION:
     'This category is not valid',
   INVALID_TX_HASH: 'Invalid txHash',
