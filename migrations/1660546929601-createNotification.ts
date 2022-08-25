@@ -71,11 +71,6 @@ export class createNotification1660546929601 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'templateId',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'typeId',
             type: 'int',
             isNullable: false,
@@ -115,28 +110,10 @@ export class createNotification1660546929601 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'notification',
       new TableForeignKey({
-        columnNames: ['templateId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'notification_template',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'notification',
-      new TableForeignKey({
         columnNames: ['userAddressId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'user_address',
         onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'notification',
-      new TableIndex({
-        name: 'IDX_NOTY_TEMP_ID',
-        columnNames: ['templateId'],
       }),
     );
 

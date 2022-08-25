@@ -60,6 +60,21 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             default: true,
           },
           {
+            name: 'htmlTemplate',
+            type: 'jsonb',
+            isNullable: true,
+          },
+          {
+            name: 'title',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'content',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'createdAt',
             type: 'timestamp without time zone',
             isNullable: false,

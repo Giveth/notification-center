@@ -116,7 +116,7 @@ export const getNotifications = async (
 
   if (isRead) {
     query = query.andWhere('notification."isRead" = :isRead', {
-      isRead:  isRead === 'true',
+      isRead: isRead === 'true',
     });
   }
 

@@ -13,7 +13,6 @@ import {
 } from 'typeorm';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { NotificationSetting } from './notificationSetting';
-import { NotificationTemplate } from './notificationTemplate';
 
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
@@ -37,6 +36,38 @@ export const SCHEMA_VALIDATORS_NAMES = {
   GET_DONATION_PRICE_FAILED: 'getDonationPriceFailed',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: 'verificationFormDrafted',
 };
+
+export class HtmlTemplate {
+  /**
+   * sample
+   * {
+    "icon": "",
+    "content": [
+        {
+            "type": "p",
+            "content" : "you staked"
+        },
+        {
+            "type": "b",
+            "content": "$amount"
+        },
+        {
+            "type": "p",
+            "content" : "on"
+        },
+        {
+            "type": "a",
+            "content" : "$farm",
+            "href": "$href1"
+        }
+    ],
+    "qutoe": "hey bro, how are you?"
+    }
+   */
+  icon?: string;
+  content: { type: string; content: string; href?: string }[];
+  quote: string;
+}
 
 // This table needs to be prefilled with all notifications in the design
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
@@ -85,17 +116,22 @@ export class NotificationType extends BaseEntity {
   @Column('boolean', { nullable: true, default: true })
   requiresTemplate: boolean;
 
+  @Column('jsonb', { nullable: true })
+  htmlTemplate: HtmlTemplate | null;
+
+  // Notification title
+  @Column('text', { nullable: true })
+  title?: string;
+
+  // Notification text
+  @Column('text', { nullable: true })
+  content?: string;
+
   @OneToMany(
     type => NotificationSetting,
     notificationSetting => notificationSetting.notificationType,
   )
   notificationSettings?: NotificationSetting[];
-
-  @OneToMany(
-    type => NotificationTemplate,
-    notificationTemplate => notificationTemplate.notificationType,
-  )
-  notificationTemplate?: NotificationTemplate[];
 
   @CreateDateColumn()
   createdAt: Date;

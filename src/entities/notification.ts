@@ -9,7 +9,6 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { NotificationTemplate } from './notificationTemplate';
 import { NotificationType } from './notificationType';
 import { UserAddress } from './userAddress';
 
@@ -63,12 +62,6 @@ export class Notification extends BaseEntity {
 
   @Column('jsonb', { nullable: true, default: {} })
   metadata: NotificationMetadata;
-
-  @Index()
-  @ManyToOne(() => NotificationTemplate)
-  template: NotificationTemplate;
-  @RelationId((notification: Notification) => notification.template)
-  templateId: number;
 
   @Index()
   @ManyToOne(() => NotificationType)
