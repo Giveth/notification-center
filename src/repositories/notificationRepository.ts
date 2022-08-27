@@ -73,8 +73,10 @@ export const countUnreadNotifications = async (
       category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     })
     .getCount();
+  const lastNotification =  await baseNotificationQuery(user).orderBy('notification.id','DESC').getOne()
 
   return {
+    lastNotificationId: lastNotification?.id,
     total,
     general,
     projectsRelated,
@@ -91,22 +93,21 @@ export const baseNotificationQuery = (user: UserAddress) => {
       })
 };
 
-export const getNotifications = async (
+export const getNotifications = async (params: {
   userAddressId: number,
   category?: string,
   projectId?: string,
   limit?: number,
-  offset?: number,
-  isRead?: string,
-) => {
-  logger.info('getNotifications userId', {
-    userAddressId,
+  startTime ?: number,
+  skip?: number,
+  isRead?: string}) => {
+  const {userAddressId,
     category,
+      startTime,
     projectId,
     limit,
-    offset,
-    isRead,
-  });
+    skip,
+    isRead,} = params
   let query = Notification.createQueryBuilder('notification')
     .innerJoinAndSelect('notification.notificationType', 'notificationType')
     .where('notification."userAddressId" = :userAddressId', {
@@ -131,7 +132,7 @@ export const getNotifications = async (
     });
   }
 
-  return query.take(limit).skip(offset).getManyAndCount();
+  return query.take(limit).skip(skip).getManyAndCount();
 };
 
 export const createNotification = async (
