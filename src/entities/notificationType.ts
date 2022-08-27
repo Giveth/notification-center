@@ -117,7 +117,7 @@ export class NotificationType extends BaseEntity {
   requiresTemplate: boolean;
 
   @Column('jsonb', { nullable: true })
-  htmlTemplate: HtmlTemplate | null;
+  htmlTemplate?: HtmlTemplate | null;
 
   // Notification title
   @Column('text', { nullable: true })
