@@ -14,7 +14,7 @@ export const markNotificationGroupAsRead = async (
     category?: string,
 ): Promise<void> => {
     let query = Notification.createQueryBuilder('notification')
-        .innerJoinAndSelect('notification."notificationType"', 'notificationType')
+        .innerJoinAndSelect('notification.notificationType', 'notificationType')
         .update<Notification>(Notification, {isRead: true})
         .where('notification."userAddressId" = :userAddressId', {
             userAddressId: user.id,

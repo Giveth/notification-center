@@ -154,8 +154,8 @@ export class NotificationsController {
                 }
             );
             return {
-                notifications,
                 count,
+                notifications,
             };
         } catch (e) {
             logger.error('getNotifications() error', e);
@@ -175,7 +175,7 @@ export class NotificationsController {
         try {
             return countUnreadNotifications(user);
         } catch (e) {
-            logger.error('getNotifications() error', e);
+            logger.error('countUnreadNotifications() error', e);
             throw e;
         }
     }
