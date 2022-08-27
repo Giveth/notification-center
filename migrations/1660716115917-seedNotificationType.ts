@@ -5,9 +5,9 @@ import {
 } from '../src/entities/notificationType';
 import {
   MICRO_SERVICES,
-  NOTIFICATION_RESOURCE_TYPES,
   THIRD_PARTY_EMAIL_SERVICES,
 } from '../src/utils/utils';
+import {NOTIFICATION_CATEGORY} from "../src/types/general";
 
 export const GivethNotificationTypes = {
   // SEGMENT
@@ -16,7 +16,7 @@ export const GivethNotificationTypes = {
     description: 'Please complete your profile',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
-    category: null,
+    category: NOTIFICATION_CATEGORY.GENERAL,
     emailNotifierService: null,
     emailNotificationId: null, // doesn't sent
     pushNotifierService: null,
@@ -28,7 +28,7 @@ export const GivethNotificationTypes = {
     description: 'Thanks for completing your profile',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
-    category: null,
+    category: NOTIFICATION_CATEGORY.GENERAL,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -40,7 +40,6 @@ export const GivethNotificationTypes = {
     description: 'Project draft has been published',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.DRAFTED_PROJECT_ACTIVATED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Draft published',
     pushNotifierService: null,
@@ -52,7 +51,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been listed!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_LISTED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project listed',
     pushNotifierService: null,
@@ -64,7 +62,6 @@ export const GivethNotificationTypes = {
     description: 'Project has unlisted!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNLISTED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project unlisted',
     pushNotifierService: null,
@@ -76,7 +73,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been edited',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project edited',
     pushNotifierService: null,
@@ -88,7 +84,6 @@ export const GivethNotificationTypes = {
     description: 'Project verified badge revoked',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_REVOKED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project badge revoked',
     pushNotifierService: null,
@@ -100,7 +95,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been verified! Rejoice!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_VERIFIED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project verified',
     pushNotifierService: null,
@@ -112,7 +106,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been rejected!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_REJECTED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project rejected',
     pushNotifierService: null,
@@ -124,7 +117,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been unverified',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project unverified',
     pushNotifierService: null,
@@ -136,7 +128,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been activated!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_ACTIVATED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project activated',
     pushNotifierService: null,
@@ -148,7 +139,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been deactivated',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_DEACTIVATED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project deactivated',
     pushNotifierService: null,
@@ -160,7 +150,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been cancelled',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CANCELLED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project cancelled',
     pushNotifierService: null,
@@ -173,7 +162,6 @@ export const GivethNotificationTypes = {
     description: 'Project Verification form email confirmation has been sent!',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.SEND_EMAIL_CONFIRMATION,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.DAPP_MAILER,
     emailNotificationId: 'Send email confirmation',
     pushNotifierService: null,
@@ -186,7 +174,6 @@ export const GivethNotificationTypes = {
     description: 'User made a donation to a project',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.MADE_DONATION,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Made donation',
     pushNotifierService: null,
@@ -198,7 +185,6 @@ export const GivethNotificationTypes = {
     description: 'Project has received a donation',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.DONATION_RECEIVED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Donation received',
     pushNotifierService: null,
@@ -211,7 +197,6 @@ export const GivethNotificationTypes = {
       'Send notification to donors that the project has added an updated',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_DONOR,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project updated - donor',
     pushNotifierService: null,
@@ -224,7 +209,6 @@ export const GivethNotificationTypes = {
       'Send notification to owner that the project has added an update',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_OWNER,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project updated - owner',
     pushNotifierService: null,
@@ -236,7 +220,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been created.',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CREATED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project created',
     pushNotifierService: null,
@@ -249,7 +232,7 @@ export const GivethNotificationTypes = {
     description: 'User updated his profile',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
-    category: null,
+    category: NOTIFICATION_CATEGORY.GENERAL,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -261,7 +244,6 @@ export const GivethNotificationTypes = {
     description: 'Project has been created.',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.GET_DONATION_PRICE_FAILED,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Get Donation Price Failed',
     pushNotifierService: null,
@@ -274,7 +256,6 @@ export const GivethNotificationTypes = {
     microService: MICRO_SERVICES.givethio,
     schemaValidator:
       SCHEMA_VALIDATORS_NAMES.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN,
-    category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Verification form got draft by admin',
     pushNotifierService: null,
@@ -297,6 +278,7 @@ export class seedNotificationType1660716115917 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DELETE FROM notification`);
     await queryRunner.query(`DELETE FROM notification_type`);
   }
 }

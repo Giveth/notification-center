@@ -65,7 +65,7 @@ export class NotificationsController {
     },
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
-    const { userWalletAddress } = body;
+    const { userWalletAddress , projectId} = body;
     try {
       const userAddress = await createNewUserAddressIfNotExists(
         userWalletAddress as string,
@@ -96,11 +96,14 @@ export class NotificationsController {
       }
 
       await createNotification(
-        notificationType,
-        userAddress,
-        body.email,
-        emailStatus,
-        body?.metadata,
+          {
+            notificationType,
+            user: userAddress,
+            email: body.email,
+            emailStatus,
+            metadata : body?.metadata,
+            projectId
+          }
       );
 
       return { success: true };
@@ -164,8 +167,7 @@ export class NotificationsController {
   ): Promise<CountUnreadNotificationsResponse> {
     const { user } = params;
     try {
-      const notificationCounts = await countUnreadNotifications(user);
-      return notificationCounts;
+      return  countUnreadNotifications(user);
     } catch (e) {
       logger.error('getNotifications() error', e);
       throw e;

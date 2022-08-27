@@ -83,11 +83,12 @@ export const countUnreadNotifications = async (
 };
 
 export const baseNotificationQuery = (user: UserAddress) => {
+
   return Notification.createQueryBuilder('notification')
-    .innerJoinAndSelect('notification."notificationType"', 'notificationType')
-    .where('notification."userAddressId" = :userAddressId', {
-      userAddressId: user.id,
-    });
+      .innerJoinAndSelect('notification.notificationType', 'notificationType')
+      .where('notification."userAddressId" = :userAddressId', {
+        userAddressId: user.id,
+      })
 };
 
 export const getNotifications = async (
@@ -134,16 +135,24 @@ export const getNotifications = async (
 };
 
 export const createNotification = async (
-  notificationType: NotificationType,
-  user: UserAddress,
-  email?: string,
-  emailStatus?: string,
-  metadata?: any,
+  params: {
+    notificationType: NotificationType,
+    user: UserAddress,
+    email?: string,
+    emailStatus?: string,
+    metadata?: any,
+    projectId ?:string
+  }
 ) => {
+  const {notificationType,user ,projectId,
+    email, emailStatus, metadata} = params;
+
   const notification = Notification.create({
     userAddress: user,
     email: email,
     metadata: metadata,
+    emailStatus,
+    projectId,
     notificationType,
   });
 

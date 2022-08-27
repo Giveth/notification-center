@@ -96,10 +96,9 @@ export class NotificationType extends BaseEntity {
   // GivEconomy, Project, Trace, General, Donations
   @Index()
   @Column('text', {
-    nullable: true,
     default: NOTIFICATION_CATEGORY.PROJECT_RELATED,
   })
-  category?: string | null;
+  category : string ;
 
   // Segment or other service, our own
   @Column('text', { nullable: true })

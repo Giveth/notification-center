@@ -6,6 +6,7 @@ dotenv.config({
 });
 
 import { initDbConnection, initServer } from './server';
+import {logger} from "./utils/logger";
 
 initDbConnection()
   .then(() => {
@@ -13,6 +14,7 @@ initDbConnection()
   })
   .then(() => {
     console.log('server is up');
+    logger.info('server is up');
   })
   .catch(e => {
     console.log('init server error', e);

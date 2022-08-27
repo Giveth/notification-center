@@ -52,9 +52,3 @@ export const THIRD_PARTY_EMAIL_SERVICES = {
   SEGMENT: 'Segment',
   DAPP_MAILER: 'Giveth Dapp mailer',
 };
-
-export const NOTIFICATION_RESOURCE_TYPES = {
-  GENERAL: 'General',
-  PROJECT_ACTIVITIES: 'Project activities',
-  GIVECONOMY: 'GIVeconomy activities',
-};

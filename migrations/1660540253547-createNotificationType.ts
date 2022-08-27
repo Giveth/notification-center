@@ -36,7 +36,8 @@ export class createNotificationType1660540253547 implements MigrationInterface {
           {
             name: 'category',
             type: 'text',
-            isNullable: true,
+            isNullable: false,
+            default: 'projectRelated'
           },
           {
             name: 'emailNotifierService',
