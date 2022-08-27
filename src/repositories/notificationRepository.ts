@@ -6,6 +6,7 @@ import { errorMessages } from '../utils/errorMessages';
 import { query } from 'express';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { CountUnreadNotificationsResponse } from '../types/requestResponses';
+import { getNotificationTypeByEventName } from './notificationTypeRepository';
 
 export const markNotificationGroupAsRead = async (
   user: UserAddress,
@@ -124,12 +125,19 @@ export const getNotifications = async (
 };
 
 export const createNotification = async (
+  notificationType: NotificationType,
   user: UserAddress,
-  emailStatus?: string,
   email?: string,
-  emailContent?: string,
   data?: any,
   metadata?: any,
 ) => {
-  // TODO implement this logic
+  const notification = Notification.create({
+    userAddressId: user.id,
+    email: email,
+    data: data,
+    metadata: metadata,
+    typeId: notificationType.id,
+  });
+
+  return notification.save();
 };

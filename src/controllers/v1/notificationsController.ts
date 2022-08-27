@@ -33,6 +33,7 @@ import { StandardError } from '../../types/StandardError';
 import { User } from '../../types/general';
 import {
   countUnreadNotifications,
+  createNotification,
   getNotifications,
   markNotificationGroupAsRead,
   markNotificationsAsRead,
@@ -40,6 +41,11 @@ import {
 import { UserAddress } from '../../entities/userAddress';
 import { getNotificationTypeByEventName } from '../../repositories/notificationTypeRepository';
 import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
+import { THIRD_PARTY_EMAIL_SERVICES } from '../../utils/utils';
+import { EMAIL_STATUSES } from '../../entities/notification';
+import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
+
+const analytics = getAnalytics();
 
 @Route('/v1')
 @Tags('Notification')
@@ -68,9 +74,33 @@ export class NotificationsController {
         SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
 
       validateWithJoiSchema(body.data, schemaValidator);
-      // TODO insert notification in DB
-      // TODO send segment event, email , ...
-      // TODO update notification record
+
+      const notification = await createNotification(
+        notificationType,
+        params.user,
+        body.email,
+        body.data,
+        body?.metadata,
+      );
+
+      if (!body.sendEmail) {
+        notification.emailStatus = EMAIL_STATUSES.NO_NEED_TO_SEND;
+      }
+
+      // need to make this more dinamic but its for segment for now.
+      if (notification.emailStatus === THIRD_PARTY_EMAIL_SERVICES.SEGMENT) {
+        analytics.track(
+          notificationType.emailNotificationId!,
+          body.analyticsUserId,
+          body.data,
+          body.anonymousId,
+        );
+        notification.emailStatus = EMAIL_STATUSES.SENT;
+      }
+
+      notification.save(); // update sent status
+
+      // add if and logic for push notification (not in mvp)
       throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
     } catch (e) {
       logger.error('sendNotification() error', e);

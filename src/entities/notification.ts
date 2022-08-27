@@ -21,6 +21,12 @@ export class NotificationMetadata {
   currency?: string;
 }
 
+export const EMAIL_STATUSES = {
+  NO_NEED_TO_SEND: 'noNeedToSend',
+  WAITING_TO_BE_SEND: 'waitingToBeSent',
+  SENT: 'send',
+};
+
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
 export class Notification extends BaseEntity {

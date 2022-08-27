@@ -33,7 +33,7 @@ class GraphAnalytics {
   }
 
   track(
-    eventName: SegmentEvents,
+    eventName: string,
     analyticsUserId?: string,
     properties?: any,
     anonymousId?: string,

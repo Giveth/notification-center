@@ -20,6 +20,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null, // doesn't sent
     pushNotifierService: null,
+    title: 'Complete profile',
+    content: 'You need to complete your profile.', // Missing copy
   },
   COMPLETE_PROFILE: {
     name: 'Profile completed',
@@ -30,6 +32,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    title: 'Profile Completed',
+    content: 'The profile has been completed', // Missing copy
   },
   DRAFTED_PROJECT_ACTIVATED: {
     name: 'Draft published',
@@ -40,6 +44,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Draft published',
     pushNotifierService: null,
+    title: 'Project is published',
+    content: '', // Missing copy
   },
   PROJECT_LISTED: {
     name: 'Project listed',
@@ -50,6 +56,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project listed',
     pushNotifierService: null,
+    title: 'Project is listed',
+    content: 'Well done your project has been published!', // Missing copy
   },
   PROJECT_UNLISTED: {
     name: 'Project unlisted',
@@ -60,6 +68,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project unlisted',
     pushNotifierService: null,
+    title: 'Project is unlisted - <PLACEHOLDER>',
+    content: '', // Missing copy
   },
   PROJECT_EDITED: {
     name: 'Project edited',
@@ -70,6 +80,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project edited',
     pushNotifierService: null,
+    title: 'Project has been edited',
+    content: '', // Missing copy
   },
   PROJECT_BADGE_REVOKED: {
     name: 'Project badge revoked',
@@ -80,6 +92,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project badge revoked',
     pushNotifierService: null,
+    title: 'Project verification revoked',
+    content: '', // Missing copy
   },
   PROJECT_VERIFIED: {
     name: 'Project verified',
@@ -90,6 +104,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project verified',
     pushNotifierService: null,
+    title: 'Project verification approved',
+    content: '', // Missing copy
   },
   PROJECT_REJECTED: {
     name: 'Project rejected',
@@ -100,6 +116,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project rejected',
     pushNotifierService: null,
+    title: 'Project verification rejected',
+    content: '', // Missing copy
   },
   PROJECT_UNVERIFIED: {
     name: 'Project unverified',
@@ -110,6 +128,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project unverified',
     pushNotifierService: null,
+    title: 'Project verification removed',
+    content: '', // Missing copy
   },
   PROJECT_ACTIVATED: {
     name: 'Project activated',
@@ -120,6 +140,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project activated',
     pushNotifierService: null,
+    title: 'Project is activated - <PLACEHOLDER>',
+    content: '', // Missing copy
   },
   PROJECT_DEACTIVATED: {
     name: 'Project deactivated',
@@ -130,6 +152,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project deactivated',
     pushNotifierService: null,
+    title: 'Project is activated - <PLACEHOLDER>',
+    content: '', // Missing copy
   },
   PROJECT_CANCELLED: {
     name: 'Project cancelled',
@@ -140,6 +164,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project cancelled',
     pushNotifierService: null,
+    title: 'Project is cancelled - <PLACEHOLDER>',
+    content: '', // Missing copy
   },
   // DAPP MAILER
   SEND_EMAIL_CONFIRMATION: {
@@ -151,6 +177,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.DAPP_MAILER,
     emailNotificationId: 'Send email confirmation',
     pushNotifierService: null,
+    title: 'Project verification email confirmation',
+    content: '', // Missing copy
   },
   // SEGMENT AGAIN
   MADE_DONATION: {
@@ -162,6 +190,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Made donation',
     pushNotifierService: null,
+    title: 'Donation is successfull',
+    content: '', // Missing copy
   },
   DONATION_RECEIVED: {
     name: 'Donation received',
@@ -172,6 +202,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Donation received',
     pushNotifierService: null,
+    title: 'Project received a donation',
+    content: '', // Missing copy
   },
   PROJECT_UPDATED_DONOR: {
     name: 'Project updated - donor',
@@ -183,6 +215,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project updated - donor',
     pushNotifierService: null,
+    title: 'Project posted an update',
+    content: '', // Missing copy
   },
   PROJECT_UPDATED_OWNER: {
     name: 'Project updated - owner',
@@ -194,6 +228,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project updated - owner',
     pushNotifierService: null,
+    title: 'Project posted an update',
+    content: '', // Missing copy
   },
   PROJECT_CREATED: {
     name: 'Project created',
@@ -204,6 +240,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project created',
     pushNotifierService: null,
+    title: 'Project created',
+    content: '', // Missing copy
   },
   UPDATED_PROFILE: {
     // No need to notify this
@@ -215,6 +253,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    title: 'Updated profile',
+    content: '', // Missing copy
   },
   GET_DONATION_PRICE_FAILED: {
     name: 'Get Donation Price Failed',
@@ -225,6 +265,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Get Donation Price Failed',
     pushNotifierService: null,
+    title: 'Donation has been failed',
+    content: '', // Missing copy
   },
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
     name: 'Verification form got draft by admin',
@@ -236,6 +278,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Verification form got draft by admin',
     pushNotifierService: null,
+    title: 'Project verification under review',
+    content: '', // Missing copy
   },
 };
 

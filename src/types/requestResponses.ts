@@ -2,14 +2,15 @@ import { Notification } from '../entities/notification';
 
 export type SendNotificationTypeRequest = {
   eventName: string;
-  analyticsUserId: string;
-  anonymousId: string;
   sendEmail: boolean;
+  sendDappNotification: boolean;
+  analyticsUserId?: string;
+  anonymousId?: string;
   email: string;
   projectId?: string;
   userId?: string;
   data: any; // this is validated with joi schemas
-  metadata: {
+  metadata?: {
     /**
      * @example 10
      */
