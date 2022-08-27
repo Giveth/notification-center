@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {MigrationInterface, QueryRunner, Table, TableForeignKey} from 'typeorm';
 
 export class createUserAddress1660539566228 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -20,6 +20,12 @@ export class createUserAddress1660539566228 implements MigrationInterface {
             default: 'now()',
           },
           {
+            name: 'walletAddress',
+            type: 'text',
+            isNullable: false,
+            isUnique:true
+          },
+          {
             name: 'updatedAt',
             type: 'timestamp without time zone',
             isNullable: false,
@@ -28,6 +34,16 @@ export class createUserAddress1660539566228 implements MigrationInterface {
         ],
       }),
       true,
+    );
+
+    await queryRunner.createForeignKey(
+        'user_address',
+        new TableForeignKey({
+          columnNames: ['notificationTypeId'],
+          referencedColumnNames: ['id'],
+          referencedTableName: 'notification_type',
+          onDelete: 'CASCADE',
+        }),
     );
   }
 
