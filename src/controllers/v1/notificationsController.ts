@@ -194,9 +194,11 @@ export class NotificationsController {
     ): Promise<ReadSingleNotificationResponse> {
         try {
             const user = params.user;
-            const [notification] = await markNotificationsAsRead(
-                [Number(notificationId)],
-                user.id,
+            const notification = await markNotificationsAsRead(
+                {
+                    notificationId: Number(notificationId),
+                    userAddressId:user.id,
+                }
             );
             if (!notification) {
                 throw new Error(errorMessages.NOTIFICATION_NOT_FOUND);

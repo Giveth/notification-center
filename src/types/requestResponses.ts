@@ -108,7 +108,7 @@ export type CountUnreadNotificationsResponse = {
   general : number;
 
   // user's last notificationId, then frontend will know should update notificationList or not
-  lastNotificationId : number | undefined;
+  lastNotificationId ?: number ;
 };
 
 export type ReadSingleNotificationResponse = {
