@@ -1,22 +1,22 @@
 import express, { Request, Response } from 'express';
 import {
-  authenticateThirdPartyBasicAuth,
-  authenticateUser,
+  authenticateThirdPartyServiceToken,
+  validateAuthMicroserviceJwt,
 } from '../../middlewares/authentication';
-import { NotificationController } from '../../controllers/v1/notificationController';
+import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 
 export const notificationRouter = express.Router();
 
-const notificationController = new NotificationController();
+const notificationsController = new NotificationsController();
 notificationRouter.post(
-  '/notifications',
-  authenticateThirdPartyBasicAuth,
+  '/thirdParty/notifications',
+  authenticateThirdPartyServiceToken,
   async (req: Request, res: Response, next) => {
-    const { microService } = res.locals;
+    const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.sendNotification(req.body, {
+      const result = await notificationsController.sendNotification(req.body, {
         microService,
       });
       return sendStandardResponse({ res, result });
@@ -28,16 +28,16 @@ notificationRouter.post(
 
 notificationRouter.get(
   '/notifications',
-  authenticateUser,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.getNotifications(
+      const result = await notificationsController.getNotifications(
         {
           user,
-          microService,
         },
+        req.query.category as string,
         req.query.projectId as string,
         req.query.limit as string,
         req.query.offset as string,
@@ -52,36 +52,15 @@ notificationRouter.get(
 
 notificationRouter.put(
   '/notifications/read/:notificationId',
-  authenticateUser,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
+    const { user } = res.locals;
 
     try {
-      const result = await notificationController.readNotification(
+      const result = await notificationsController.readNotification(
         req.params.notificationId,
         {
           user,
-          microService,
-        },
-      );
-      return sendStandardResponse({ res, result });
-    } catch (e) {
-      next(e);
-    }
-  },
-);
-
-notificationRouter.put(
-  '/notifications/readAll',
-  authenticateUser,
-  async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
-
-    try {
-      const result = await notificationController.readAllUnreadNotifications(
-        {
-          user,
-          microService,
         },
       );
       return sendStandardResponse({ res, result });
@@ -93,17 +72,33 @@ notificationRouter.put(
 
 notificationRouter.get(
   '/notifications/countUnread',
-  authenticateUser,
+  validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { microService, user } = res.locals;
 
     try {
-      const result = await notificationController.countUnreadNotifications(
-        {
-          user,
-          microService,
-        },
-      );
+      const result = await notificationsController.countUnreadNotifications({
+        user,
+      });
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+notificationRouter.put(
+  '/notifications/readAll',
+  validateAuthMicroserviceJwt,
+  async (req: Request, res: Response, next) => {
+    const { user } = res.locals;
+    const category = req.body.category;
+
+    try {
+      const result = await notificationsController.readAllUnreadNotifications({
+        user,
+        category,
+      });
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);

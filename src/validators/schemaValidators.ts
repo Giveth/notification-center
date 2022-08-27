@@ -42,3 +42,5 @@ export const getNotificationsValidator = Joi.object({
 export const readSingleNotificationsValidator = Joi.object({
   // TODO should fill it
 });
+
+// need to define a schema validator for each segment event

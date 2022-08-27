@@ -22,6 +22,25 @@ export const decodeBasicAuthentication = (
   }
 };
 
+export const decodeMicroServiceToken = (
+  basicAuthentication: string,
+): {
+  token: string;
+} => {
+  try {
+    const decodedStr = new Buffer(
+      basicAuthentication.split(' ')[1],
+      'base64',
+    ).toString();
+    return {
+      token: decodedStr,
+    };
+  } catch (e) {
+    logger.error('decodeMicroServiceToken() error', e);
+    throw e;
+  }
+};
+
 //TODO need to add unit test
 export const createBasicAuthentication = (params: {
   username: string;

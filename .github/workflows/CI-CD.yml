@@ -68,4 +68,17 @@ jobs:
           # Add commit hash to docker image tag @see{@link https://github.com/docker/build-push-action/tree/releases/v1#tag_with_sha}
           tag_with_sha: true
 
+  deploy:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'|| github.ref == 'refs/heads/staging'
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Staging deploy
+        if: github.ref == 'refs/heads/staging'
+        uses: garygrossgarten/github-action-ssh@v0.6.4
+        with:
+          command: cd notification-center && git checkout staging && git pull &&  docker-compose -f docker-compose-staging.yml pull && docker-compose -f docker-compose-staging.yml down && docker-compose -f docker-compose-staging.yml up -d && docker image prune -a --force;
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USERNAME }}
+          privateKey: ${{ secrets.STAGING_PRIVATE_KEY}}
 
