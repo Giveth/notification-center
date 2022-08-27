@@ -49,6 +49,7 @@ export const errorMessagesEnum = {
 };
 
 export const errorMessages = {
+  SPECIFY_JWT_AUTHENTICATION_ADAPTER: 'Specify authentication jwt adapter',
   CHANGE_API_INVALID_TITLE_OR_EIN:
     'ChangeAPI title or EIN not found or invalid',
   INVALID_SOCIAL_NETWORK: 'Invalid social network',

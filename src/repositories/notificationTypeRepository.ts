@@ -6,10 +6,14 @@ export const getNotificationTypeByEventName = async (eventName: string) => {
     .getOne();
 };
 
-export const getNotificationTypeByEventNameAndMicroservice = async (
-    params : {eventName: string, microService:string}) => {
+export const getNotificationTypeByEventNameAndMicroservice = async (params: {
+  eventName: string;
+  microService: string;
+}) => {
   return NotificationType.createQueryBuilder()
     .where('name = :name', { name: params.eventName })
-    .andWhere('"microService" = :microService', { microService: params.microService })
+    .andWhere('"microService" = :microService', {
+      microService: params.microService,
+    })
     .getOne();
 };

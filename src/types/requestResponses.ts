@@ -1,4 +1,4 @@
-import {Notification, NotificationMetadata} from '../entities/notification';
+import { Notification, NotificationMetadata } from '../entities/notification';
 
 export type SendNotificationTypeRequest = {
   /**
@@ -16,7 +16,7 @@ export type SendNotificationTypeRequest = {
   /**
    * @example  false
    */
-  sendDappNotification ?: boolean;
+  sendDappNotification?: boolean;
   /**
    * @example ""
    */
@@ -34,7 +34,8 @@ export type SendNotificationTypeRequest = {
    */
   projectId?: string;
   /**
-   * @example "0x11BE55F4eA41E99A3fb06ADdA507d99d7bb0a571"
+   * @example "0x11be55f4ea41e99a3fb06adda507d99d7bb0a571"
+   * @description Sample token for above wallet address and mock authentication service eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNBZGRyZXNzIjoiMHgxMUJFNTVGNGVBNDFFOTlBM2ZiMDZBRGRBNTA3ZDk5ZDdiYjBhNTcxIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDIyLTA5LTIzVDA4OjA5OjA2LjQ1N1oiLCJqdGkiOiIxNjYxMzI4NTQ2NDU3LTc1YzNhNGI2YWUiLCJpYXQiOjE2NjEzMjg1NDYsImV4cCI6MTY2MzkyMDU0Nn0.Tdd2f7bCMtg3F1ojX1AQQpJ7smTU7vR7Nixromr0ju4
    */
   userWalletAddress?: string;
 
@@ -50,8 +51,7 @@ export type SendNotificationTypeRequest = {
     currency?: string;
   };
 
-  segmentData: any
-
+  segmentData: any;
 };
 
 export type SendNotificationRequest = {

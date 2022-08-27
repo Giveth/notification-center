@@ -7,11 +7,10 @@ import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 import { MICRO_SERVICES } from '../utils/utils';
 import axios from 'axios';
-import {
-  createNewUserAddressIfNotExists,
-} from '../repositories/userAddressRepository';
-import {logger} from "../utils/logger";
-import {findThirdPartyBySecret} from "../repositories/thirdPartyRepository";
+import { createNewUserAddressIfNotExists } from '../repositories/userAddressRepository';
+import { logger } from '../utils/logger';
+import { findThirdPartyBySecret } from '../repositories/thirdPartyRepository';
+import { getJwtAuthenticationAdapter } from '../adapters/adapterFactory';
 
 const givethIoUsername = process.env.GIVETHIO_USERNAME;
 const givethIoPassword = process.env.GIVETHIO_PASSWORD;
@@ -60,7 +59,7 @@ export const authenticateThirdPartyServiceToken = async (
     const { username, secret } = decodeBasicAuthentication(authorization);
     const serviceEntity = await findThirdPartyBySecret({
       username,
-      secret
+      secret,
     });
 
     if (!serviceEntity) {
@@ -82,23 +81,9 @@ export const validateAuthMicroserviceJwt = async (
 ) => {
   const authorizationHeader = req.headers.authorization as string;
   const token = authorizationHeader.split(' ')[1].toString();
-
-  const authorizationRoute = process.env
-    .AUTH_MICROSERVICE_AUTHORIZATION_URL as string;
   try {
-    const result = await axios.post(
-      authorizationRoute,
-      {
-        jwt: token,
-      },
-      {
-        headers: { 'Content-Type': `application/json` },
-      },
-    );
-
-    const walletAddress = result.data.publicAddress.toLowerCase();
-
-    res.locals.user = createNewUserAddressIfNotExists(walletAddress);
+    const walletAddress = await getJwtAuthenticationAdapter().verifyJwt(token);
+    res.locals.user = await createNewUserAddressIfNotExists(walletAddress);
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);

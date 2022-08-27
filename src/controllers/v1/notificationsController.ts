@@ -41,13 +41,13 @@ import {
 import { UserAddress } from '../../entities/userAddress';
 import {
   getNotificationTypeByEventName,
-  getNotificationTypeByEventNameAndMicroservice
+  getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
 import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
 import { THIRD_PARTY_EMAIL_SERVICES } from '../../utils/utils';
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
-import {createNewUserAddressIfNotExists} from "../../repositories/userAddressRepository";
+import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 
 const analytics = getAnalytics();
 
@@ -64,55 +64,55 @@ export class NotificationsController {
       microService: string;
     },
   ): Promise<SendNotificationResponse> {
-    const {microService} = params;
-    const {userWalletAddress} = body
+    const { microService } = params;
+    const { userWalletAddress } = body;
     try {
-      const userAddress = await createNewUserAddressIfNotExists(userWalletAddress as string)
-      const notificationType = await getNotificationTypeByEventNameAndMicroservice(
-          {
-            eventName:  body.eventName,
-            microService
-          }
+      const userAddress = await createNewUserAddressIfNotExists(
+        userWalletAddress as string,
       );
+      const notificationType =
+        await getNotificationTypeByEventNameAndMicroservice({
+          eventName: body.eventName,
+          microService,
+        });
 
       if (!notificationType) {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
       }
-      let emailStatus =body.sendEmail? EMAIL_STATUSES.WAITING_TO_BE_SEND : EMAIL_STATUSES.NO_NEED_TO_SEND
+      let emailStatus = body.sendEmail
+        ? EMAIL_STATUSES.WAITING_TO_BE_SEND
+        : EMAIL_STATUSES.NO_NEED_TO_SEND;
       if (body.sendSegment && notificationType.schemaValidator) {
         const schemaValidator =
-            SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
+          SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
         validateWithJoiSchema(body.segmentData, schemaValidator);
         analytics.track(
-            notificationType.emailNotificationId!,
-            body.analyticsUserId,
-            body.segmentData,
-            body.anonymousId,
+          notificationType.emailNotificationId!,
+          body.analyticsUserId,
+          body.segmentData,
+          body.anonymousId,
         );
         emailStatus = EMAIL_STATUSES.SENT;
       }
 
       await createNotification(
-          notificationType,
-          userAddress,
-          body.email,
-          emailStatus,
-          body?.metadata,
+        notificationType,
+        userAddress,
+        body.email,
+        emailStatus,
+        body?.metadata,
       );
 
-
-      return {success: true}
+      return { success: true };
       // add if and logic for push notification (not in mvp)
     } catch (e) {
       logger.error('sendNotification() error', e);
       throw e;
     }
-
   }
 
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
   /**
-   * @example projectId "1"
    * @example limit "20"
    * @example offset "0"
    * @example isRead "true"

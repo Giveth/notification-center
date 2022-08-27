@@ -7,6 +7,7 @@ import { query } from 'express';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { CountUnreadNotificationsResponse } from '../types/requestResponses';
 import { getNotificationTypeByEventName } from './notificationTypeRepository';
+import { logger } from '../utils/logger';
 
 export const markNotificationGroupAsRead = async (
   user: UserAddress,
@@ -97,8 +98,16 @@ export const getNotifications = async (
   offset?: number,
   isRead?: string,
 ) => {
+  logger.info('getNotifications userId', {
+    userAddressId,
+    category,
+    projectId,
+    limit,
+    offset,
+    isRead,
+  });
   let query = Notification.createQueryBuilder('notification')
-    .innerJoinAndSelect('notification."notificationType"', 'notificationType')
+    .innerJoinAndSelect('notification.notificationType', 'notificationType')
     .where('notification."userAddressId" = :userAddressId', {
       userAddressId: userAddressId,
     });
@@ -135,7 +144,7 @@ export const createNotification = async (
     userAddress: user,
     email: email,
     metadata: metadata,
-    typeId: notificationType.id,
+    notificationType,
   });
 
   return notification.save();

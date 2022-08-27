@@ -31,5 +31,8 @@ export const createNewUserAddress = async (
 export const createNewUserAddressIfNotExists = async (
   walletAddress: string,
 ): Promise<UserAddress> => {
-  return await findUserByWalletAddress(walletAddress) || await createNewUserAddress(walletAddress)
+  return (
+    (await findUserByWalletAddress(walletAddress)) ||
+    (await createNewUserAddress(walletAddress))
+  );
 };

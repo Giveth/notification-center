@@ -35,17 +35,17 @@ export class Notification extends BaseEntity {
 
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
-  @Column('text', {nullable: true})
+  @Column('text', { nullable: true })
   projectId?: string;
 
   // waitingForSend | sent | noNeedToSend
-  @Column('text', {nullable: true})
+  @Column('text', { nullable: true })
   emailStatus?: string;
 
-  @Column('text', {nullable: true})
+  @Column('text', { nullable: true })
   email?: string;
 
-  @Column('text', {nullable: true})
+  @Column('text', { nullable: true })
   emailContent?: string;
 
   @Column({ default: false })
@@ -62,7 +62,7 @@ export class Notification extends BaseEntity {
   @ManyToOne(() => NotificationType)
   notificationType: NotificationType;
   @RelationId((notification: Notification) => notification.notificationType)
-  typeId: number;
+  notificationTypeId: number;
 
   @Index()
   @ManyToOne(() => UserAddress)
