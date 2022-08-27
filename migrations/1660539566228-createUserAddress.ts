@@ -36,15 +36,6 @@ export class createUserAddress1660539566228 implements MigrationInterface {
       true,
     );
 
-    await queryRunner.createForeignKey(
-        'user_address',
-        new TableForeignKey({
-          columnNames: ['notificationTypeId'],
-          referencedColumnNames: ['id'],
-          referencedTableName: 'notification_type',
-          onDelete: 'CASCADE',
-        }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
