@@ -14,7 +14,7 @@ import { NotificationSetting } from './notificationSetting';
 
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
-export class ServiceToken extends BaseEntity {
+export class ThirdParty extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
@@ -24,7 +24,7 @@ export class ServiceToken extends BaseEntity {
 
   @Index({ unique: true })
   @Column('text', { nullable: false })
-  token: string;
+  secret: string;
 
   @Column('boolean', { default: true, nullable: false })
   isActive: boolean;

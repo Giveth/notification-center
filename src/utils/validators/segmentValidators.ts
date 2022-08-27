@@ -134,11 +134,11 @@ const sendEmailConfirmation = Joi.object({
 });
 
 const donationTrackerSchema = Joi.object({
-  email: Joi.string().allow(null, undefined, ''), // if anonymous
+  email: Joi.string().allow(null, ''), // if anonymous
   title: Joi.string().required(),
-  firstName: Joi.string().allow(null, undefined, ''),
-  projectOwnerId: Joi.string().allow(null, undefined, ''),
-  slug: Joi.string().allow(null, undefined, ''),
+  firstName: Joi.string().allow(null, ''),
+  projectOwnerId: Joi.string().allow(null, ''),
+  slug: Joi.string().allow(null, ''),
   amount: Joi.number()?.greater(0).required(),
   transactionId: Joi.string().required().pattern(txHashRegex).messages({
     'string.pattern.base': errorMessages.INVALID_TRANSACTION_ID,
@@ -157,10 +157,10 @@ const donationTrackerSchema = Joi.object({
   fromWalletAddress: Joi.string()
     .required()
     .pattern(ethereumWalletAddressRegex),
-  donationValueUsd: Joi.number().greater(0).allow(null, undefined), // incase it fails
-  donationValueEth: Joi.number().greater(0).allow(null, undefined),
-  verified: Joi.boolean().allow(null, undefined),
-  transakStatus: Joi.string().allow(null, undefined),
+  donationValueUsd: Joi.number().greater(0).allow(null), // incase it fails
+  donationValueEth: Joi.number().greater(0).allow(null),
+  verified: Joi.boolean().allow(null),
+  transakStatus: Joi.string().allow(null),
 });
 
 const madeDonation = Joi.object({

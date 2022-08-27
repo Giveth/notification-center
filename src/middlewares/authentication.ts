@@ -8,11 +8,10 @@ import { errorMessagesEnum } from '../utils/errorMessages';
 import { MICRO_SERVICES } from '../utils/utils';
 import axios from 'axios';
 import {
-  createNewUserAddress,
-  findUserByWalletAddress,
+  createNewUserAddressIfNotExists,
 } from '../repositories/userAddressRepository';
-import { ServiceToken } from '../entities/serviceToken';
-import { findMicroserviceByToken } from '../repositories/serviceTokenRepository';
+import {logger} from "../utils/logger";
+import {findThirdPartyBySecret} from "../repositories/thirdPartyRepository";
 
 const givethIoUsername = process.env.GIVETHIO_USERNAME;
 const givethIoPassword = process.env.GIVETHIO_PASSWORD;
@@ -54,12 +53,15 @@ export const authenticateThirdPartyServiceToken = async (
   next: NextFunction,
 ) => {
   try {
-    const authorization = req.headers['X-AUTH-MICROSERVICE'] as string;
+    const authorization = req.headers['authorization'] as string;
     if (!authorization) {
       throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
     }
-    const { token } = decodeMicroServiceToken(authorization);
-    const serviceEntity = await findMicroserviceByToken(token);
+    const { username, secret } = decodeBasicAuthentication(authorization);
+    const serviceEntity = await findThirdPartyBySecret({
+      username,
+      secret
+    });
 
     if (!serviceEntity) {
       throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
@@ -94,11 +96,9 @@ export const validateAuthMicroserviceJwt = async (
       },
     );
 
-    const userAddress = result.data.publicAddress.toLowerCase();
+    const walletAddress = result.data.publicAddress.toLowerCase();
 
-    res.locals.user =
-      (await findUserByWalletAddress(userAddress)) ||
-      (await createNewUserAddress(userAddress));
+    res.locals.user = createNewUserAddressIfNotExists(walletAddress);
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);

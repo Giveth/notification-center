@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createServiceToken1660539945623 implements MigrationInterface {
+export class createThirdParty1660539945623 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'service_token',
+        name: 'third_party',
         columns: [
           {
             name: 'id',
@@ -19,7 +19,7 @@ export class createServiceToken1660539945623 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'token',
+            name: 'secret',
             type: 'varchar',
             isNullable: false,
           },

@@ -1,15 +1,43 @@
-import { Notification } from '../entities/notification';
+import {Notification, NotificationMetadata} from '../entities/notification';
 
 export type SendNotificationTypeRequest = {
+  /**
+   * @example "Made donation"
+   */
   eventName: string;
+  /**
+   * @example false
+   */
   sendEmail: boolean;
-  sendDappNotification: boolean;
+  /**
+   * @example false
+   */
+  sendSegment: boolean;
+  /**
+   * @example  false
+   */
+  sendDappNotification ?: boolean;
+  /**
+   * @example ""
+   */
   analyticsUserId?: string;
+  /**
+   * @example ""
+   */
   anonymousId?: string;
-  email: string;
+  /**
+   * @example ""
+   */
+  email?: string;
+  /**
+   * @example "1"
+   */
   projectId?: string;
-  userId?: string;
-  data: any; // this is validated with joi schemas
+  /**
+   * @example "0x11BE55F4eA41E99A3fb06ADdA507d99d7bb0a571"
+   */
+  userWalletAddress?: string;
+
   metadata?: {
     /**
      * @example 10
@@ -21,6 +49,9 @@ export type SendNotificationTypeRequest = {
      */
     currency?: string;
   };
+
+  segmentData: any
+
 };
 
 export type SendNotificationRequest = {

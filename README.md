@@ -71,6 +71,14 @@ npm run db:migrate:run:local
 npm run db:migrate:revert:local
 ```
 
+#### Create Third party in DB
+As we can't put inserting third parties in migration, I put a query sample here, we can use it in prod
+
+```
+  INSERT INTO public.third_party(
+  "microService", secret, "isActive")
+  VALUES ('givethio', 'givethio_secret', true);
+```
 
 ## References
 

@@ -20,17 +20,7 @@ export class createNotification1660546929601 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'userId',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
             name: 'projectId',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'walletAddress',
             type: 'varchar',
             isNullable: true,
           },
@@ -50,18 +40,13 @@ export class createNotification1660546929601 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'content',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
             name: 'isRead',
             type: 'boolean',
             isNullable: true,
             default: false,
           },
           {
-            name: 'data',
+            name: 'segmentData',
             type: 'jsonb',
             isNullable: true,
           },

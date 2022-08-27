@@ -79,7 +79,7 @@ export class NotificationType extends BaseEntity {
   // trace, giveth.io, ...
   @Index()
   @Column('text', { nullable: true })
-  microService?: string;
+  microService: string;
 
   @Index()
   @Column('text', { nullable: false })

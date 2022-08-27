@@ -39,11 +39,15 @@ import {
   markNotificationsAsRead,
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
-import { getNotificationTypeByEventName } from '../../repositories/notificationTypeRepository';
+import {
+  getNotificationTypeByEventName,
+  getNotificationTypeByEventNameAndMicroservice
+} from '../../repositories/notificationTypeRepository';
 import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
 import { THIRD_PARTY_EMAIL_SERVICES } from '../../utils/utils';
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
+import {createNewUserAddressIfNotExists} from "../../repositories/userAddressRepository";
 
 const analytics = getAnalytics();
 
@@ -51,61 +55,59 @@ const analytics = getAnalytics();
 @Tags('Notification')
 export class NotificationsController {
   @Post('/thirdParty/notifications')
+  @Security('basicAuth')
   public async sendNotification(
     @Body()
     body: SendNotificationTypeRequest,
     @Inject()
     params: {
-      // flag for sending email or just save in front
-      user: UserAddress;
       microService: string;
     },
   ): Promise<SendNotificationResponse> {
-    const { microService } = params;
+    const {microService} = params;
+    const {userWalletAddress} = body
     try {
-      const notificationType = await getNotificationTypeByEventName(
-        body.eventName,
+      const userAddress = await createNewUserAddressIfNotExists(userWalletAddress as string)
+      const notificationType = await getNotificationTypeByEventNameAndMicroservice(
+          {
+            eventName:  body.eventName,
+            microService
+          }
       );
 
-      if (!notificationType)
+      if (!notificationType) {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
+      }
+      let emailStatus =body.sendEmail? EMAIL_STATUSES.WAITING_TO_BE_SEND : EMAIL_STATUSES.NO_NEED_TO_SEND
+      if (body.sendSegment && notificationType.schemaValidator) {
+        const schemaValidator =
+            SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
+        validateWithJoiSchema(body.segmentData, schemaValidator);
+        analytics.track(
+            notificationType.emailNotificationId!,
+            body.analyticsUserId,
+            body.segmentData,
+            body.anonymousId,
+        );
+        emailStatus = EMAIL_STATUSES.SENT;
+      }
 
-      const schemaValidator =
-        SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
-
-      validateWithJoiSchema(body.data, schemaValidator);
-
-      const notification = await createNotification(
-        notificationType,
-        params.user,
-        body.email,
-        body.data,
-        body?.metadata,
+      await createNotification(
+          notificationType,
+          userAddress,
+          body.email,
+          emailStatus,
+          body?.metadata,
       );
 
-      if (!body.sendEmail) {
-        notification.emailStatus = EMAIL_STATUSES.NO_NEED_TO_SEND;
-      }
 
-      // need to make this more dinamic but its for segment for now.
-      if (notification.emailStatus === THIRD_PARTY_EMAIL_SERVICES.SEGMENT) {
-        analytics.track(
-          notificationType.emailNotificationId!,
-          body.analyticsUserId,
-          body.data,
-          body.anonymousId,
-        );
-        notification.emailStatus = EMAIL_STATUSES.SENT;
-      }
-
-      notification.save(); // update sent status
-
+      return {success: true}
       // add if and logic for push notification (not in mvp)
-      throw new StandardError(errorMessagesEnum.NOT_IMPLEMENTED);
     } catch (e) {
       logger.error('sendNotification() error', e);
       throw e;
     }
+
   }
 
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
@@ -117,6 +119,7 @@ export class NotificationsController {
    * @example isRead "false"
    */
   @Get('/notifications/')
+  @Security('JWT')
   public async getNotifications(
     @Inject()
     params: {
@@ -173,6 +176,7 @@ export class NotificationsController {
    *
    */
   @Put('/notifications/read/:notificationId')
+  @Security('JWT')
   public async readNotification(
     @Path() notificationId: string,
     @Inject()
@@ -199,6 +203,7 @@ export class NotificationsController {
   }
 
   @Put('/notifications/readAll')
+  @Security('JWT')
   public async readAllUnreadNotifications(
     @Inject()
     params: {

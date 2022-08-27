@@ -15,42 +15,42 @@ export class createNotificationType1660540253547 implements MigrationInterface {
           },
           {
             name: 'microService',
-            type: 'varchar',
-            isNullable: true,
+            type: 'text',
+            isNullable: false,
           },
           {
             name: 'name',
-            type: 'varchar',
+            type: 'text',
             isNullable: false,
           },
           {
             name: 'description',
-            type: 'varchar',
+            type: 'text',
             isNullable: false,
           },
           {
             name: 'schemaValidator',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {
             name: 'category',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {
             name: 'emailNotifierService',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {
             name: 'emailNotificationId',
-            type: 'varchar', // events are strings
+            type: 'text', // events are strings
             isNullable: true,
           },
           {
             name: 'pushNotifierService',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {
@@ -66,12 +66,12 @@ export class createNotificationType1660540253547 implements MigrationInterface {
           },
           {
             name: 'title',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {
             name: 'content',
-            type: 'varchar',
+            type: 'text',
             isNullable: true,
           },
           {

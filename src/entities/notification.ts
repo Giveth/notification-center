@@ -33,39 +33,28 @@ export class Notification extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
-  // Giveth.io users have integer id (Postgres), Trace users have string id (Mongo)
-  // So use string here to support both of them
-  @Column('text')
-  userId?: string;
-
-  @Column('text')
-  walletAddress?: string;
-
   // Giveth.io project have integer id (Postgres), Trace projects have string id (Mongo)
   // So use string here to support both of them
-  @Column('text')
+  @Column('text', {nullable: true})
   projectId?: string;
 
   // waitingForSend | sent | noNeedToSend
-  @Column('text')
+  @Column('text', {nullable: true})
   emailStatus?: string;
 
-  @Column('text')
+  @Column('text', {nullable: true})
   email?: string;
 
-  @Column('text')
+  @Column('text', {nullable: true})
   emailContent?: string;
-
-  @Column('text')
-  content: string;
 
   @Column({ default: false })
   isRead?: boolean;
 
-  // dynamic data considering segment structures, and validate with joi schema
   @Column('jsonb', { nullable: true, default: {} })
-  data: string;
+  segmentData: string;
 
+  // dynamic data considering segment structures, and validate with joi schema
   @Column('jsonb', { nullable: true, default: {} })
   metadata: NotificationMetadata;
 

@@ -37,7 +37,7 @@ export const GivethNotificationTypes = {
   },
   DRAFTED_PROJECT_ACTIVATED: {
     name: 'Draft published',
-    description: 'Project draft has beeen published',
+    description: 'Project draft has been published',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.DRAFTED_PROJECT_ACTIVATED,
     category: NOTIFICATION_RESOURCE_TYPES.PROJECT_ACTIVITIES,
