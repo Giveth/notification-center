@@ -46,7 +46,7 @@ export class createNotificationSetting1660541108096
             default: true,
           },
           {
-            name: 'typeId',
+            name: 'notificationTypeId',
             type: 'int',
             isNullable: true,
           },
@@ -75,7 +75,7 @@ export class createNotificationSetting1660541108096
     await queryRunner.createForeignKey(
       'notification_setting',
       new TableForeignKey({
-        columnNames: ['typeId'],
+        columnNames: ['notificationTypeId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'notification_type',
         onDelete: 'CASCADE',
@@ -95,8 +95,8 @@ export class createNotificationSetting1660541108096
     await queryRunner.createIndex(
       'notification_setting',
       new TableIndex({
-        name: 'IDX_NOTY_SET_TYPE_ID',
-        columnNames: ['typeId'],
+        name: 'IDX_NOTY_SET_NOTIFICATION_TYPE_ID',
+        columnNames: ['notificationTypeId'],
       }),
     );
 

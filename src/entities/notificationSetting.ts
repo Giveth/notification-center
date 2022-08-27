@@ -38,7 +38,7 @@ export class NotificationSetting extends BaseEntity {
     (notificationSetting: NotificationSetting) =>
       notificationSetting.notificationType,
   )
-  typeId?: number | null;
+  notificationTypeId?: number | null;
 
   @Index()
   @ManyToOne(type => UserAddress, { eager: true, nullable: false })

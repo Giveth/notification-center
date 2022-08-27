@@ -15,12 +15,12 @@ export class createThirdParty1660539945623 implements MigrationInterface {
           },
           {
             name: 'microService',
-            type: 'varchar',
+            type: 'text',
             isNullable: false,
           },
           {
             name: 'secret',
-            type: 'varchar',
+            type: 'text',
             isNullable: false,
           },
           {
@@ -48,6 +48,6 @@ export class createThirdParty1660539945623 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('service_token');
+    await queryRunner.dropTable('third_party');
   }
 }

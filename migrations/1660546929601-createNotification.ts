@@ -56,7 +56,7 @@ export class createNotification1660546929601 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'notificationType',
+            name: 'notificationTypeId',
             type: 'int',
             isNullable: false,
           },
@@ -85,7 +85,7 @@ export class createNotification1660546929601 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'notification',
       new TableForeignKey({
-        columnNames: ['notificationType'],
+        columnNames: ['notificationTypeId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'notification_type',
         onDelete: 'CASCADE',
@@ -113,8 +113,8 @@ export class createNotification1660546929601 implements MigrationInterface {
     await queryRunner.createIndex(
       'notification',
       new TableIndex({
-        name: 'IDX_NOTY_TYPE_ID',
-        columnNames: ['typeId'],
+        name: 'IDX_NOTY_NOTIFICATION_TYPE_ID',
+        columnNames: ['notificationTypeId'],
       }),
     );
   }

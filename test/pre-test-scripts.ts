@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
 import * as path from 'path';
-import { initServer } from '../src/server';
-import { AppDataSource } from '../src/dataSource';
-
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });
+
+import { initServer } from '../src/server';
+import { AppDataSource } from '../src/dataSource';
+
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { dropdb, createdb } = require('pgtools');
 
