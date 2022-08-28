@@ -6,7 +6,7 @@ dotenv.config({
 });
 
 import { initDbConnection, initServer } from './server';
-import {logger} from "./utils/logger";
+import { logger } from './utils/logger';
 
 initDbConnection()
   .then(() => {

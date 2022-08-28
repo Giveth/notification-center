@@ -1,5 +1,6 @@
 import { assert } from 'chai';
 import { Notification } from '../src/entities/notification';
+import { UserAddress } from '../src/entities/userAddress';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -64,4 +65,15 @@ function generateHexNumber(len: number) {
   return output;
 }
 
+export interface userAddressData {
+  walletAddress: string;
+}
+
+export const saveUserAddressDirectlyToDb = async (
+  userAddressData: userAddressData,
+) => {
+  return UserAddress.create({
+    ...userAddressData,
+  }).save();
+};
 export const SEED_DATA = {};

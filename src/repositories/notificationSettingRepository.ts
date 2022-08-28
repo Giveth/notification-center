@@ -10,8 +10,8 @@ export const createNotificationSettingsForNewUser = async (
   // rest of values are set by default
   const typeSettings = notificationTypes.map(notificationType => {
     const payload: Partial<NotificationSetting> = {
-      notificationTypeId: notificationType.id,
-      userAddressId: user.id,
+      notificationType: notificationType,
+      userAddress: user,
     };
 
     return payload;
@@ -19,14 +19,14 @@ export const createNotificationSettingsForNewUser = async (
 
   // Global setting that controls all notifications
   const globalSetting: Partial<NotificationSetting> = {
-    notificationTypeId: null,
-    userAddressId: user.id,
+    userAddress: user,
+    isGlobalSetting: true,
   };
   typeSettings.push(globalSetting);
 
   const userSettings = NotificationSetting.create(typeSettings);
 
-  return await NotificationSetting.insert(userSettings);
+  return await NotificationSetting.save(userSettings);
 };
 
 export const getUserNotificationSettings = async (
