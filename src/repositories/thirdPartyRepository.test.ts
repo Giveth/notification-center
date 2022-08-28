@@ -1,5 +1,5 @@
-import { assert } from "chai";
-import { findThirdPartyBySecret } from "./thirdPartyRepository";
+import { assert } from 'chai';
+import { findThirdPartyBySecret } from './thirdPartyRepository';
 
 describe(
   'findThirdPartyBySecret() test cases',
@@ -10,11 +10,11 @@ describe(
 const username = 'givethio';
 const secret = 'givethio_secret';
 
-function findThirdPartyBySecretTestCases () {
+function findThirdPartyBySecretTestCases() {
   it('should return microservice by name and secret', async () => {
     const thirdParty = await findThirdPartyBySecret({
       username,
-      secret
+      secret,
     });
 
     assert.isOk(thirdParty);
@@ -24,7 +24,7 @@ function findThirdPartyBySecretTestCases () {
   it('should not return microservice if secret is wrong', async () => {
     const thirdParty = await findThirdPartyBySecret({
       username,
-      secret: 'test'
+      secret: 'test',
     });
 
     assert.isNotOk(thirdParty);
