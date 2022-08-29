@@ -4,7 +4,7 @@ import {
   decodeMicroServiceToken,
 } from '../utils/authorizationUtils';
 import { StandardError } from '../types/StandardError';
-import { errorMessagesEnum } from '../utils/errorMessages';
+import {errorMessages, errorMessagesEnum} from '../utils/errorMessages';
 import { MICRO_SERVICES } from '../utils/utils';
 import axios from 'axios';
 import { createNewUserAddressIfNotExists } from '../repositories/userAddressRepository';
@@ -87,6 +87,7 @@ export const validateAuthMicroserviceJwt = async (
     next();
   } catch (e) {
     console.log('authenticateThirdPartyBasicAuth error', e);
-    next(e);
+    res.status(401).send({message:errorMessages.UN_AUTHORIZED})
+    // next(e);
   }
 };
