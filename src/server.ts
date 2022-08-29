@@ -5,6 +5,7 @@ import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
+import {logger} from "./utils/logger";
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
