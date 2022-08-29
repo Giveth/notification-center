@@ -2,12 +2,15 @@ import { assert } from 'chai';
 import {
   generateRandomEthereumAddress,
   saveNotificationDirectlyToDb,
+  sleep,
 } from '../../test/testUtils';
 import { NotificationSetting } from '../entities/notificationSetting';
 import { NotificationType } from '../entities/notificationType';
+import { Notification } from '../entities/notification';
 import {
   countUnreadNotifications,
   getNotifications,
+  markNotificationGroupAsRead,
   markNotificationsAsRead,
 } from './notificationRepository';
 import {
@@ -15,6 +18,7 @@ import {
   updateUserNotificationSetting,
 } from './notificationSettingRepository';
 import { createNewUserAddressIfNotExists } from './userAddressRepository';
+import { NOTIFICATION_CATEGORY } from '../types/general';
 
 // createNotificationSettingsForNewUser tested in userRepository
 describe('getNotifications() test cases', getNotificationsTestCases);
@@ -27,6 +31,11 @@ describe(
 describe(
   'countUnreadNotifications() test cases',
   countUnreadNotificationsTestCases,
+);
+
+describe(
+  'markNotificationGroupAsRead() test cases',
+  markNotificationGroupAsReadTestCases,
 );
 
 const eventName = 'Project listed';
@@ -85,6 +94,39 @@ function getNotificationsTestCases() {
     notifications.forEach(notification => {
       assert.isTrue(notification!.userAddressId === userAddress.id);
     });
+  });
+}
+
+function markNotificationGroupAsReadTestCases() {
+  it('should mark a group of notifications as read', async () => {
+    const walletAddress = generateRandomEthereumAddress();
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const notificationType = await NotificationType.createQueryBuilder('type')
+      .where('type.name = :name', { name: eventName })
+      .getOne();
+    const profileNotificationType = await NotificationType.createQueryBuilder('type')
+      .where('type.name = :name', { name: profileEventName })
+      .getOne();
+    const notification = await saveNotificationDirectlyToDb(
+      userAddress,
+      notificationType!,
+    );
+    const notification2 = await saveNotificationDirectlyToDb(
+      userAddress,
+      profileNotificationType!,
+    );
+
+    const result = await markNotificationGroupAsRead(userAddress, NOTIFICATION_CATEGORY.GENERAL);
+
+    const nonUpdatednotification = await Notification.createQueryBuilder()
+      .where('id = :id', { id: notification!.id })
+      .getOne();
+    const updatedNotification = await Notification.createQueryBuilder()
+      .where('id = :id', { id: notification2!.id })
+      .getOne();
+
+    assert.notEqual(updatedNotification!.isRead, notification2!.isRead);
+    assert.equal(nonUpdatednotification!.isRead, notification!.isRead);
   });
 }
 

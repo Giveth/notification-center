@@ -14,19 +14,31 @@ export const markNotificationGroupAsRead = async (
   category?: string,
 ): Promise<void> => {
   let query = Notification.createQueryBuilder('notification')
-    .innerJoinAndSelect('notification.notificationType', 'notificationType')
-    .update<Notification>(Notification, { isRead: true })
-    .where('notification."userAddressId" = :userAddressId', {
+    .leftJoinAndSelect('notification.notificationType', 'notificationType')
+    .where('notification.userAddressId = :userAddressId', {
       userAddressId: user.id,
     })
-    .andWhere('notification."isRead" = false');
+    .andWhere('notification.isRead = false');
 
   if (category) {
     query = query.andWhere('notificationType.category = :category', {
       category: category,
     });
   }
-  await query.execute();
+
+  const notifications = await query.getMany();
+
+  if (notifications.length === 0) return;
+
+  const notificationIds = notifications.map((notification) => {
+    return notification.id;
+  });
+
+  await Notification.createQueryBuilder('notification')
+    .update<Notification>(Notification, { isRead: true })
+    .where('notification.id IN (:...ids)', { ids: notificationIds })
+    .updateEntity(true)
+    .execute();
 };
 
 // returns raw data as array always
