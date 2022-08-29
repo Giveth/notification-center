@@ -11,7 +11,7 @@ export const createNotificationSettingsForNewUser = async (
   const typeSettings = notificationTypes.map(notificationType => {
     const payload: Partial<NotificationSetting> = {
       notificationType: notificationType,
-      userAddress:user,
+      userAddress: user,
     };
 
     return payload;

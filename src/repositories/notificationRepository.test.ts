@@ -48,7 +48,9 @@ function countUnreadNotificationsTestCases() {
     const notificationType = await NotificationType.createQueryBuilder('type')
       .where('type.name = :name', { name: eventName })
       .getOne();
-    const profileNotificationType = await NotificationType.createQueryBuilder('type')
+    const profileNotificationType = await NotificationType.createQueryBuilder(
+      'type',
+    )
       .where('type.name = :name', { name: profileEventName })
       .getOne();
     const notification = await saveNotificationDirectlyToDb(
@@ -104,7 +106,9 @@ function markNotificationGroupAsReadTestCases() {
     const notificationType = await NotificationType.createQueryBuilder('type')
       .where('type.name = :name', { name: eventName })
       .getOne();
-    const profileNotificationType = await NotificationType.createQueryBuilder('type')
+    const profileNotificationType = await NotificationType.createQueryBuilder(
+      'type',
+    )
       .where('type.name = :name', { name: profileEventName })
       .getOne();
     const notification = await saveNotificationDirectlyToDb(
@@ -116,7 +120,10 @@ function markNotificationGroupAsReadTestCases() {
       profileNotificationType!,
     );
 
-    const result = await markNotificationGroupAsRead(userAddress, NOTIFICATION_CATEGORY.GENERAL);
+    const result = await markNotificationGroupAsRead(
+      userAddress,
+      NOTIFICATION_CATEGORY.GENERAL,
+    );
 
     const nonUpdatednotification = await Notification.createQueryBuilder()
       .where('id = :id', { id: notification!.id })

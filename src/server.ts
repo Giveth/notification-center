@@ -5,7 +5,7 @@ import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
-import {logger} from "./utils/logger";
+import { logger } from './utils/logger';
 const cors = require('cors');
 
 export let dbConnection: DataSource;
@@ -25,11 +25,11 @@ export const initServer = async () => {
   app.use(express.static('public'));
 
   const whitelistHostnames: string[] = (
-      process.env.HOSTNAME_WHITELIST as string
+    process.env.HOSTNAME_WHITELIST as string
   ).split(',');
 
   const corsOptions = {
-    origin(origin :string, callback:(a:Error | null, b ?: any)=>{}) {
+    origin(origin: string, callback: (a: Error | null, b?: any) => void) {
       if (!origin) {
         // allow requests with no origin (like mobile apps, Curl, ...)
         return callback(null, true);
@@ -37,15 +37,15 @@ export const initServer = async () => {
 
       // removing http:// , https://, and :port
       const formattedOrigin = origin
-          .replace('https://', '')
-          .replace('http://', '')
-          .split(':')[0];
+        .replace('https://', '')
+        .replace('http://', '')
+        .split(':')[0];
 
       for (const allowedOrigin of whitelistHostnames) {
         // passing all subdomains of whitelist hosts, for instance x.vercel.app, x.giveth.io,...
         if (
-            formattedOrigin === allowedOrigin ||
-            formattedOrigin.endsWith(`.${allowedOrigin}`)
+          formattedOrigin === allowedOrigin ||
+          formattedOrigin.endsWith(`.${allowedOrigin}`)
         ) {
           return callback(null, true);
         }

@@ -30,7 +30,7 @@ export const markNotificationGroupAsRead = async (
 
   if (notifications.length === 0) return;
 
-  const notificationIds = notifications.map((notification) => {
+  const notificationIds = notifications.map(notification => {
     return notification.id;
   });
 
