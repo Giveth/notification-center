@@ -32,13 +32,13 @@ export class NotificationSettingsController {
       allowDappPushNotification,
     } = body;
     try {
-      const updatedNotification = await updateUserNotificationSetting(
-        id,
-        user.id,
+      const updatedNotification = await updateUserNotificationSetting({
+        notificationSettingId: id,
+        userAddressId: user.id,
         allowNotifications,
         allowEmailNotification,
         allowDappPushNotification,
-      );
+      });
 
       return updatedNotification;
     } catch (e) {

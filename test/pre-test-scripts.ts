@@ -7,7 +7,6 @@ dotenv.config({
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
 
-
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { dropdb, createdb } = require('pgtools');
 

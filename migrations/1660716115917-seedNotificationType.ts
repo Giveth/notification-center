@@ -3,10 +3,7 @@ import {
   NotificationType,
   SCHEMA_VALIDATORS_NAMES,
 } from '../src/entities/notificationType';
-import {
-  MICRO_SERVICES,
-  THIRD_PARTY_EMAIL_SERVICES,
-} from '../src/utils/utils';
+import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
 
 export const GivethNotificationTypes = {
   // SEGMENT

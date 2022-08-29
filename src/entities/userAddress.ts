@@ -23,14 +23,14 @@ export class UserAddress extends BaseEntity {
   @Column('text', { nullable: false })
   walletAddress: string;
 
-  // @OneToMany(type => Notification, notification => notification.userAddress)
-  // notifications?: Notification[];
-  //
-  // @OneToMany(
-  //   type => NotificationSetting,
-  //   notificationSetting => notificationSetting.userAddress,
-  // )
-  // settings?: NotificationSetting[];
+  @OneToMany(type => Notification, notification => notification.userAddress)
+  notifications?: Notification[];
+
+  @OneToMany(
+    type => NotificationSetting,
+    notificationSetting => notificationSetting.userAddress,
+  )
+  settings?: NotificationSetting[];
 
   // need to define push notifier logic (device address???)
 

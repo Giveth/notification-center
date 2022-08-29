@@ -48,8 +48,8 @@ export const validateAuthMicroserviceJwt = async (
   next: NextFunction,
 ) => {
   const authorizationHeader = req.headers.authorization as string;
-  const token = authorizationHeader.split(' ')[1].toString();
   try {
+    const token = authorizationHeader.split(' ')[1].toString();
     const walletAddress = await getJwtAuthenticationAdapter().verifyJwt(token);
     res.locals.user = await createNewUserAddressIfNotExists(walletAddress);
     next();

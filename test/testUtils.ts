@@ -1,5 +1,7 @@
 import { assert } from 'chai';
 import { Notification } from '../src/entities/notification';
+import { UserAddress } from '../src/entities/userAddress';
+import { NotificationType } from '../src/entities/notificationType';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -64,4 +66,27 @@ function generateHexNumber(len: number) {
   return output;
 }
 
+export interface userAddressData {
+  walletAddress: string;
+}
+
+export const saveUserAddressDirectlyToDb = async (
+  userAddressData: userAddressData,
+) => {
+  return UserAddress.create({
+    ...userAddressData,
+  }).save();
+};
+
+export const saveNotificationDirectlyToDb = async (
+  userAddress: UserAddress,
+  notificationType: NotificationType,
+) => {
+  const notification = Notification.create({
+    userAddress: userAddress,
+    notificationType: notificationType,
+  });
+
+  return notification.save();
+};
 export const SEED_DATA = {};

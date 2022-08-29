@@ -10,7 +10,7 @@ export const createNotificationSettingsForNewUser = async (
   // rest of values are set by default
   const typeSettings = notificationTypes.map(notificationType => {
     const payload: Partial<NotificationSetting> = {
-      notificationTypeId: notificationType.id,
+      notificationType: notificationType,
       userAddress:user,
     };
 
@@ -19,14 +19,14 @@ export const createNotificationSettingsForNewUser = async (
 
   // Global setting that controls all notifications
   const globalSetting: Partial<NotificationSetting> = {
-    notificationTypeId: null,
     userAddress: user,
+    isGlobalSetting: true,
   };
   typeSettings.push(globalSetting);
 
   const userSettings = NotificationSetting.create(typeSettings);
 
-  return await NotificationSetting.insert(userSettings);
+  return await NotificationSetting.save(userSettings);
 };
 
 export const getUserNotificationSettings = async (
@@ -47,31 +47,32 @@ export const getUserNotificationSettings = async (
   return query.take(take).skip(skip).getManyAndCount();
 };
 
-export const updateUserNotificationSetting = async (
-  notificationId: number,
-  userAddressId: number,
-  allowNotifications?: string,
-  allowEmailNotification?: string,
-  allowDappPushNotification?: string,
-) => {
+export const updateUserNotificationSetting = async (params: {
+  notificationSettingId: number;
+  userAddressId: number;
+  allowNotifications?: string;
+  allowEmailNotification?: string;
+  allowDappPushNotification?: string;
+}) => {
   const notificationSetting = await NotificationSetting.createQueryBuilder()
     .where('id = :id AND "userAddressId" = :userAddressId', {
-      id: notificationId,
-      userAddressId: userAddressId,
+      id: params.notificationSettingId,
+      userAddressId: params.userAddressId,
     })
     .getOne();
 
   if (!notificationSetting)
     throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
 
-  if (allowNotifications)
-    notificationSetting.allowNotifications = allowNotifications === 'true';
-  if (allowEmailNotification)
+  if (params.allowNotifications)
+    notificationSetting.allowNotifications =
+      params.allowNotifications === 'true';
+  if (params.allowEmailNotification)
     notificationSetting.allowEmailNotification =
-      allowEmailNotification === 'true';
-  if (allowDappPushNotification)
+      params.allowEmailNotification === 'true';
+  if (params.allowDappPushNotification)
     notificationSetting.allowDappPushNotification =
-      allowDappPushNotification === 'true';
+      params.allowDappPushNotification === 'true';
 
   return notificationSetting.save();
 };
