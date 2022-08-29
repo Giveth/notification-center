@@ -1,5 +1,9 @@
 import { Notification, NotificationMetadata } from '../entities/notification';
 
+interface BaseNotificationResponse {
+  trackId ?: string
+}
+
 export type SendNotificationTypeRequest = {
   /**
    * @example "Made donation"
@@ -93,15 +97,15 @@ export type SendNotificationRequest = {
   sendEmail: boolean;
 };
 
-export type SendNotificationResponse = {
+export interface SendNotificationResponse extends BaseNotificationResponse {
   success: boolean;
 };
-export type GetNotificationsResponse = {
+export interface GetNotificationsResponse extends BaseNotificationResponse {
   notifications: Notification[];
   count: number;
 };
 
-export type CountUnreadNotificationsResponse = {
+export interface CountUnreadNotificationsResponse extends BaseNotificationResponse {
   total: number;
   projectsRelated: number;
   givEconomyRelated: number;
@@ -111,10 +115,10 @@ export type CountUnreadNotificationsResponse = {
   lastNotificationId?: number;
 };
 
-export type ReadSingleNotificationResponse = {
+export interface ReadSingleNotificationResponse extends BaseNotificationResponse {
   notification: Notification;
 };
 
-export type ReadAllNotificationsResponse = {
+export interface ReadAllNotificationsResponse extends BaseNotificationResponse{
   success: boolean;
 };
