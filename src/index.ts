@@ -18,5 +18,6 @@ initDbConnection()
   })
   .catch(e => {
     console.log('init server error', e);
+    logger.error('init server error', e);
     throw e;
   });

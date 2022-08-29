@@ -39,5 +39,6 @@ export const initServer = async () => {
   const port = process.env.PORT || 3040;
   app.listen(port, () => {
     console.log(`The application is listening on port ${port}`);
+    logger.info(`The application is listening on port ${port}`);
   });
 };
