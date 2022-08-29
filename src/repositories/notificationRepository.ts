@@ -66,14 +66,14 @@ export const countUnreadNotifications = async (
     .andWhere('notification."isRead" = false')
 
     .andWhere('notificationType.category = :category', {
-      category: NOTIFICATION_CATEGORY.GENERAL,
+      category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     })
     .getCount();
   const general = await baseNotificationQuery(user)
     .andWhere('notification."isRead" = false')
 
     .andWhere('notificationType.category = :category', {
-      category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
+      category: NOTIFICATION_CATEGORY.GENERAL,
     })
     .getCount();
   const lastNotification = await baseNotificationQuery(user)
