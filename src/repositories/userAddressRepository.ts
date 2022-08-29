@@ -18,7 +18,7 @@ export const createNewUserAddress = async (
   walletAddress: string,
 ): Promise<UserAddress> => {
   const query = UserAddress.create({
-    walletAddress: walletAddress,
+    walletAddress: walletAddress.toLowerCase(),
   });
   const user = await query.save();
 

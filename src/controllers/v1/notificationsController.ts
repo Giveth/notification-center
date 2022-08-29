@@ -118,8 +118,8 @@ export class NotificationsController {
     /**
      * @example limit "20"
      * @example offset "0"
-     * @example isRead "true"
      * @example isRead "false"
+     * @example isRead "true"
      * @example startTime "1659356987"
 
      */
