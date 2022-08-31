@@ -1,7 +1,7 @@
 import { Notification, NotificationMetadata } from '../entities/notification';
 
 interface BaseNotificationResponse {
-  trackId ?: string
+  trackId?: string;
 }
 
 export type SendNotificationTypeRequest = {
@@ -99,13 +99,14 @@ export type SendNotificationRequest = {
 
 export interface SendNotificationResponse extends BaseNotificationResponse {
   success: boolean;
-};
+}
 export interface GetNotificationsResponse extends BaseNotificationResponse {
   notifications: Notification[];
   count: number;
-};
+}
 
-export interface CountUnreadNotificationsResponse extends BaseNotificationResponse {
+export interface CountUnreadNotificationsResponse
+  extends BaseNotificationResponse {
   total: number;
   projectsRelated: number;
   givEconomyRelated: number;
@@ -113,12 +114,13 @@ export interface CountUnreadNotificationsResponse extends BaseNotificationRespon
 
   // user's last notificationId, then frontend will know should update notificationList or not
   lastNotificationId?: number;
-};
+}
 
-export interface ReadSingleNotificationResponse extends BaseNotificationResponse {
+export interface ReadSingleNotificationResponse
+  extends BaseNotificationResponse {
   notification: Notification;
-};
+}
 
-export interface ReadAllNotificationsResponse extends BaseNotificationResponse{
+export interface ReadAllNotificationsResponse extends BaseNotificationResponse {
   success: boolean;
-};
+}

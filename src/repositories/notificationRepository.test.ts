@@ -6,9 +6,10 @@ import {
 } from '../../test/testUtils';
 import { NotificationSetting } from '../entities/notificationSetting';
 import { NotificationType } from '../entities/notificationType';
-import { Notification } from '../entities/notification';
+import { EMAIL_STATUSES, Notification } from '../entities/notification';
 import {
   countUnreadNotifications,
+  createNotification,
   getNotifications,
   markNotificationGroupAsRead,
   markNotificationsAsRead,
@@ -38,8 +39,37 @@ describe(
   markNotificationGroupAsReadTestCases,
 );
 
+describe('createNotification() test cases', createNotificationTestCases);
+
 const eventName = 'Project listed';
 const profileEventName = 'Updated profile';
+
+function createNotificationTestCases() {
+  it('should create notification with required params', async () => {
+    const walletAddress = generateRandomEthereumAddress();
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const notificationType = await NotificationType.createQueryBuilder('type')
+      .where('type.name = :name', { name: eventName })
+      .getOne();
+
+    const result = await createNotification({
+      notificationType: notificationType!,
+      user: userAddress,
+      email: 'test@example.com',
+      emailStatus: EMAIL_STATUSES.NO_NEED_TO_SEND,
+      projectId: '1',
+      metadata: {
+        name: 'Carlos',
+        amount: 10,
+        currency: 'DAI',
+      },
+    });
+
+    assert.isOk(result);
+    assert.equal(result.userAddressId, userAddress.id);
+    assert.equal(result.notificationTypeId, notificationType!.id);
+  });
+}
 
 function countUnreadNotificationsTestCases() {
   it('should count unread notifications by category', async () => {

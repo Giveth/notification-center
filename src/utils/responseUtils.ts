@@ -9,5 +9,5 @@ export const sendStandardResponse = (
 ) => {
   const { res, result } = data;
   const trackId = res?.locals?.trackId;
-  res.status(httpStatusCode).json({...result, trackId});
+  res.status(httpStatusCode).json({ ...result, trackId });
 };
