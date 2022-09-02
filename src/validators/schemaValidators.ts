@@ -32,7 +32,7 @@ export const sendNotificationValidator = Joi.object({
   metadata: Joi.object({
     amount: Joi.number(),
     currency: Joi.string(),
-
+    projectSlug: Joi.string(),
     name: Joi.string(),
   }),
 });
