@@ -124,3 +124,11 @@ export interface ReadSingleNotificationResponse
 export interface ReadAllNotificationsResponse extends BaseNotificationResponse {
   success: boolean;
 }
+
+export interface ReadAllNotificationsRequestType{
+  /**
+   * @example "projectRelated"
+   */
+  category?: string;
+
+}

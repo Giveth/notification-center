@@ -21,7 +21,7 @@ import {
 } from '../../validators/schemaValidators';
 import {
   CountUnreadNotificationsResponse,
-  GetNotificationsResponse,
+  GetNotificationsResponse, ReadAllNotificationsRequestType,
   ReadAllNotificationsResponse,
   ReadSingleNotificationResponse,
   SendNotificationRequest,
@@ -116,6 +116,11 @@ export class NotificationsController {
   /**
      * @example limit "20"
      * @example offset "0"
+     * @example category ""
+     * @example category "projectRelated"
+     * @example category "givEconomyRelated"
+     * @example category "general"
+     * @example isRead ""
      * @example isRead "false"
      * @example isRead "true"
      * @example startTime "1659356987"
@@ -209,17 +214,18 @@ export class NotificationsController {
   @Put('/notifications/readAll')
   @Security('JWT')
   public async readAllUnreadNotifications(
+      @Body()
+          body: ReadAllNotificationsRequestType,
     @Inject()
     params: {
       user: UserAddress;
-      category?: string;
     },
   ): Promise<CountUnreadNotificationsResponse> {
     const user = params.user;
 
     try {
       // in case mark as read all is limited per category
-      await markNotificationGroupAsRead(user, params.category);
+      await markNotificationGroupAsRead(user, body.category);
 
       return countUnreadNotifications(user);
     } catch (e) {
