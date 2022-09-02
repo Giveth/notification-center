@@ -67,6 +67,7 @@ export class NotificationsController {
     const { microService } = params;
     const { userWalletAddress, projectId } = body;
     try {
+      validateWithJoiSchema(body, sendNotificationValidator)
       const userAddress = await createNewUserAddressIfNotExists(
         userWalletAddress as string,
       );

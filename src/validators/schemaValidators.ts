@@ -23,10 +23,12 @@ const throwHttpErrorIfJoiValidatorFails = (
 };
 
 export const sendNotificationValidator = Joi.object({
-  userId: Joi.string().required(),
-  projectId: Joi.string().required(),
-  notificationType: Joi.string().required(),
-  walletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
+  projectId: Joi.string(),
+  eventName: Joi.string().required(),
+  sendEmail: Joi.boolean(),
+  sendSegment: Joi.boolean(),
+  email: Joi.string(),
+  userWalletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
   metadata: Joi.object({
     amount: Joi.number(),
     currency: Joi.string(),
