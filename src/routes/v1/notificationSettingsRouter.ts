@@ -3,11 +3,11 @@ import { validateAuthMicroserviceJwt } from '../../middlewares/authentication';
 import { NotificationSettingsController } from '../../controllers/v1/notificationSettingsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 
-export const notificationRouter = express.Router();
+export const notificationSettingsRouter = express.Router();
 
 const notificationSettingsController = new NotificationSettingsController();
 
-notificationRouter.get(
+notificationSettingsRouter.get(
   '/notification_settings',
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
@@ -30,7 +30,7 @@ notificationRouter.get(
   },
 );
 
-notificationRouter.put(
+notificationSettingsRouter.put(
   '/notification_settings/:id',
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {

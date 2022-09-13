@@ -54,7 +54,7 @@ export const validateAuthMicroserviceJwt = async (
     res.locals.user = await createNewUserAddressIfNotExists(walletAddress);
     next();
   } catch (e) {
-    logger.error('authenticateThirdPartyBasicAuth error', e);
+    logger.error('validateAuthMicroserviceJwt error', e);
     res.status(401).send({ message: errorMessages.UN_AUTHORIZED });
     // next(e);
   }
