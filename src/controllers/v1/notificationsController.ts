@@ -21,7 +21,8 @@ import {
 } from '../../validators/schemaValidators';
 import {
   CountUnreadNotificationsResponse,
-  GetNotificationsResponse, ReadAllNotificationsRequestType,
+  GetNotificationsResponse,
+  ReadAllNotificationsRequestType,
   ReadAllNotificationsResponse,
   ReadSingleNotificationResponse,
   SendNotificationRequest,
@@ -67,7 +68,7 @@ export class NotificationsController {
     const { microService } = params;
     const { userWalletAddress, projectId } = body;
     try {
-      validateWithJoiSchema(body, sendNotificationValidator)
+      validateWithJoiSchema(body, sendNotificationValidator);
       const userAddress = await createNewUserAddressIfNotExists(
         userWalletAddress as string,
       );
@@ -215,8 +216,8 @@ export class NotificationsController {
   @Put('/notifications/readAll')
   @Security('JWT')
   public async readAllUnreadNotifications(
-      @Body()
-          body: ReadAllNotificationsRequestType,
+    @Body()
+    body: ReadAllNotificationsRequestType,
     @Inject()
     params: {
       user: UserAddress;

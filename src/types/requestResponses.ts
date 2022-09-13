@@ -125,10 +125,9 @@ export interface ReadAllNotificationsResponse extends BaseNotificationResponse {
   success: boolean;
 }
 
-export interface ReadAllNotificationsRequestType{
+export interface ReadAllNotificationsRequestType {
   /**
    * @example "projectRelated"
    */
   category?: string;
-
 }
