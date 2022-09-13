@@ -10,7 +10,7 @@ import { UserAddress } from '../../entities/userAddress';
 @Tags('NotificationSettings')
 export class NotificationSettingsController {
   @Put('/')
-  @Security('basicAuth')
+  @Security('JWT')
   public async updateNotificationSetting(
     @Body()
     body: {
