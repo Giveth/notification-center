@@ -35,13 +35,19 @@ export const getUserNotificationSettings = async (
   userAddressId: number,
   category?: string,
 ) => {
-  let query = NotificationSetting.createQueryBuilder().where(
-    '"userAddressId" = :userAddressId',
-    { userAddressId: userAddressId },
-  );
+  let query = NotificationSetting.createQueryBuilder('notificationSetting')
+    .leftJoinAndSelect(
+      'notificationSetting.notificationType',
+      'notificationType',
+    )
+    .where('notificationSetting.userAddressId = :userAddressId', {
+      userAddressId: userAddressId,
+    });
 
   if (category) {
-    query = query.andWhere('category = :category', { category: category });
+    query = query.andWhere('notificationSetting.category = :category', {
+      category: category,
+    });
   }
 
   return query.take(take).skip(skip).getManyAndCount();
@@ -54,11 +60,20 @@ export const updateUserNotificationSetting = async (params: {
   allowEmailNotification?: string;
   allowDappPushNotification?: string;
 }) => {
-  const notificationSetting = await NotificationSetting.createQueryBuilder()
-    .where('id = :id AND "userAddressId" = :userAddressId', {
-      id: params.notificationSettingId,
-      userAddressId: params.userAddressId,
-    })
+  const notificationSetting = await NotificationSetting.createQueryBuilder(
+    'notificationSetting',
+  )
+    .leftJoinAndSelect(
+      'notificationSetting.notificationType',
+      'notificationType',
+    )
+    .where(
+      'notificationSetting.id = :id AND notificationSetting.userAddressId = :userAddressId',
+      {
+        id: params.notificationSettingId,
+        userAddressId: params.userAddressId,
+      },
+    )
     .getOne();
 
   if (!notificationSetting)
