@@ -14,9 +14,17 @@ describe(
   '/notification_settings GET test cases',
   getNotificationSettingsTestCases,
 );
-describe('/notification_settings PUT test cases', updateNotificationsTestCases);
+describe(
+  '/notification_settings/:id PUT test cases',
+  updateNotificationsTestCases,
+);
+describe(
+  '/notification_settings PUT test cases',
+  updateMultipleNotificationsTestCases,
+);
 
 const walletAddress = generateRandomEthereumAddress().toLowerCase();
+const walletAddress2 = generateRandomEthereumAddress().toLowerCase();
 
 function getNotificationSettingsTestCases() {
   it('should return success response', async () => {
@@ -66,6 +74,50 @@ function updateNotificationsTestCases() {
     assert.isTrue(updatedNotification.allowDappPushNotification === false);
     assert.isTrue(
       updatedNotification.allowDappPushNotification !==
+        notificationSetting?.allowDappPushNotification,
+    );
+  });
+}
+
+function updateMultipleNotificationsTestCases() {
+  it('should update notification settings', async () => {
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress2);
+    const notificationSetting = await NotificationSetting.createQueryBuilder(
+      'notificationSetting',
+    )
+      .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .getOne();
+    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+    const result = await Axios.put(
+      `${apiBaseUrl}/v1/notification_settings/multiple`,
+      {
+        settings: [
+          {
+            id: notificationSetting!.id,
+            allowEmailNotification: 'false',
+            allowDappPushNotification: 'false',
+          },
+        ],
+      },
+      { headers: { Authorization: `Bearer ${jwtToken}` } },
+    );
+
+    const updatedNotification = result.data;
+    assert.isOk(result);
+    // didnt update this value so it remains true
+    assert.isTrue(updatedNotification[0].allowNotifications === true);
+    assert.isTrue(
+      updatedNotification[0].allowNotifications ===
+        notificationSetting?.allowNotifications,
+    );
+    assert.isTrue(updatedNotification[0].allowEmailNotification === false);
+    assert.isTrue(
+      updatedNotification[0].allowEmailNotification !==
+        notificationSetting?.allowEmailNotification,
+    );
+    assert.isTrue(updatedNotification[0].allowDappPushNotification === false);
+    assert.isTrue(
+      updatedNotification[0].allowDappPushNotification !==
         notificationSetting?.allowDappPushNotification,
     );
   });

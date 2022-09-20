@@ -50,3 +50,24 @@ notificationSettingsRouter.put(
     }
   },
 );
+
+notificationSettingsRouter.put(
+  '/notification_settings/multiple',
+  validateAuthMicroserviceJwt,
+  async (req: Request, res: Response, next) => {
+    const { user } = res.locals;
+
+    try {
+      const result =
+        await notificationSettingsController.updateNotificationSettings(
+          req.body,
+          {
+            user,
+          },
+        );
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      next(e);
+    }
+  },
+);

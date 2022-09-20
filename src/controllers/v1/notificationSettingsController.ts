@@ -9,7 +9,58 @@ import { UserAddress } from '../../entities/userAddress';
 @Route('/v1/notification_settings')
 @Tags('NotificationSettings')
 export class NotificationSettingsController {
-  @Put('/')
+  @Put('/multiple')
+  @Security('JWT')
+  public async updateNotificationSettings(
+    @Body()
+    body: {
+      settings: [
+        {
+          id: number;
+          allowNotifications?: string;
+          allowEmailNotification?: string;
+          allowDappPushNotification?: string;
+        },
+      ];
+    },
+    @Inject()
+    params: {
+      user: UserAddress;
+    },
+  ) {
+    const { user } = params;
+    const { settings } = body;
+
+    try {
+      const updatedNotifications = await Promise.all(
+        settings.map(async setting => {
+          const {
+            id,
+            allowNotifications,
+            allowEmailNotification,
+            allowDappPushNotification,
+          } = setting;
+
+          const updatedNotification = await updateUserNotificationSetting({
+            notificationSettingId: id,
+            userAddressId: user.id,
+            allowNotifications,
+            allowEmailNotification,
+            allowDappPushNotification,
+          });
+
+          return updatedNotification;
+        }),
+      );
+
+      return updatedNotifications;
+    } catch (e) {
+      logger.error('updateNotificationSetting() error', e);
+      throw e;
+    }
+  }
+
+  @Put('/:id')
   @Security('JWT')
   public async updateNotificationSetting(
     @Body()

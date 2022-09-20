@@ -6,6 +6,30 @@ import {
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
 
 export const GivethNotificationTypes = {
+  EMAIL_NOTIFICATIONS: {
+    name: 'Email notifications',
+    description: 'Turn on/off all email notifications',
+    microService: MICRO_SERVICES.givethio,
+    category: 'general',
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null, // doesn't sent
+    pushNotifierService: null,
+    title: 'Email notifications',
+    content: 'Turn on/off all email notifications', // Missing copy
+  },
+  DAPP_NOTIFICATIONS: {
+    name: 'Dapp notifications',
+    description: 'Turn on/off all Dapp notifications',
+    microService: MICRO_SERVICES.givethio,
+    category: 'general',
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null, // doesn't sent
+    pushNotifierService: null,
+    title: 'Dapp notifications',
+    content: 'Turn on/off all Dapp notifications', // Missing copy
+  },
   // SEGMENT
   INCOMPLETE_PROFILE: {
     name: 'Incomplete profile',
