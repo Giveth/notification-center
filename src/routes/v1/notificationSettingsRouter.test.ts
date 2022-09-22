@@ -82,43 +82,72 @@ function updateNotificationsTestCases() {
 function updateMultipleNotificationsTestCases() {
   it('should update notification settings', async () => {
     const userAddress = await createNewUserAddressIfNotExists(walletAddress2);
-    const notificationSetting = await NotificationSetting.createQueryBuilder(
+    const notificationSettings = await NotificationSetting.createQueryBuilder(
       'notificationSetting',
     )
       .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
-      .getOne();
-    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+      .take(2)
+      .getMany();
+
+    const jwtToken = jwt.sign({ publicAddress: walletAddress2 }, 'xxxx');
     const result = await Axios.put(
-      `${apiBaseUrl}/v1/notification_settings/multiple`,
+      `${apiBaseUrl}/v1/notification_settings`,
       {
-        settings: [
-          {
-            id: notificationSetting!.id,
+        settings: notificationSettings.map(setting => {
+          return {
+            id: setting!.id,
             allowEmailNotification: 'false',
             allowDappPushNotification: 'false',
-          },
-        ],
+          };
+        }),
       },
       { headers: { Authorization: `Bearer ${jwtToken}` } },
     );
 
-    const updatedNotification = result.data;
+    const updatedNotifications: any[] = Object.values(result.data);
     assert.isOk(result);
     // didnt update this value so it remains true
-    assert.isTrue(updatedNotification[0].allowNotifications === true);
+    assert.isTrue(updatedNotifications[0].allowNotifications === true);
+    assert.isTrue(updatedNotifications[1].allowNotifications === true);
+
+    const updatedNotification1 = updatedNotifications.find((setting: any) => {
+      return setting.id === notificationSettings[0].id;
+    });
+
+    const updatedNotification2 = updatedNotifications.find((setting: any) => {
+      return setting.id === notificationSettings[1].id;
+    });
+
+    // notification 1
     assert.isTrue(
-      updatedNotification[0].allowNotifications ===
-        notificationSetting?.allowNotifications,
+      updatedNotification1.allowNotifications ===
+        notificationSettings[0]?.allowNotifications,
     );
-    assert.isTrue(updatedNotification[0].allowEmailNotification === false);
+    assert.isTrue(updatedNotification1.allowEmailNotification === false);
     assert.isTrue(
-      updatedNotification[0].allowEmailNotification !==
-        notificationSetting?.allowEmailNotification,
+      updatedNotification1.allowEmailNotification !==
+        notificationSettings[0]?.allowEmailNotification,
     );
-    assert.isTrue(updatedNotification[0].allowDappPushNotification === false);
+    assert.isTrue(updatedNotification1.allowDappPushNotification === false);
     assert.isTrue(
-      updatedNotification[0].allowDappPushNotification !==
-        notificationSetting?.allowDappPushNotification,
+      updatedNotification1.allowDappPushNotification !==
+        notificationSettings[0]?.allowDappPushNotification,
+    );
+
+    // notification 2
+    assert.isTrue(
+      updatedNotification2.allowNotifications ===
+        notificationSettings[1]?.allowNotifications,
+    );
+    assert.isTrue(updatedNotification2.allowEmailNotification === false);
+    assert.isTrue(
+      updatedNotification2.allowEmailNotification !==
+        notificationSettings[1]?.allowEmailNotification,
+    );
+    assert.isTrue(updatedNotification2.allowDappPushNotification === false);
+    assert.isTrue(
+      updatedNotification2.allowDappPushNotification !==
+        notificationSettings[1]?.allowDappPushNotification,
     );
   });
 }

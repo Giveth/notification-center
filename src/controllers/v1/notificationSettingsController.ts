@@ -6,22 +6,22 @@ import {
 } from '../../repositories/notificationSettingRepository';
 import { UserAddress } from '../../entities/userAddress';
 
+interface SettingParams {
+  id: number;
+  allowNotifications?: string;
+  allowEmailNotification?: string;
+  allowDappPushNotification?: string;
+}
+
 @Route('/v1/notification_settings')
 @Tags('NotificationSettings')
 export class NotificationSettingsController {
-  @Put('/multiple')
+  @Put('/')
   @Security('JWT')
   public async updateNotificationSettings(
     @Body()
     body: {
-      settings: [
-        {
-          id: number;
-          allowNotifications?: string;
-          allowEmailNotification?: string;
-          allowDappPushNotification?: string;
-        },
-      ];
+      settings: SettingParams[];
     },
     @Inject()
     params: {

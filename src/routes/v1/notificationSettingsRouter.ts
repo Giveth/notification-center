@@ -52,7 +52,7 @@ notificationSettingsRouter.put(
 );
 
 notificationSettingsRouter.put(
-  '/notification_settings/multiple',
+  '/notification_settings',
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { user } = res.locals;
