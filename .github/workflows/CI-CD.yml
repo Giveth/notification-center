@@ -82,3 +82,20 @@ jobs:
           username: ${{ secrets.STAGING_USERNAME }}
           privateKey: ${{ secrets.STAGING_PRIVATE_KEY}}
 
+  deploy-k8s:
+    name: deploy to cluster
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: deploy to cluster
+      uses: steebchen/kubectl@v2.0.0
+      with: # defaults to latest kubectl binary version
+        config: ${{ secrets.KUBE_CONFIG }}
+        command: rollout restart deployments/notification-center -n notification-center
+    - name: verify deployment
+      uses: steebchen/kubectl@v2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG }}
+        version: v1.24.2 # specify kubectl binary version explicitly
+        command: rollout status deployments/notification-center -n notification-center
