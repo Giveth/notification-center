@@ -17,6 +17,7 @@ import { NotificationSetting } from './notificationSetting';
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
   DRAFTED_PROJECT_ACTIVATED: 'draftedProjectValidator',
+  DRAFTED_PROJECT_SAVED: 'draftedProjectSavedValidator',
   PROJECT_LISTED: 'projectListed',
   PROJECT_UNLISTED: 'projectUnlisted',
   PROJECT_EDITED: 'projectEdited',
@@ -27,47 +28,28 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_ACTIVATED: 'projectActivated',
   PROJECT_DEACTIVATED: 'projectDeactivated',
   PROJECT_CANCELLED: 'projectCancelled',
+  VERIFICATION_FORM_SENT: 'verificationFormSent',
+  VERIFICATION_FORM_Reapply_Reminder: 'verificationFormReapplyReminder',
+  VERIFICATION_FORM_REJECTED: 'verificationFormRejected',
+
+  GIV_FARM_CLAIM: 'givFarmClaim',
+  GIV_FARM_STAKE: 'givFarmStake',
+  GIV_FARM_UN_STAKE: 'givFarmUnStake',
+  GIV_FARM_READY_TO_CLAIM: 'givFarmReadyToClaim',
+  GIV_FARM_REWARD_HARVEST: 'givFarmRewardHarvest',
+
   SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation', // verificationForm,
   MADE_DONATION: 'madeDonation',
   DONATION_RECEIVED: 'donationReceived',
   PROJECT_UPDATED_DONOR: 'projectUpdatedDonor',
   PROJECT_UPDATED_OWNER: 'projectUpdatedOwner',
+  PROJECT_UPDATED_WHO_LIKED: 'projectUpdatedWhoLiked',
   PROJECT_CREATED: 'projectCreated',
   GET_DONATION_PRICE_FAILED: 'getDonationPriceFailed',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: 'verificationFormDrafted',
+  PROJECT_RECEIVED_LIKE: 'projectReceivedLike',
 };
-
-export class HtmlTemplate {
-  /**
-   * sample
-   * {
-    "icon": "",
-    "content": [
-        {
-            "type": "p",
-            "content" : "you staked"
-        },
-        {
-            "type": "b",
-            "content": "$amount"
-        },
-        {
-            "type": "p",
-            "content" : "on"
-        },
-        {
-            "type": "a",
-            "content" : "$farm",
-            "href": "$href1"
-        }
-    ],
-    "qutoe": "hey bro, how are you?"
-    }
-   */
-  icon?: string;
-  content: { type: string; content: string; href?: string }[];
-  quote: string;
-}
+export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
 // This table needs to be prefilled with all notifications in the design
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
