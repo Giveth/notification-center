@@ -16,8 +16,8 @@ import { NotificationSetting } from './notificationSetting';
 
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
-  DRAFTED_PROJECT_ACTIVATED: 'draftedProjectValidator',
   DRAFTED_PROJECT_SAVED: 'draftedProjectSavedValidator',
+  DRAFTED_PROJECT_ACTIVATED: 'draftedProjectPublishedValidator',
   PROJECT_LISTED: 'projectListed',
   PROJECT_UNLISTED: 'projectUnlisted',
   PROJECT_EDITED: 'projectEdited',

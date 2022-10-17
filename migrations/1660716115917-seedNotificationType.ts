@@ -787,7 +787,7 @@ export const GivethNotificationTypes = {
       },
       {
         "type": "a",
-        "content": "$poolname",
+        "content": "$poolName",
         "href": "/givfarm"
       },
       {
@@ -821,7 +821,7 @@ export const GivethNotificationTypes = {
       },
       {
         "type": "a",
-        "content": "$poolname",
+        "content": "$poolName",
         "href": "/givfarm"
       },
       {
@@ -993,7 +993,7 @@ export const GivethNotificationTypes = {
     description: 'Project has received a donation',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.DONATION_RECEIVED,
+  schemaValidator: SCHEMA_VALIDATORS_NAMES.GET_DONATION_PRICE_FAILED,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -1168,7 +1168,7 @@ export const GivethNotificationTypes = {
   },
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
     name: 'Verification form got draft by admin',
-    description: 'Project has been created.',
+    description: 'Verification form got drafted by admin',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator:
@@ -1177,7 +1177,22 @@ export const GivethNotificationTypes = {
     emailNotificationId: 'Verification form got draft by admin',
     pushNotifierService: null,
     title: 'Project verification under review',
-    content: '', // Missing copy
+    htmlTemplate: [
+      {
+        "type": "p",
+        "content": "Your project "
+      },
+      {
+        "type": "a",
+        "content": "$projectTitle",
+        "href": "$projectLink"
+      },
+      {
+        "type": "p",
+        "content": " got draft by admin"
+      }
+    ],
+    content: 'Your project {project name} got draft by admin'
   },
   PROJECT_RECEIVED_LIKE: {
     name: 'project liked',

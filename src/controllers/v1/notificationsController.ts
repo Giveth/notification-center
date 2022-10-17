@@ -44,7 +44,7 @@ import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
-import { SCHEMA_VALIDATORS } from '../../utils/validators/segmentValidators';
+import { SEGMENT_SCHEMA_VALIDATOR } from '../../utils/validators/segmentValidators';
 import { THIRD_PARTY_EMAIL_SERVICES } from '../../utils/utils';
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
@@ -84,10 +84,12 @@ export class NotificationsController {
       let emailStatus = body.sendEmail
         ? EMAIL_STATUSES.WAITING_TO_BE_SEND
         : EMAIL_STATUSES.NO_NEED_TO_SEND;
-      if (body.sendSegment && notificationType.schemaValidator) {
-        const schemaValidator =
-          SCHEMA_VALIDATORS[notificationType.schemaValidator as string];
-        validateWithJoiSchema(body.segmentData, schemaValidator);
+
+      const segmentValidator = SEGMENT_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.segment
+      const metadataValidator = SEGMENT_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.metadata
+      if (body.sendSegment &&
+          segmentValidator) {
+        validateWithJoiSchema(body.segmentData, segmentValidator);
         analytics.track(
           notificationType.emailNotificationId!,
           body.analyticsUserId,
