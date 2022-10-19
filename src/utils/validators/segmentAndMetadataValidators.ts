@@ -365,6 +365,14 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
+  projectReceivedLike: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
+  projectUpdatedWhoLiked: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
   verificationFormRejected: {
     metadata: projectTitleProjectLinkReasonSchema,
     segment: null,

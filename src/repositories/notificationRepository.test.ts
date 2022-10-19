@@ -42,7 +42,7 @@ describe(
 describe('createNotification() test cases', createNotificationTestCases);
 
 const eventName = 'Project listed';
-const profileEventName = 'Updated profile';
+const profileEventName = 'Incomplete profile';
 
 function createNotificationTestCases() {
   it('should create notification with required params', async () => {

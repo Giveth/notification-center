@@ -1174,7 +1174,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Your project update was succesful.',
+        content: 'Your project update was successful.',
       },
     ],
     content: '', // Missing copy
@@ -1203,44 +1203,7 @@ export const GivethNotificationTypes = {
     ],
     content: '{Project name} that you donated before posted an update.',
   },
-  PROJECT_CREATED: {
-    name: 'Project created',
-    description: 'Project has been created.',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CREATED,
-    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project created',
-    pushNotifierService: null,
-    title: 'Project created',
-    content: '', // Missing copy
-  },
-  UPDATED_PROFILE: {
-    // No need to notify this
-    name: 'Updated profile',
-    description: 'User updated his profile',
-    microService: MICRO_SERVICES.givethio,
-    schemaValidator: null,
-    category: 'general',
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Updated profile',
-    content: '', // Missing copy
-  },
-  GET_DONATION_PRICE_FAILED: {
-    name: 'Get Donation Price Failed',
-    description: 'Project has been created.',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.GET_DONATION_PRICE_FAILED,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Donation has been failed',
-    content:
-      'Your donation to {project name} was not successful. {reason} \n{tx link}',
-  },
+
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
     name: 'Verification form got draft by admin',
     description: 'Verification form got drafted by admin',
