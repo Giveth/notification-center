@@ -99,6 +99,9 @@ export class NotificationsController {
         emailStatus = EMAIL_STATUSES.SENT;
       }
 
+      if(metadataValidator){
+        validateWithJoiSchema(body.metadata,metadataValidator)
+      }
       await createNotification({
         notificationType,
         user: userAddress,
