@@ -7,6 +7,7 @@ import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
 import { SegmentEvents } from '../src/services/segment/analytics';
 import { NOTIFICATION_CATEGORY } from '../src/types/general';
 
+// https://github.com/Giveth/notification-center/issues/6 , https://gist.github.com/MohammadPCh/24434d50bc9ccd9b74905c271ee05482
 export const GivethNotificationTypes = {
   EMAIL_NOTIFICATIONS: {
     name: 'Email notifications',
