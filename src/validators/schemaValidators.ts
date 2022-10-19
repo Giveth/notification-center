@@ -31,12 +31,9 @@ export const sendNotificationValidator = Joi.object({
   userWalletAddress: Joi.string()
     .pattern(ethereumWalletAddressRegex)
     .required(),
-  metadata: Joi.object({
-    amount: Joi.number(),
-    currency: Joi.string(),
-    projectSlug: Joi.string(),
-    name: Joi.string(),
-  }),
+
+  // We have a different validator for each notification type and validate it later in notification controller
+  metadata: Joi.object(),
 });
 
 export const getNotificationsValidator = Joi.object({

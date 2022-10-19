@@ -249,6 +249,18 @@ const projectTitleProjectLinkSchema = Joi.object({
         .required(),
     projectLink: Joi.string().required(),
 })
+const projectTitleProjectLinkReasonSchema = Joi.object({
+    projectTitle: Joi.string()
+        .required(),
+    projectLink: Joi.string().required(),
+    reason: Joi.string(),
+})
+const verificationFormReapplyReminderSchema = Joi.object({
+    projectTitle: Joi.string()
+        .required(),
+    projectLink: Joi.string().required(),
+    href: Joi.string(),
+})
 const getDonationPriceFailedMetadataSchema = Joi.object({
     projectTitle: Joi.string()
         .required(),
@@ -265,7 +277,14 @@ const claimSchema = Joi.object({
     round: Joi.number().required(),
 })
 
-export const SEGMENT_SCHEMA_VALIDATOR:
+const adminMessageSchema =  Joi.object({
+    linkTitle: Joi.string().required(),
+    content: Joi.string().required(),
+    instruction: Joi.string().required(),
+    href: Joi.string().required(),
+})
+
+export const SEGMENT_METADATA_SCHEMA_VALIDATOR:
     {
         [key: string]:
             {
@@ -286,10 +305,9 @@ export const SEGMENT_SCHEMA_VALIDATOR:
     projectEdited: {metadata:projectTitleProjectLinkSchema, segment: projectEditedSegmentValidator},
     projectBadgeRevoked: {metadata:projectTitleProjectLinkSchema, segment: projectBadgeRevokedSegmentValidator},
     projectVerified: {metadata: projectTitleProjectLinkSchema, segment: projectVerifiedSegmentValidator},
-    projectRejected: {metadata: projectTitleProjectLinkSchema, segment: projectRejectedSegmentValidator},
     projectUnverified: {metadata:projectTitleProjectLinkSchema, segment: projectUnverifiedSegmentValidator},
     projectActivated: {metadata: projectTitleProjectLinkSchema, segment: projectActivatedSegmentValidator},
-    projectDeactivated: {metadata: projectTitleProjectLinkSchema, segment: projectDeactivatedSegmentValidator},
+    projectDeactivated: {metadata: projectTitleProjectLinkReasonSchema, segment: projectDeactivatedSegmentValidator},
     projectCancelled: {metadata: projectTitleProjectLinkSchema, segment: projectCancelledSegmentValidator},
     sendEmailConfirmation: {metadata:null, segment: sendEmailConfirmationSegmentValidator},
     madeDonation: {metadata: projectTitleProjectLinkSchema, segment: madeDonationSegmentValidator},
@@ -300,13 +318,14 @@ export const SEGMENT_SCHEMA_VALIDATOR:
     getDonationPriceFailed: {metadata:getDonationPriceFailedMetadataSchema, segment: getDonationPriceFailedSegmentValidator},
     verificationFormDrafted: {metadata:projectTitleProjectLinkSchema, segment: verificationFormDraftedSegmentValidator},
     verificationFormSent: {metadata: projectTitleProjectLinkSchema, segment: null},
-    verificationFormRejected: {metadata: projectTitleProjectLinkSchema, segment: null},
-    verificationFormReapplyReminder: {metadata: projectTitleProjectLinkSchema, segment: null},
+    verificationFormRejected: {metadata: projectTitleProjectLinkReasonSchema, segment: null},
+    verificationFormReapplyReminder: {metadata: verificationFormReapplyReminderSchema, segment: null},
     givFarmClaim: {metadata: null, segment: null},
     givFarmRewardHarvest: {metadata: null, segment: null},
     givFarmStake: {metadata: stakeUnStakeSchema, segment: null},
     givFarmUnStake: {metadata: stakeUnStakeSchema, segment: null},
     givFarmReadyToClaim: {metadata: claimSchema, segment: null},
+    adminMessage: {metadata: adminMessageSchema, segment: null},
 };
 
 

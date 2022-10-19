@@ -14,8 +14,6 @@ import {
 import { logger } from '../../utils/logger';
 
 import {
-  getNotificationsValidator,
-  readSingleNotificationsValidator,
   sendNotificationValidator,
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
@@ -44,11 +42,10 @@ import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
-import { SEGMENT_SCHEMA_VALIDATOR } from '../../utils/validators/segmentValidators';
-import { THIRD_PARTY_EMAIL_SERVICES } from '../../utils/utils';
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
+import {SEGMENT_METADATA_SCHEMA_VALIDATOR} from "../../utils/validators/segmentAndMetadataValidators";
 
 const analytics = getAnalytics();
 
@@ -85,8 +82,8 @@ export class NotificationsController {
         ? EMAIL_STATUSES.WAITING_TO_BE_SEND
         : EMAIL_STATUSES.NO_NEED_TO_SEND;
 
-      const segmentValidator = SEGMENT_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.segment
-      const metadataValidator = SEGMENT_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.metadata
+      const segmentValidator = SEGMENT_METADATA_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.segment
+      const metadataValidator = SEGMENT_METADATA_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.metadata
       if (body.sendSegment &&
           segmentValidator) {
         validateWithJoiSchema(body.segmentData, segmentValidator);
