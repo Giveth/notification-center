@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import { Notification } from '../src/entities/notification';
 import { UserAddress } from '../src/entities/userAddress';
 import { NotificationType } from '../src/entities/notificationType';
-import {createBasicAuthentication} from "../src/utils/authorizationUtils";
+import { createBasicAuthentication } from '../src/utils/authorizationUtils';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -92,10 +92,9 @@ export const saveNotificationDirectlyToDb = async (
 };
 export const SEED_DATA = {};
 
-
-export const getGivethIoBasicAuth = ()=>{
+export const getGivethIoBasicAuth = () => {
   return createBasicAuthentication({
     secret: process.env.GIVETH_IO_THIRD_PARTY_SECRET as string,
-    username: process.env.GIVETH_IO_THIRD_PARTY_MICRO_SERVICE as string
-  })
-}
+    username: process.env.GIVETH_IO_THIRD_PARTY_MICRO_SERVICE as string,
+  });
+};

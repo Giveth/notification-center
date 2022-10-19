@@ -45,7 +45,7 @@ import {
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
-import {SEGMENT_METADATA_SCHEMA_VALIDATOR} from "../../utils/validators/segmentAndMetadataValidators";
+import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
 
 const analytics = getAnalytics();
 
@@ -82,10 +82,15 @@ export class NotificationsController {
         ? EMAIL_STATUSES.WAITING_TO_BE_SEND
         : EMAIL_STATUSES.NO_NEED_TO_SEND;
 
-      const segmentValidator = SEGMENT_METADATA_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.segment
-      const metadataValidator = SEGMENT_METADATA_SCHEMA_VALIDATOR[notificationType?.schemaValidator as string]?.metadata
-      if (body.sendSegment &&
-          segmentValidator) {
+      const segmentValidator =
+        SEGMENT_METADATA_SCHEMA_VALIDATOR[
+          notificationType?.schemaValidator as string
+        ]?.segment;
+      const metadataValidator =
+        SEGMENT_METADATA_SCHEMA_VALIDATOR[
+          notificationType?.schemaValidator as string
+        ]?.metadata;
+      if (body.sendSegment && segmentValidator) {
         validateWithJoiSchema(body.segmentData, segmentValidator);
         analytics.track(
           notificationType.emailNotificationId!,
@@ -96,8 +101,8 @@ export class NotificationsController {
         emailStatus = EMAIL_STATUSES.SENT;
       }
 
-      if(metadataValidator){
-        validateWithJoiSchema(body.metadata,metadataValidator)
+      if (metadataValidator) {
+        validateWithJoiSchema(body.metadata, metadataValidator);
       }
       await createNotification({
         notificationType,

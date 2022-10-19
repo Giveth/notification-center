@@ -6,9 +6,9 @@ dotenv.config({
 
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
-import {ThirdParty} from "../src/entities/ThirdParty";
-import {Notification} from "../src/entities/notification";
-import {sleep} from "./testUtils";
+import { ThirdParty } from '../src/entities/ThirdParty';
+import { Notification } from '../src/entities/notification';
+import { sleep } from './testUtils';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { dropdb, createdb } = require('pgtools');
@@ -51,14 +51,12 @@ async function runMigrations() {
 }
 
 const seedDb = async () => {
-  new ThirdParty()
-   await ThirdParty.create({
+  new ThirdParty();
+  await ThirdParty.create({
     microService: process.env.GIVETH_IO_THIRD_PARTY_MICRO_SERVICE,
     secret: process.env.GIVETH_IO_THIRD_PARTY_SECRET,
-    isActive:true,
-
+    isActive: true,
   }).save();
-
 };
 
 before(async () => {
@@ -67,7 +65,7 @@ before(async () => {
     await runMigrations();
     await seedDb();
     await initServer();
-    await sleep(500)
+    await sleep(500);
   } catch (e: any) {
     throw new Error(`Could not setup tests requirements \n${e.message}`);
   }
