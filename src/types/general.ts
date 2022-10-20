@@ -6,6 +6,7 @@ export type User = {
 
 export enum NOTIFICATION_CATEGORY {
   PROJECT_RELATED = 'projectRelated',
+  DISCUSSION = 'discussion',
   GENERAL = 'general',
   GIV_ECONOMY = 'givEconomy',
 }
