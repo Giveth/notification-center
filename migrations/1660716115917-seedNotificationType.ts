@@ -104,7 +104,7 @@ export const GivethNotificationTypes = {
   },
   DRAFTED_PROJECT_SAVED: {
     name: 'The project saved as draft',
-    description: 'The project saved as draftd',
+    description: 'The project saved as draft',
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.DRAFTED_PROJECT_SAVED,
@@ -740,7 +740,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'a',
-        content: 'clik here',
+        content: 'click here',
         href: '$href',
       },
       {
@@ -771,11 +771,11 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: 'Checkout GIVeconomey to claim your rewards.',
+        content: 'Checkout GIVeconomy to claim your rewards.',
       },
     ],
     content:
-      'Pssst! your rewards are ready to claim 😉\nCheckout GIVeconomey to claim your rewards.',
+      'Pssst! your rewards are ready to claim 😉\nCheckout GIVeconomy to claim your rewards.',
   },
   REWARDS_HARVESTED: {
     name: 'Rewards harvested',
@@ -891,7 +891,7 @@ export const GivethNotificationTypes = {
       { type: 'br' },
       {
         type: 'a',
-        content: 'Clik here',
+        content: 'Click here',
         href: '/givbacks',
       },
       {
@@ -1112,7 +1112,7 @@ export const GivethNotificationTypes = {
         content: 'Your project update was successful.',
       },
     ],
-    content: 'Your project update was succesful.',
+    content: 'Your project update was successful.',
   },
   NEW_PROJECT_UPDATE_DONORS: {
     name: 'Project update - Donors',
