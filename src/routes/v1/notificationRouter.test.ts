@@ -1591,7 +1591,6 @@ function sendNotification() {
     }
   });
 
-
   it('should create *Failed donation* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Failed donation',
@@ -1601,8 +1600,8 @@ function sendNotification() {
       metadata: {
         projectTitle,
         projectLink,
-        reason:'reason',
-        txLink:'txLink'
+        reason: 'reason',
+        txLink: 'txLink',
       },
     };
 
@@ -1624,8 +1623,8 @@ function sendNotification() {
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
           projectLink,
-          reason:'reason',
-          txLink:'txLink'
+          reason: 'reason',
+          txLink: 'txLink',
         },
       };
 
@@ -1638,14 +1637,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
-
 
   it('should create *Project update - Donors* notification,  success, segment is off', async () => {
     const data = {
@@ -1689,13 +1686,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Project update* notification,  success, segment is off', async () => {
     const data = {
@@ -1739,13 +1735,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Project update - Donors* notification,  success, segment is off', async () => {
     const data = {
@@ -1789,13 +1784,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Project update - Users Who Liked* notification,  success, segment is off', async () => {
     const data = {
@@ -1839,14 +1833,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
-
 
   it('should create *Project updated - owner* notification,  success, segment is off', async () => {
     const data = {
@@ -1890,13 +1882,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Project updated - donor* notification,  success, segment is off', async () => {
     const data = {
@@ -1940,13 +1931,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Verification form got draft by admin* notification,  success, segment is off', async () => {
     const data = {
@@ -1990,13 +1980,12 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *project liked* notification,  success, segment is off', async () => {
     const data = {
@@ -2040,13 +2029,10 @@ function sendNotification() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
-
-
 }

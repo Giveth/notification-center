@@ -52,6 +52,24 @@ export const GivethNotificationTypes = {
       },
     ],
   },
+  WELCOME: {
+    name: 'Welcome',
+    description: "Welcome to Giveth! ❤️ So happy you're here.",
+    microService: MICRO_SERVICES.givethio,
+    category: 'general',
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Welcome!',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: "Welcome to Giveth! ❤️ So happy you're here.",
+      },
+    ],
+    content: "Welcome to Giveth! ❤️ So happy you're here.",
+  },
   COMPLETE_PROFILE: {
     name: 'The profile has been completed',
     description: 'Thanks for completing your profile',
