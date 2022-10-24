@@ -37,6 +37,20 @@ function getNotificationSettingsTestCases() {
     assert.isOk(notifications);
     assert.isTrue(notifications[0].userAddressId === userAddress.id);
   });
+  it('should return addresses filtered by category', async () => {
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+    const result = await Axios.get(
+      `${apiBaseUrl}/v1/notification_settings?limit=10&category=general`,
+      {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      },
+    );
+    const notifications = result.data.notificationSettings;
+    assert.isOk(notifications);
+    assert.isTrue(notifications[0]?.userAddressId === userAddress.id);
+    assert.isTrue(notifications[0]?.notificationType?.category === 'general');
+  });
 }
 
 function updateNotificationsTestCases() {

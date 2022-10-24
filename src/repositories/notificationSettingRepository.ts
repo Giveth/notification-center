@@ -45,7 +45,7 @@ export const getUserNotificationSettings = async (
     });
 
   if (category) {
-    query = query.andWhere('notificationSetting.category = :category', {
+    query = query.andWhere('notificationType.category = :category', {
       category: category,
     });
   }
