@@ -48,6 +48,13 @@ export const SCHEMA_VALIDATORS_NAMES = {
   GET_DONATION_PRICE_FAILED: 'getDonationPriceFailed',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: 'verificationFormDrafted',
   PROJECT_RECEIVED_LIKE: 'projectReceivedLike',
+  USER_BOOSTED: 'givPowerUserBoosted',
+  USER_CHANGED_BOOSTED_ALLOCATION: 'givPowerUserChangedBoostedAllocation',
+  PROJECT_HAS_BEEN_BOOSTED: 'givPowerProjectHasBeenBoosted',
+  USER_LOCKED_GIVPOWER: 'givPowerUserLockedGivPower',
+  USER_UNLOCKED_GIVPOWER: 'givPowerUserUnlockedGivPower',
+  USER_GIVPOWER_RELOCKED_AUTOMATICALLY:
+    'givPowerUserGivPowerRelockedAutoMatically',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 

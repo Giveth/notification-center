@@ -387,6 +387,12 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   givFarmUnStake: { metadata: stakeUnStakeSchema, segment: null },
   givFarmReadyToClaim: { metadata: claimSchema, segment: null },
   adminMessage: { metadata: adminMessageSchema, segment: null },
+  givPowerUserBoosted: { metadata: null, segment: null },
+  givPowerUserChangedBoostedAllocation: { metadata: null, segment: null },
+  givPowerProjectHasBeenBoosted: { metadata: null, segment: null },
+  givPowerUserLockedGivPower: { metadata: null, segment: null },
+  givPowerUserUnlockedGivPower: { metadata: null, segment: null },
+  givPowerUserGivPowerRelockedAutoMatically: { metadata: null, segment: null },
 };
 
 function throwHttpErrorIfJoiValidatorFails(

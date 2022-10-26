@@ -1278,6 +1278,192 @@ export const GivethNotificationTypes = {
     ],
     content: 'Nice! Your project {project name} received a like',
   },
+  NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
+    name: 'Project updated - Users Who Liked',
+    description: 'Project updated - Users Who Liked',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_WHO_LIKED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: 'Project updated - liker',
+    pushNotifierService: null,
+    title: 'Project updated - Users Who Liked',
+    htmlTemplate: [
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: 'that you liked before posted an update.',
+      },
+    ],
+    content: '{Project name} that you liked before posted an update.',
+  },
+  YOU_BOOSTED: {
+    name: 'You boosted',
+    description: 'User boosted a project',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_BOOSTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'You boosted',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You boosted ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' with ',
+      },
+      {
+        type: 'p',
+        content: '$boostedAmount',
+      },
+      {
+        type: 'p',
+        content: ' of GIVpower.',
+      },
+    ],
+    content: 'You boosted {project name} with {boosted amount} of GIVpower.',
+  },
+  YOU_CHANGED_BOOSTED_ALLOCATION: {
+    name: 'You changed the allocation',
+    description: 'User changed boosted allocation',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_CHANGED_BOOSTED_ALLOCATION,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'You changed the allocation',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You successfully changed your boosting allocation.',
+      },
+    ],
+    content: 'You successfully changed your boosting allocation.',
+  },
+  YOUR_PROJECT_HAS_BEEN_BOOSTED: {
+    name: 'Your project has been boosted.',
+    description: 'Project has received a boosting',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_HAS_BEEN_BOOSTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Your project has been boosted.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' has been boosted by ',
+      },
+      {
+        type: 'p',
+        content: '$userName',
+      },
+    ],
+    content: 'Your project {project name} has been boosted by {user name}',
+  },
+  YOU_LOCKED_GIVPOWER: {
+    name: 'You locked {amount} & recieved {amount} GIVpower',
+    description: 'User locked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_LOCKED_GIVPOWER,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'You locked {amount} & recieved {amount} GIVpower',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You locked ',
+      },
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' & recieved ',
+      },
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' GIVpower',
+      },
+    ],
+    content: 'You locked {amount} & recieved {amount} GIVpower',
+  },
+  YOU_UNLOCKED_GIVPOWER: {
+    name: '{amount} unlocked.',
+    description: 'User unlocked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_UNLOCKED_GIVPOWER,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: '{amount} unlocked.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' unlocked.',
+      },
+    ],
+    content: '{amount} unlocked.',
+  },
+  RE_LOCKED_AUTOMATICALLY: {
+    name: '{amount} re-locked automatically',
+    description: 'User unlocked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator:
+      SCHEMA_VALIDATORS_NAMES.USER_GIVPOWER_RELOCKED_AUTOMATICALLY,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: '{amount} re-locked automatically',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' re-locked automatically.',
+      },
+    ],
+    content: '{amount} re-locked automatically',
+  },
 };
 
 export class seedNotificationType1660716115917 implements MigrationInterface {
