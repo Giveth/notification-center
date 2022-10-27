@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { NOTIFICATION_CATEGORY } from '../types/general';
+import { NotificationGroup } from './notificationGroup';
 import { NotificationSetting } from './notificationSetting';
 
 // Export Object with Schemas to N1 lookup
@@ -118,6 +119,13 @@ export class NotificationType extends BaseEntity {
     notificationSetting => notificationSetting.notificationType,
   )
   notificationSettings?: NotificationSetting[];
+
+  @ManyToOne(type => NotificationGroup, { nullable: true })
+  notificationGroup?: NotificationGroup;
+  @RelationId(
+    (notificationType: NotificationType) => notificationType.notificationGroup,
+  )
+  notificationGroupId?: number | null;
 
   @CreateDateColumn()
   createdAt: Date;

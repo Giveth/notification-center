@@ -6,6 +6,52 @@ import {
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
 import { SegmentEvents } from '../src/services/segment/analytics';
 import { NOTIFICATION_CATEGORY } from '../src/types/general';
+import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationGroup';
+
+export const NotificationGroups = {
+  GIVPOWER_ALLOCATIONS_GROUP: {
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
+    title: 'GIVpower Allocations',
+    description: 'Shows your locked, unlocked, received amount of GIVpower and the amount automatically relocked.'
+  },
+  GIVPOWER_SELF_BOOSTING_GROUP: {
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SELF_BOOSTING_STATUS,
+    title: 'Your boost status',
+    description: 'Shows when you boost a project, change the allocation of GIVpower.'
+  },
+  GIVPOWER_PROJECT_BOOSTING_GROUP: {
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_BOOSTING_STATUS,
+    title: 'Project boost status',
+    description: 'Show when your project receives a boost'
+  },
+  PROJECT_STATUS_GROUP: {
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
+    title: 'Project status',
+    description: 'When Project has been listed, unlisted, cancelled, activated or deactivated.'
+  },
+  DONATIONS_GROUP: {
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
+    title: 'Donations',
+    description: 'When someone donates to your project, when you donate to a project, donation success and failure.'
+  },
+  STAKES_GROUP: {
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
+    title: 'Donations',
+    description: 'Show when you stake or unstake on the GIVfarm'
+  },
+  REWARDS_GROUP: {
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.REWARDS,
+    title: 'Rewards',
+    description: 'Shows when you have claimable rewards and you harvested rewards.'
+  }
+}
 
 // https://github.com/Giveth/notification-center/issues/6 , https://gist.github.com/MohammadPCh/24434d50bc9ccd9b74905c271ee05482
 export const GivethNotificationTypes = {

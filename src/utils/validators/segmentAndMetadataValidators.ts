@@ -45,6 +45,22 @@ const draftedProjectSavedSegmentValidator = Joi.object({
   anonymousId: Joi.string(),
 });
 
+const boostedSchema = Joi.object({
+  projectTitle: Joi.string().required(),
+  projectLink: Joi.string().required(),
+  boostedAmount: Joi.number()?.greater(0).required(),
+});
+
+const projectBoostedSchema = Joi.object({
+  projectTitle: Joi.string().required(),
+  projectLink: Joi.string().required(),
+  userName: Joi.string().required(),
+});
+
+const givPowerLockedSchema = Joi.object({
+  amount: Joi.number()?.greater(0).required(),
+});
+
 const projectTrackerSchema = {
   email: Joi.string().required(),
   title: Joi.string().required(),
@@ -387,12 +403,21 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   givFarmUnStake: { metadata: stakeUnStakeSchema, segment: null },
   givFarmReadyToClaim: { metadata: claimSchema, segment: null },
   adminMessage: { metadata: adminMessageSchema, segment: null },
-  givPowerUserBoosted: { metadata: null, segment: null },
+  givPowerUserBoosted: { metadata: boostedSchema, segment: null },
   givPowerUserChangedBoostedAllocation: { metadata: null, segment: null },
-  givPowerProjectHasBeenBoosted: { metadata: null, segment: null },
-  givPowerUserLockedGivPower: { metadata: null, segment: null },
-  givPowerUserUnlockedGivPower: { metadata: null, segment: null },
-  givPowerUserGivPowerRelockedAutoMatically: { metadata: null, segment: null },
+  givPowerProjectHasBeenBoosted: {
+    metadata: projectBoostedSchema,
+    segment: null,
+  },
+  givPowerUserLockedGivPower: { metadata: givPowerLockedSchema, segment: null },
+  givPowerUserUnlockedGivPower: {
+    metadata: givPowerLockedSchema,
+    segment: null,
+  },
+  givPowerUserGivPowerRelockedAutoMatically: {
+    metadata: givPowerLockedSchema,
+    segment: null,
+  },
 };
 
 function throwHttpErrorIfJoiValidatorFails(
