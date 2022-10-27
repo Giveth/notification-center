@@ -29,6 +29,7 @@ export const authenticateThirdPartyServiceToken = async (
     });
 
     if (!serviceEntity) {
+      logger.error('Invalid basic auth', {authorization, username, secret})
       throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
     }
 
