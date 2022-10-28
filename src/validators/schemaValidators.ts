@@ -24,7 +24,10 @@ const throwHttpErrorIfJoiValidatorFails = (
 
 export const sendNotificationValidator = Joi.object({
   projectId: Joi.string(),
+  analyticsUserId: Joi.string(),
+  anonymousId: Joi.string(),
   eventName: Joi.string().required(),
+  sendDappNotification: Joi.boolean(),
   sendEmail: Joi.boolean(),
   sendSegment: Joi.boolean(),
   email: Joi.string(),
@@ -34,6 +37,7 @@ export const sendNotificationValidator = Joi.object({
 
   // We have a different validator for each notification type and validate it later in notification controller
   metadata: Joi.object(),
+  segmentData: Joi.any(),
 });
 
 export const getNotificationsValidator = Joi.object({

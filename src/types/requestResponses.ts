@@ -22,15 +22,15 @@ export type SendNotificationTypeRequest = {
    */
   sendDappNotification?: boolean;
   /**
-   * @example ""
+   * @example "asddsa"
    */
   analyticsUserId?: string;
   /**
-   * @example ""
+   * @example "123213"
    */
   anonymousId?: string;
   /**
-   * @example ""
+   * @example "test@gmail.com"
    */
   email?: string;
   /**
@@ -45,14 +45,14 @@ export type SendNotificationTypeRequest = {
 
   metadata?: {
     /**
-     * @example 10
+     * @example "title"
      */
-    amount?: number;
+    projectTitle?: string;
 
     /**
-     * @example "GIV"
+     * @example "project link"
      */
-    currency?: string;
+    projectLink?: string;
   };
 
   segmentData: any;
