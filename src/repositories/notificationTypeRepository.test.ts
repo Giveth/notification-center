@@ -5,7 +5,6 @@ import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from './notificationTypeRepository';
-import { findThirdPartyBySecret } from './thirdPartyRepository';
 
 describe(
   'getNotificationTypeByEventName() test cases',

@@ -124,7 +124,8 @@ export const getNotifications = async (params: {
     .innerJoinAndSelect('notification.notificationType', 'notificationType')
     .where('notification."userAddressId" = :userAddressId', {
       userAddressId: userAddressId,
-    });
+    })
+    .orderBy(`notification.createdAt`, 'DESC');
 
   if (category) {
     query = query.andWhere('notificationType.category = :category', {
@@ -143,7 +144,6 @@ export const getNotifications = async (params: {
       isRead: isRead === 'true',
     });
   }
-
   return query.take(limit).skip(skip).getManyAndCount();
 };
 

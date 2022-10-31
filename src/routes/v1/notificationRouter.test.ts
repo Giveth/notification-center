@@ -1,19 +1,74 @@
 import {
   generateRandomEthereumAddress,
+  getAccessTokenForMockAuthMicroService,
   getGivethIoBasicAuth,
   serverUrl,
+  sleep,
 } from '../../../test/testUtils';
 import axios from 'axios';
 import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 
-describe('/notifications POST test cases', sendNotification);
+describe('/notifications POST test cases', sendNotificationTestCases);
+describe('/notifications GET test cases', getNotificationTestCases);
 
-function sendNotification() {
-  const sendNotificationUrl = `${serverUrl}/v1/thirdParty/notifications`;
-  const projectTitle = 'project title';
-  const projectLink = 'https://giveth.io/project/project-title';
+const sendNotificationUrl = `${serverUrl}/v1/thirdParty/notifications`;
+const getNotificationUrl = `${serverUrl}/v1/notifications`;
+const projectTitle = 'project title';
+const projectLink = 'https://giveth.io/project/project-title';
 
+function getNotificationTestCases() {
+  it('should create *The profile has been completed* notification,  success, segment is off', async () => {
+    const walletAddress = generateRandomEthereumAddress();
+    const data = {
+      eventName: 'The profile has been completed',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: walletAddress,
+      metadata: {},
+    };
+
+    await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    await sleep(20);
+
+    await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    await sleep(20);
+
+    await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    await sleep(20);
+    const notificationResult = await axios.get(getNotificationUrl, {
+      headers: {
+        authorization: getAccessTokenForMockAuthMicroService(walletAddress),
+      },
+    });
+    console.log('**result**', notificationResult.data);
+    assert.equal(notificationResult.status, 200);
+    assert.isOk(notificationResult.data);
+    assert.equal(notificationResult.data.count, 3);
+    assert.isTrue(
+      notificationResult.data.notifications[0].createdAt >
+        notificationResult.data.notifications[1].createdAt,
+    );
+    assert.isTrue(
+      notificationResult.data.notifications[1].createdAt >
+        notificationResult.data.notifications[2].createdAt,
+    );
+  });
+}
+
+function sendNotificationTestCases() {
   it('should create *Incomplete profile* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Incomplete profile',
