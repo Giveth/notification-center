@@ -87,7 +87,7 @@ export const updateUserNotificationSetting = async (params: {
     notificationSetting?.notificationType?.isGroupParent &&
     notificationSetting?.notificationType?.categoryGroup
   ) {
-    updateChildNotificationSettings({
+    await updateChildNotificationSettings({
       categoryGroup: notificationSetting?.notificationType?.categoryGroup,
       userAddressId: params.userAddressId,
       allowNotifications: notificationSetting.allowNotifications,
@@ -110,27 +110,26 @@ export const updateChildNotificationSettings = async (params: {
   const notificationTypes = await NotificationType.createQueryBuilder(
     'notificationType',
   )
-    .select('notificationSetting.id')
-    .where('notificationSetting.categoryGroup = :categoryGroup', {
+    .select('notificationType.id')
+    .where('notificationType.categoryGroup = :categoryGroup', {
       categoryGroup: params.categoryGroup,
     })
-    .andWhere('notificationSetting.isGroupParent = false')
+    .andWhere('notificationType.isGroupParent = false')
     .getMany();
 
   const notificationTypeIds = notificationTypes.map(notificationType => {
     return notificationType.id;
   });
 
-  await NotificationSetting.createQueryBuilder('notificationSetting')
-    .update<NotificationSetting>(NotificationSetting, {
-      allowNotifications: params.allowNotifications,
-      allowEmailNotification: params.allowEmailNotification,
-      allowDappPushNotification: params.allowDappPushNotification,
-    })
-    .where(
-      'notificationSetting.userAddressId = :userAddressId AND notificationSetting.notificationTypeId IN (:...ids)',
-      { userAddressId: params.userAddressId, ids: notificationTypeIds },
-    )
-    .updateEntity(true)
-    .execute();
+  await NotificationSetting.query(`
+    UPDATE notification_setting
+    SET "allowNotifications" = ${
+      params.allowNotifications
+    }, "allowEmailNotification" = ${
+    params.allowEmailNotification
+  }, "allowDappPushNotification" = ${params.allowDappPushNotification}
+    WHERE "notificationTypeId" IN (${notificationTypeIds.join(
+      ',',
+    )}) AND "userAddressId" = ${params.userAddressId}
+  `);
 };

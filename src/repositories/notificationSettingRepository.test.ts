@@ -46,9 +46,11 @@ function updateUserNotificationSettingTestCases() {
 
     const userNotificationSetting =
       await NotificationSetting.createQueryBuilder('setting')
+        .leftJoinAndSelect('setting.notificationType', 'notificationType')
         .where('setting."userAddressId" = :userAddressId', {
           userAddressId: userAddress.id,
         })
+        .andWhere('notificationType.isGroupParent = false')
         .getOne();
 
     assert.isTrue(userNotificationSetting?.userAddressId === userAddress.id);
