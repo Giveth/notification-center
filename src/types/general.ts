@@ -9,4 +9,5 @@ export enum NOTIFICATION_CATEGORY {
   DISCUSSION = 'discussion',
   GENERAL = 'general',
   GIV_ECONOMY = 'givEconomy',
+  GIV_POWER = 'givPower',
 }

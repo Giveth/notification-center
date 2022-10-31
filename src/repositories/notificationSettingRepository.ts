@@ -2,6 +2,7 @@ import { UserAddress } from '../entities/userAddress';
 import { NotificationType } from '../entities/notificationType';
 import { NotificationSetting } from '../entities/notificationSetting';
 import { errorMessages } from '../utils/errorMessages';
+import { createQueryBuilder } from 'typeorm';
 
 export const createNotificationSettingsForNewUser = async (
   user: UserAddress,
@@ -16,13 +17,6 @@ export const createNotificationSettingsForNewUser = async (
 
     return payload;
   });
-
-  // Global setting that controls all notifications
-  const globalSetting: Partial<NotificationSetting> = {
-    userAddress: user,
-    isGlobalSetting: true,
-  };
-  typeSettings.push(globalSetting);
 
   const userSettings = NotificationSetting.create(typeSettings);
 
@@ -89,5 +83,53 @@ export const updateUserNotificationSetting = async (params: {
     notificationSetting.allowDappPushNotification =
       params.allowDappPushNotification === 'true';
 
+  if (
+    notificationSetting?.notificationType?.isGroupParent &&
+    notificationSetting?.notificationType?.categoryGroup
+  ) {
+    await updateChildNotificationSettings({
+      categoryGroup: notificationSetting?.notificationType?.categoryGroup,
+      userAddressId: params.userAddressId,
+      allowNotifications: notificationSetting.allowNotifications,
+      allowEmailNotification: notificationSetting.allowEmailNotification,
+      allowDappPushNotification: notificationSetting.allowDappPushNotification,
+    });
+  }
+
   return notificationSetting.save();
+};
+
+export const updateChildNotificationSettings = async (params: {
+  categoryGroup: string;
+  userAddressId: number;
+  allowNotifications?: boolean;
+  allowEmailNotification?: boolean;
+  allowDappPushNotification?: boolean;
+}) => {
+  // Grab type ids
+  const notificationTypes = await NotificationType.createQueryBuilder(
+    'notificationType',
+  )
+    .select('notificationType.id')
+    .where('notificationType.categoryGroup = :categoryGroup', {
+      categoryGroup: params.categoryGroup,
+    })
+    .andWhere('notificationType.isGroupParent = false')
+    .getMany();
+
+  const notificationTypeIds = notificationTypes.map(notificationType => {
+    return notificationType.id;
+  });
+
+  await NotificationSetting.query(`
+    UPDATE notification_setting
+    SET "allowNotifications" = ${
+      params.allowNotifications
+    }, "allowEmailNotification" = ${
+    params.allowEmailNotification
+  }, "allowDappPushNotification" = ${params.allowDappPushNotification}
+    WHERE "notificationTypeId" IN (${notificationTypeIds.join(
+      ',',
+    )}) AND "userAddressId" = ${params.userAddressId}
+  `);
 };

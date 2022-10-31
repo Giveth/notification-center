@@ -59,12 +59,10 @@ function createNewUserAddressTestCases() {
     assert.isOk(user);
     assert.isTrue(givethNotificationSettings.length > 0);
     givethNotificationSettings.forEach(setting => {
-      if (!setting.isGlobalSetting) {
-        assert.equal(
-          setting!.notificationType!.microService,
-          MICRO_SERVICES.givethio,
-        );
-      }
+      assert.equal(
+        setting!.notificationType!.microService,
+        MICRO_SERVICES.givethio,
+      );
 
       assert.equal(setting!.userAddressId, user.id);
     });

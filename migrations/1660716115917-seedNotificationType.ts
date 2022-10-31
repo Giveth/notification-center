@@ -6,6 +6,7 @@ import {
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
 import { SegmentEvents } from '../src/services/segment/analytics';
 import { NOTIFICATION_CATEGORY } from '../src/types/general';
+import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationSetting';
 
 // https://github.com/Giveth/notification-center/issues/6 , https://gist.github.com/MohammadPCh/24434d50bc9ccd9b74905c271ee05482
 export const GivethNotificationTypes = {
@@ -20,6 +21,7 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     title: 'Email notifications',
     content: 'Turn on/off all email notifications', // Missing copy
+    isGlobal: true,
   },
   DAPP_NOTIFICATIONS: {
     name: 'Dapp notifications',
@@ -32,6 +34,7 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     title: 'Dapp notifications',
     content: 'Turn on/off all Dapp notifications', // Missing copy
+    isGlobal: true,
   },
   // SEGMENT
   INCOMPLETE_PROFILE: {
@@ -129,6 +132,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'The project saved as draft',
     content: 'Hurray! Your {project name} project is live 🥳',
     htmlTemplate: [
@@ -156,6 +160,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.DRAFTED_PROJECT_ACTIVATED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is published',
     content: 'Hurray! Your {project name} project is live 🥳',
     htmlTemplate: [
@@ -183,6 +188,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_LISTED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is listed',
     htmlTemplate: [
       {
@@ -210,6 +216,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_UNLISTED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is unlisted',
     htmlTemplate: [
       {
@@ -307,6 +314,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_CANCELLED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is cancelled by admin',
     htmlTemplate: [
       {
@@ -413,6 +421,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_ACTIVATED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is activated',
     htmlTemplate: [
       {
@@ -497,6 +506,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_DEACTIVATED,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is deactivated',
     htmlTemplate: [
       {
@@ -822,6 +832,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
     title: 'Stake',
     htmlTemplate: [
       {
@@ -857,6 +868,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
     title: 'UnStake',
     htmlTemplate: [
       {
@@ -1025,6 +1037,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Made donation',
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
     title: 'Donations is successfull',
     htmlTemplate: [
       {
@@ -1058,6 +1071,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Donation received',
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
     title: 'Project received a donation',
     htmlTemplate: [
       {
@@ -1085,6 +1099,7 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
     title: 'Failed donation',
     htmlTemplate: [
       {
@@ -1277,6 +1292,352 @@ export const GivethNotificationTypes = {
       },
     ],
     content: 'Nice! Your project {project name} received a like',
+  },
+  NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
+    name: 'Project updated - Users Who Liked',
+    description: 'Project updated - Users Who Liked',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_WHO_LIKED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: 'Project updated - liker',
+    pushNotifierService: null,
+    title: 'Project updated - Users Who Liked',
+    htmlTemplate: [
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: 'that you liked before posted an update.',
+      },
+    ],
+    content: '{Project name} that you liked before posted an update.',
+  },
+  YOU_BOOSTED: {
+    name: 'You boosted',
+    description: 'User boosted a project',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_BOOSTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SELF_BOOSTING_STATUS,
+    title: 'You boosted',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You boosted ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' with ',
+      },
+      {
+        type: 'p',
+        content: '$boostedAmount',
+      },
+      {
+        type: 'p',
+        content: ' of GIVpower.',
+      },
+    ],
+    content: 'You boosted {project name} with {boosted amount} of GIVpower.',
+  },
+  YOU_CHANGED_BOOSTED_ALLOCATION: {
+    name: 'You changed the allocation',
+    description: 'User changed boosted allocation',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_CHANGED_BOOSTED_ALLOCATION,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SELF_BOOSTING_STATUS,
+    title: 'You changed the allocation',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You successfully changed your boosting allocation.',
+      },
+    ],
+    content: 'You successfully changed your boosting allocation.',
+  },
+  YOUR_PROJECT_HAS_BEEN_BOOSTED: {
+    name: 'Your project has been boosted.',
+    description: 'Project has received a boosting',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_HAS_BEEN_BOOSTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_BOOSTING_STATUS,
+    title: 'Your project has been boosted.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' has been boosted by ',
+      },
+      {
+        type: 'p',
+        content: '$userName',
+      },
+    ],
+    content: 'Your project {project name} has been boosted by {user name}',
+  },
+  YOU_LOCKED_GIVPOWER: {
+    name: 'You locked {amount} & recieved {amount} GIVpower',
+    description: 'User locked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_LOCKED_GIVPOWER,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
+    title: 'You locked {amount} & recieved {amount} GIVpower',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You locked ',
+      },
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' & recieved ',
+      },
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' GIVpower',
+      },
+    ],
+    content: 'You locked {amount} & recieved {amount} GIVpower',
+  },
+  YOU_UNLOCKED_GIVPOWER: {
+    name: '{amount} unlocked.',
+    description: 'User unlocked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_UNLOCKED_GIVPOWER,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
+    title: '{amount} unlocked.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' unlocked.',
+      },
+    ],
+    content: '{amount} unlocked.',
+  },
+  RE_LOCKED_AUTOMATICALLY: {
+    name: '{amount} re-locked automatically',
+    description: 'User unlocked GIVpower',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    schemaValidator:
+      SCHEMA_VALIDATORS_NAMES.USER_GIVPOWER_RELOCKED_AUTOMATICALLY,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
+    title: '{amount} re-locked automatically',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' re-locked automatically.',
+      },
+    ],
+    content: '{amount} re-locked automatically',
+  },
+  GIVPOWER_ALLOCATIONS_GROUP: {
+    name: 'GIVpower Allocations',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null, // doesn't sent
+    pushNotifierService: null,
+    isGroupParent: true,
+    content:
+      'Shows your locked, unlocked, received amount of GIVpower and the amount automatically relocked.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'Shows your locked, unlocked, received amount of GIVpower and the amount automatically relocked.',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
+    title: 'GIVpower Allocations',
+    description:
+      'Shows your locked, unlocked, received amount of GIVpower and the amount automatically relocked.',
+  },
+  GIVPOWER_SELF_BOOSTING_GROUP: {
+    name: 'Your boost status',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content:
+      'Shows when you boost a project, change the allocation of GIVpower.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'Shows when you boost a project, change the allocation of GIVpower.',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SELF_BOOSTING_STATUS,
+    title: 'Your boost status',
+    description:
+      'Shows when you boost a project, change the allocation of GIVpower.',
+  },
+  GIVPOWER_PROJECT_BOOSTING_GROUP: {
+    name: 'Project boost status',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content: 'Show when your project receives a boost',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Show when your project receives a boost',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_BOOSTING_STATUS,
+    title: 'Project boost status',
+    description: 'Show when your project receives a boost',
+  },
+  PROJECT_STATUS_GROUP: {
+    name: 'Project status',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content:
+      'When Project has been listed, unlisted, cancelled, activated or deactivated.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'When Project has been listed, unlisted, cancelled, activated or deactivated.',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
+    title: 'Project status',
+    description:
+      'When Project has been listed, unlisted, cancelled, activated or deactivated.',
+  },
+  DONATIONS_GROUP: {
+    name: 'Donations',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content:
+      'When someone donates to your project, when you donate to a project, donation success and failure.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'When someone donates to your project, when you donate to a project, donation success and failure.',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
+    title: 'Donations',
+    description:
+      'When someone donates to your project, when you donate to a project, donation success and failure.',
+  },
+  STAKES_GROUP: {
+    name: 'Donations',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content: 'Show when you stake or unstake on the GIVfarm',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Show when you stake or unstake on the GIVfarm',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
+    title: 'Stakes',
+    description: 'Show when you stake or unstake on the GIVfarm',
+  },
+  REWARDS_GROUP: {
+    name: 'Rewards',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content: 'Shows when you have claimable rewards and you harvested rewards.',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'Shows when you have claimable rewards and you harvested rewards.',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.REWARDS,
+    title: 'Rewards',
+    description:
+      'Shows when you have claimable rewards and you harvested rewards.',
   },
 };
 
