@@ -1,55 +1,13 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+  TableIndex,
+} from 'typeorm';
 
 export class createNotificationType1660540253547 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // create notifications groups to relate to types
-    await queryRunner.createTable(
-      new Table({
-        name: 'notification_group',
-        columns: [
-          {
-            name: 'id',
-            type: 'int',
-            isPrimary: true,
-            isGenerated: true, // Auto-increment
-            generationStrategy: 'increment',
-          },
-          {
-            name: 'title',
-            type: 'text',
-            isNullable: true,
-          },
-          {
-            name: 'description',
-            type: 'text',
-            isNullable: true,
-          },
-          {
-            name: 'categoryGroup',
-            type: 'text',
-            isNullable: false,
-          },
-          {
-            name: 'category',
-            type: 'text',
-            isNullable: false,
-          },
-          {
-            name: 'createdAt',
-            type: 'timestamp without time zone',
-            isNullable: false,
-            default: 'now()',
-          },
-          {
-            name: 'updatedAt',
-            type: 'timestamp without time zone',
-            isNullable: false,
-            default: 'now()',
-          },
-        ]
-      })
-    );
-
     await queryRunner.createTable(
       new Table({
         name: 'notification_type',
@@ -60,6 +18,23 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true, // Auto-increment
             generationStrategy: 'increment',
+          },
+          {
+            name: 'isGlobal',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
+            name: 'isGroupParent',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
+            name: 'categoryGroup',
+            type: 'text',
+            isNullable: true,
           },
           {
             name: 'microService',
@@ -142,15 +117,6 @@ export class createNotificationType1660540253547 implements MigrationInterface {
         ],
       }),
       true,
-    );
-
-    await queryRunner.createForeignKey(
-      'notification_type',
-      new TableForeignKey({
-        columnNames: ['notificationGroupId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'notification_group',
-      }),
     );
 
     await queryRunner.createIndex(

@@ -12,14 +12,22 @@ import {
 import { NotificationType } from './notificationType';
 import { UserAddress } from './userAddress';
 
+export const NOTIFICATION_CATEGORY_GROUPS = {
+  GIVPOWER_ALLOCATIONS: 'givPowerAllocations',
+  PROJECT_BOOSTING_STATUS: 'projectBoostStatus',
+  SELF_BOOSTING_STATUS: 'yourBoostStatus',
+  PROJECT_STATUS: 'projectStatus',
+  DONATIONS: 'donations',
+  STAKING: 'stakes',
+  REWARDS: 'rewards',
+  GIVBACKS: 'givBacks',
+};
+
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()
 export class NotificationSetting extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
-
-  @Column('boolean', { default: false })
-  isGlobalSetting?: boolean;
 
   // has more importance over the other two.
   @Column('boolean', { default: true, nullable: false })

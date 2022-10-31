@@ -6,7 +6,10 @@ import {
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import Axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { NotificationSetting } from '../../entities/notificationSetting';
+import {
+  NotificationSetting,
+  NOTIFICATION_CATEGORY_GROUPS,
+} from '../../entities/notificationSetting';
 
 const apiBaseUrl = serverUrl;
 
@@ -59,7 +62,15 @@ function updateNotificationsTestCases() {
     const notificationSetting = await NotificationSetting.createQueryBuilder(
       'notificationSetting',
     )
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
       .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .andWhere(
+        'notificationType.isGroupParent = true AND notificationType.categoryGroup = :categoryGroup',
+        { categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS },
+      )
       .getOne();
     const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
     const result = await Axios.put(
@@ -90,6 +101,27 @@ function updateNotificationsTestCases() {
       updatedNotification.allowDappPushNotification !==
         notificationSetting?.allowDappPushNotification,
     );
+
+    //validate child notifications of the group are updated
+    const updatedChildSettings = await NotificationSetting.createQueryBuilder(
+      'notificationSetting',
+    )
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
+      .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .andWhere(
+        'notificationType.isGroupParent = false AND notificationType.categoryGroup = :categoryGroup',
+        { categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS },
+      )
+      .getMany();
+
+    updatedChildSettings.forEach(setting => {
+      assert.isTrue(setting.allowNotifications === true);
+      assert.isTrue(setting.allowEmailNotification === false);
+      assert.isTrue(setting.allowDappPushNotification === false);
+    });
   });
 }
 
