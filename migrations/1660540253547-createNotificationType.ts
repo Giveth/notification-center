@@ -98,11 +98,6 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'notificationGroupId',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'createdAt',
             type: 'timestamp without time zone',
             isNullable: false,
