@@ -8,9 +8,9 @@ import { UserAddress } from '../../entities/userAddress';
 
 interface SettingParams {
   id: number;
-  allowNotifications?: string;
-  allowEmailNotification?: string;
-  allowDappPushNotification?: string;
+  allowNotifications?: boolean;
+  allowEmailNotification?: boolean;
+  allowDappPushNotification?: boolean;
 }
 
 @Route('/v1/notification_settings')
@@ -66,9 +66,9 @@ export class NotificationSettingsController {
     @Body()
     body: {
       id: number;
-      allowNotifications?: string;
-      allowEmailNotification?: string;
-      allowDappPushNotification?: string;
+      allowNotifications?: boolean;
+      allowEmailNotification?: boolean;
+      allowDappPushNotification?: boolean;
     },
     @Inject()
     params: {

@@ -66,8 +66,8 @@ function updateNotificationsTestCases() {
       `${apiBaseUrl}/v1/notification_settings/${notificationSetting!.id}`,
       {
         id: notificationSetting!.id,
-        allowEmailNotification: 'false',
-        allowDappPushNotification: 'false',
+        allowEmailNotification: false,
+        allowDappPushNotification: false,
       },
       { headers: { Authorization: `Bearer ${jwtToken}` } },
     );
@@ -110,8 +110,8 @@ function updateMultipleNotificationsTestCases() {
         settings: notificationSettings.map(setting => {
           return {
             id: setting!.id,
-            allowEmailNotification: 'false',
-            allowDappPushNotification: 'false',
+            allowEmailNotification: false,
+            allowDappPushNotification: false,
           };
         }),
       },

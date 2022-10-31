@@ -56,9 +56,9 @@ export const getUserNotificationSettings = async (
 export const updateUserNotificationSetting = async (params: {
   notificationSettingId: number;
   userAddressId: number;
-  allowNotifications?: string;
-  allowEmailNotification?: string;
-  allowDappPushNotification?: string;
+  allowNotifications?: boolean;
+  allowEmailNotification?: boolean;
+  allowDappPushNotification?: boolean;
 }) => {
   const notificationSetting = await NotificationSetting.createQueryBuilder(
     'notificationSetting',
@@ -79,15 +79,13 @@ export const updateUserNotificationSetting = async (params: {
   if (!notificationSetting)
     throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
 
-  if (params.allowNotifications)
-    notificationSetting.allowNotifications =
-      params.allowNotifications === 'true';
-  if (params.allowEmailNotification)
-    notificationSetting.allowEmailNotification =
-      params.allowEmailNotification === 'true';
-  if (params.allowDappPushNotification)
+  if (params.allowNotifications != null)
+    notificationSetting.allowNotifications = params.allowNotifications;
+  if (params.allowEmailNotification != null)
+    notificationSetting.allowEmailNotification = params.allowEmailNotification;
+  if (params.allowDappPushNotification != null)
     notificationSetting.allowDappPushNotification =
-      params.allowDappPushNotification === 'true';
+      params.allowDappPushNotification;
 
   return notificationSetting.save();
 };

@@ -56,9 +56,9 @@ function updateUserNotificationSettingTestCases() {
     const updatedSetting = await updateUserNotificationSetting({
       notificationSettingId: userNotificationSetting!.id,
       userAddressId: userAddress.id,
-      allowNotifications: 'false',
-      allowEmailNotification: 'false',
-      allowDappPushNotification: 'false',
+      allowNotifications: false,
+      allowEmailNotification: false,
+      allowDappPushNotification: false,
     });
 
     assert.isOk(updatedSetting);
