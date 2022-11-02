@@ -70,6 +70,9 @@ export const updateUserNotificationSetting = async (params: {
     )
     .getOne();
 
+  console.log('user id ' + params.userAddressId);
+  console.log('notif id ' + params.notificationSettingId);
+
   if (!notificationSetting)
     throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
 

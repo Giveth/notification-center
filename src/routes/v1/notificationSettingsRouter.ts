@@ -35,6 +35,7 @@ notificationSettingsRouter.put(
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
     const { user } = res.locals;
+    console.log('user' + user);
 
     try {
       const result =
