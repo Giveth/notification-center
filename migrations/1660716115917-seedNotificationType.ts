@@ -1194,7 +1194,7 @@ export const GivethNotificationTypes = {
   },
 
   PROJECT_UPDATED_OWNER: {
-    name: 'Project updates',
+    name: 'Project updated - owner',
     description: 'You Posted an update on your project',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
