@@ -160,7 +160,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.DRAFTED_PROJECT_ACTIVATED,
     pushNotifierService: null,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
     title: 'Project is published',
     content: 'Hurray! Your {project name} project is live 🥳',
     htmlTemplate: [
@@ -1195,9 +1194,8 @@ export const GivethNotificationTypes = {
   },
 
   PROJECT_UPDATED_OWNER: {
-    name: 'Project updated - owner',
-    description:
-      'Send notification to owner that the project has added an update',
+    name: 'Project updates',
+    description: 'You Posted an update on your project',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
@@ -1211,7 +1209,7 @@ export const GivethNotificationTypes = {
         content: 'Your project update was successful.',
       },
     ],
-    content: '', // Missing copy
+    content: 'Your project update was successful.', // Missing copy
   },
   PROJECT_UPDATED_DONOR: {
     name: 'Project updated - donor',
@@ -1294,8 +1292,8 @@ export const GivethNotificationTypes = {
     content: 'Nice! Your project {project name} received a like',
   },
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
-    name: 'Project updated - Users Who Liked',
-    description: 'Project updated - Users Who Liked',
+    name: 'Project updates',
+    description: 'When your liked project has an update',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_WHO_LIKED,
@@ -1598,7 +1596,7 @@ export const GivethNotificationTypes = {
       'When someone donates to your project, when you donate to a project, donation success and failure.',
   },
   STAKES_GROUP: {
-    name: 'Donations',
+    name: 'Stakes',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1638,6 +1636,29 @@ export const GivethNotificationTypes = {
     title: 'Rewards',
     description:
       'Shows when you have claimable rewards and you harvested rewards.',
+  },
+  LIKED_BY_YOU_PROJECT_GROUP: {
+    name: 'Project status',
+    microService: MICRO_SERVICES.givethio,
+    schemaValidator: null,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    isGroupParent: true,
+    content:
+      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content:
+          'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+      },
+    ],
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
+    title: 'Project Liked',
+    description:
+      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
   },
 };
 
