@@ -124,6 +124,8 @@ export const updateChildNotificationSettings = async (params: {
     return notificationType.id;
   });
 
+  if (notificationTypeIds.length === 0) return;
+
   await NotificationSetting.query(`
     UPDATE notification_setting
     SET "allowNotifications" = ${
