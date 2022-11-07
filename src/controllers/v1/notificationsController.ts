@@ -43,12 +43,11 @@ import {
   getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
 import { EMAIL_STATUSES } from '../../entities/notification';
-import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
 import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
+import {SegmentAnalyticsSingleton} from "../../services/segment/segmentAnalyticsSingleton";
 
-const analytics = getAnalytics();
 
 @Route('/v1')
 @Tags('Notification')
@@ -109,12 +108,14 @@ export class NotificationsController {
           // Segment and autopilot will send email automatically so now we just can cancel sending event by make email empty
           delete segmentData['email'];
         }
-        analytics.track(
-          notificationType.emailNotificationId!,
-          body?.segment?.analyticsUserId,
-          segmentData,
-          body?.segment?.anonymousId,
-        );
+
+        await SegmentAnalyticsSingleton.getInstance().track({
+          eventName: notificationType.emailNotificationId as string,
+          anonymousId:   body?.segment?.anonymousId,
+          properties: segmentData,
+          analyticsUserId: body?.segment?.analyticsUserId
+
+        })
         emailStatus = EMAIL_STATUSES.SENT;
       }
 
