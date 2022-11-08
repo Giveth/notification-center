@@ -73,14 +73,14 @@ export type SendNotificationRequest = {
 
   metadata: {
     /**
-     * @example 10
+     * @example "https://giveth.io/project/test-project
      */
-    amount?: number;
+    projectLink?: string;
 
     /**
-     * @example "GIV"
+     * @example "Test project"
      */
-    currency?: string;
+    projectTitle?: string;
   };
 
   /**

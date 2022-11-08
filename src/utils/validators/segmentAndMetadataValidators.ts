@@ -17,22 +17,23 @@ export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
 // Using Analytics structure for all notifications
 
 // Define all joi schemas here
-const projectSchema = {
+const projectRelatedTrackerSchema =  Joi.object({
   // seems we have to different schemas, not good TODO CHANGE ON IMPACT GRAPH
-  email: Joi.string().required(),
+  email: Joi.string(),
   title: Joi.string().required(),
-  FirstName: Joi.string().required(),
-  LastName: Joi.string().required(),
-  OwnerId: Joi.string().required(),
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  OwnerId: Joi.string(),
   slug: Joi.string().required(),
-};
+
+});
 
 const draftedProjectPublishedSegmentValidator = Joi.object({
   event: Joi.string()
     .required()
     .valid(GIVETH_IO_EVENTS.DRAFTED_PROJECT_ACTIVATED),
   analyticsUserId: Joi.string().required(),
-  properties: projectSchema,
+  properties: projectRelatedTrackerSchema,
   anonymousId: Joi.string(),
 });
 
@@ -41,7 +42,7 @@ const draftedProjectSavedSegmentValidator = Joi.object({
     .required()
     .valid(GIVETH_IO_EVENTS.DRAFTED_PROJECT_ACTIVATED),
   analyticsUserId: Joi.string().required(),
-  properties: projectSchema,
+  properties: projectRelatedTrackerSchema,
   anonymousId: Joi.string(),
 });
 
@@ -70,80 +71,6 @@ const projectTrackerSchema = {
   slug: Joi.string().required(),
   walletAddress: Joi.string().required().pattern(ethereumWalletAddressRegex),
 };
-
-const projectListedSegmentValidator = Joi.object({
-  event: Joi.string()
-    .required()
-    .valid(GIVETH_IO_EVENTS.DRAFTED_PROJECT_ACTIVATED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectUnlistedSegmentValidator = Joi.object({
-  event: Joi.string()
-    .required()
-    .valid(GIVETH_IO_EVENTS.DRAFTED_PROJECT_ACTIVATED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectEditedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_EDITED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectBadgeRevokedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_BADGE_REVOKED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectVerifiedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_VERIFIED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectRejectedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_REJECTED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectUnverifiedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_UNVERIFIED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectActivatedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_ACTIVATED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectDeactivatedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_DEACTIVATED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const projectCancelledSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.PROJECT_CANCELLED),
-  analyticsUserId: Joi.string().required(),
-  properties: projectTrackerSchema,
-  anonymousId: Joi.string(),
-});
 
 const sendVerificationEmailSchema = Joi.object({
   email: Joi.string().required(),
@@ -186,20 +113,6 @@ const donationTrackerSchema = Joi.object({
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
   transakStatus: Joi.string().allow(null),
-});
-
-const madeDonationSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.MADE_DONATION),
-  analyticsUserId: Joi.string().required(),
-  properties: donationTrackerSchema,
-  anonymousId: Joi.string(),
-});
-
-const donationReceivedSegmentValidator = Joi.object({
-  event: Joi.string().required().valid(GIVETH_IO_EVENTS.DONATION_RECEIVED),
-  analyticsUserId: Joi.string().required(),
-  properties: donationTrackerSchema,
-  anonymousId: Joi.string(),
 });
 
 const projectUpdatesForDonorSchema = Joi.object({
@@ -303,7 +216,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
 } = {
   draftedProjectSavedValidator: {
     metadata: projectTitleProjectLinkSchema,
-    segment: draftedProjectSavedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   draftedProjectPublishedValidator: {
     metadata: projectTitleProjectLinkSchema,
@@ -311,39 +224,55 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   projectListed: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectListedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectUnlisted: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectUnlistedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectEdited: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectEditedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectBadgeRevoked: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectBadgeRevokedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
+  },
+  projectBadgeRevokeReminder: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
+  projectBadgeRevokeWarning: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
+  projectBadgeRevokeLastWarning: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
+  projectBadgeUpForRevoking: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
   },
   projectVerified: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectVerifiedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectUnverified: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectUnverifiedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectActivated: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectActivatedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectDeactivated: {
     metadata: projectTitleProjectLinkReasonSchema,
-    segment: projectDeactivatedSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   projectCancelled: {
     metadata: projectTitleProjectLinkSchema,
-    segment: projectCancelledSegmentValidator,
+    segment: projectRelatedTrackerSchema,
   },
   sendEmailConfirmation: {
     metadata: null,
@@ -351,11 +280,11 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   madeDonation: {
     metadata: projectTitleProjectLinkSchema,
-    segment: madeDonationSegmentValidator,
+    segment: donationTrackerSchema,
   },
   donationReceived: {
     metadata: projectTitleProjectLinkSchema,
-    segment: donationReceivedSegmentValidator,
+    segment: donationTrackerSchema,
   },
   projectUpdatedDonor: {
     metadata: projectTitleProjectLinkSchema,

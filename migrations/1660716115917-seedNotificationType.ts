@@ -4,9 +4,9 @@ import {
   SCHEMA_VALIDATORS_NAMES,
 } from '../src/entities/notificationType';
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
-import { SegmentEvents } from '../src/services/segment/analytics';
 import { NOTIFICATION_CATEGORY } from '../src/types/general';
 import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationSetting';
+import {SegmentEvents} from "../src/services/segment/segmentAnalyticsSingleton";
 
 // https://github.com/Giveth/notification-center/issues/6 , https://gist.github.com/MohammadPCh/24434d50bc9ccd9b74905c271ee05482
 export const GivethNotificationTypes = {
@@ -945,7 +945,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project edited',
+    emailNotificationId: SegmentEvents.PROJECT_EDITED,
     pushNotifierService: null,
     title: 'Project edited',
     htmlTemplate: [
@@ -972,7 +972,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_REVOKED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project badge revoked',
+    emailNotificationId: SegmentEvents.PROJECT_BADGE_REVOKED,
     pushNotifierService: null,
     title: 'Project verification revoked',
     htmlTemplate: [
@@ -992,6 +992,118 @@ export const GivethNotificationTypes = {
     ],
     content: 'You project {project name} is not verified anymore',
   },
+  PROJECT_BADGE_REVOKE_REMINDER: {
+    name: 'Project badge revoke reminder',
+    description: 'Project verified badge revoke reminder',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_REVOKE_REMINDER,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: SegmentEvents.PROJECT_BADGE_REVOKE_REMINDER,
+    pushNotifierService: null,
+    title: 'Project verification revoke reminder',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your Project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        //TODO Carlos please check this copy with existing autopilot emails
+        content: ' would lose verification badge soon',
+      },
+    ],
+    content: 'You project {project name} would lose verification badge soon',
+  },
+  PROJECT_BADGE_REVOKE_WARNING: {
+    name: 'Project badge revoke warning',
+    description: 'Project badge revoke warning',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_REVOKE_WARNING,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: SegmentEvents.PROJECT_BADGE_REVOKE_WARNING,
+    pushNotifierService: null,
+    title: 'Project verification revoke warning',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your Project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        //TODO Carlos please check this copy with existing autopilot emails
+        content: ' would lose verification badge soon',
+      },
+    ],
+    content: 'You project {project name} would lose verification badge soon',
+  },
+  PROJECT_BADGE_REVOKE_LAST_WARNING: {
+    name: 'Project badge revoke last warning',
+    description: 'Project badge revoke last warning',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: SegmentEvents.PROJECT_BADGE_REVOKE_LAST_WARNING,
+    pushNotifierService: null,
+    title: 'Project badge revoke last warning',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your Project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        //TODO Carlos please check this copy with existing autopilot emails
+        content: ' would lose verification badge soon. this is last warning',
+      },
+    ],
+    content: 'You project {project name} would lose verification badge soon, this is last warning.',
+  },
+  PROJECT_BADGE_UP_FOR_REVOKING: {
+    name: 'Project badge up for revoking',
+    description: 'Project badge up for revoking',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BADGE_UP_FOR_REVOKING,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: SegmentEvents.PROJECT_BADGE_UP_FOR_REVOKING,
+    pushNotifierService: null,
+    title: 'Project badge up for revoking',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Your Project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        //TODO Carlos please check this copy with existing autopilot emails
+        content: ' would lose verification badge soon',
+      },
+    ],
+    content: 'You project {project name} would lose verification badge soon',
+  },
   PROJECT_UNVERIFIED: {
     name: 'Project unverified',
     description: 'Project has been unverified',
@@ -999,7 +1111,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project unverified',
+    emailNotificationId: SegmentEvents.PROJECT_UNVERIFIED,
     pushNotifierService: null,
     title: 'Project verification removed',
     htmlTemplate: [
@@ -1028,7 +1140,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.SEND_EMAIL_CONFIRMATION,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.DAPP_MAILER,
-    emailNotificationId: 'Send email confirmation',
+    emailNotificationId: SegmentEvents.SEND_EMAIL_CONFIRMATION,
     pushNotifierService: null,
     title: 'Project verification email confirmation',
     content: '', // Missing copy
@@ -1041,7 +1153,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.MADE_DONATION,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Made donation',
+    emailNotificationId: SegmentEvents.MADE_DONATION,
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
     title: 'Donations is successfull',
@@ -1075,7 +1187,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.DONATION_RECEIVED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Donation received',
+    emailNotificationId: SegmentEvents.DONATION_RECEIVED,
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
     title: 'Project received a donation',
@@ -1097,7 +1209,7 @@ export const GivethNotificationTypes = {
     content: 'Hurray! Your project {project name} received a donation 🥳',
   },
   DONATION_FAILED: {
-    name: 'Failed donation',
+    name: 'Donation get price failed',
     description: 'Project has received a donation',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1208,7 +1320,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project updated - owner',
+    emailNotificationId: SegmentEvents.PROJECT_UPDATED_OWNER,
     pushNotifierService: null,
     title: 'Project posted an update',
     htmlTemplate: [
@@ -1227,7 +1339,7 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project updated - donor',
+    emailNotificationId: SegmentEvents.PROJECT_UPDATED_DONOR,
     pushNotifierService: null,
     title: 'Project posted an update',
     htmlTemplate: [
@@ -1252,7 +1364,7 @@ export const GivethNotificationTypes = {
     schemaValidator:
       SCHEMA_VALIDATORS_NAMES.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Verification form got draft by admin',
+    emailNotificationId: SegmentEvents.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN,
     pushNotifierService: null,
     title: 'Project verification under review',
     htmlTemplate: [
