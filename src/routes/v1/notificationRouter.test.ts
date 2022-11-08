@@ -1648,7 +1648,7 @@ function sendNotificationTestCases() {
 
   it('should create *Failed donation* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'Failed donation',
+      eventName: 'Donation get price failed',
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -1672,7 +1672,7 @@ function sendNotificationTestCases() {
   it('should create *Failed donation* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'Failed donation',
+        eventName: 'Donation get price failed',
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
