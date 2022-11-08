@@ -123,6 +123,9 @@ export class NotificationType extends BaseEntity {
   @Column('text', { nullable: true })
   title?: string;
 
+  @Column('text', { nullable: true })
+  icon?: string;
+
   // Notification text
   @Column('text', { nullable: true })
   content?: string;
