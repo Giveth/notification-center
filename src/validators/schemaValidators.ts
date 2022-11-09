@@ -37,7 +37,42 @@ export const sendNotificationValidator = Joi.object({
 
   // We have a different validator for each notification type and validate it later in notification controller
   metadata: Joi.object(),
-  segmentData: Joi.any(),
+  segment: Joi.object({
+    anonymousId: Joi.string(),
+    analyticsUserId: Joi.string(),
+    payload: Joi.object({
+      // Common attributes
+      email: Joi.string(),
+      title: Joi.string(),
+      slug: Joi.string(),
+      firstName: Joi.string(),
+
+      // Donation related attributes
+      projectOwnerId: Joi.string(),
+      amount: Joi.number(),
+      transactionId: Joi.string(),
+      transactionNetworkId: Joi.number(),
+      currency: Joi.string(),
+      createdAt: Joi.string(),
+      toWalletAddress: Joi.string(),
+      fromWalletAddress: Joi.string(),
+      donationValueUsd: Joi.number(),
+      donationValueEth: Joi.number(),
+      verified: Joi.boolean(),
+      transakStatus: Joi.string(),
+
+
+
+      //Project related attributes
+      lastName: Joi.string(),
+      OwnerId: Joi.number(),
+
+      // Project update
+      update: Joi.string(),
+
+
+    })
+  }),
 });
 
 export const getNotificationsValidator = Joi.object({
