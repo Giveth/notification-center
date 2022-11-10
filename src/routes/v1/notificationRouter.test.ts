@@ -1554,7 +1554,7 @@ function sendNotificationTestCases() {
     const data = {
       eventName: 'Made donation',
       sendEmail: false,
-      sendSegment: false,
+      sendSegment: true,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
         projectTitle,

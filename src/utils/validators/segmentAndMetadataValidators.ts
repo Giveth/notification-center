@@ -55,15 +55,9 @@ const donationTrackerSchema = Joi.object({
     'string.pattern.base': errorMessages.INVALID_TRANSACTION_ID,
   }),
   transactionNetworkId: Joi.number()
-    .required()
-    .valid(...Object.values(NETWORK_IDS)),
-  currency: Joi.string().required().pattern(tokenSymbolRegex).messages({
-    'string.pattern.base': errorMessages.CURRENCY_IS_INVALID,
-    'string.base': errorMessages.CURRENCY_IS_INVALID,
-  }),
-  createdAt: Joi.string().pattern(filterDateRegex).messages({
-    'string.pattern.base': errorMessages.INVALID_DATE_FORMAT,
-  }),
+    .required(),
+  currency: Joi.string().required(),
+  createdAt: Joi.string(),
   toWalletAddress: Joi.string().required().pattern(ethereumWalletAddressRegex),
   fromWalletAddress: Joi.string().pattern(ethereumWalletAddressRegex),
   donationValueUsd: Joi.number().greater(0).allow(null), // in case it fails
