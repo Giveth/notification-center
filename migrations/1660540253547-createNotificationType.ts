@@ -32,6 +32,12 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             default: false,
           },
           {
+            name: 'showOnSettingPage',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
             name: 'categoryGroup',
             type: 'text',
             isNullable: true,

@@ -79,12 +79,15 @@ export class NotificationType extends BaseEntity {
   @Column('boolean', { default: false })
   isGroupParent?: boolean;
 
+  @Column('boolean', { default: false })
+  showOnSettingPage?: boolean;
+
   @Index()
   @Column('text', { nullable: true })
   categoryGroup?: string;
 
   @Index()
-  @Column('text', { nullable: false , unique: true})
+  @Column('text', { nullable: false, unique: true })
   name: string;
 
   @Column('text', { nullable: false })

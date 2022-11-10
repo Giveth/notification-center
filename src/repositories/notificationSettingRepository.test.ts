@@ -30,7 +30,7 @@ const walletAddress = generateRandomEthereumAddress();
 function getUserNotificationSettingsTestCases() {
   it('return notification settings by user and take and skip', async () => {
     const userAddress = await createNewUserAddressIfNotExists(walletAddress);
-    const take = 2;
+    const take = 50;
     const skip = 0;
 
     const [notificationSettings] = await getUserNotificationSettings(
@@ -40,9 +40,9 @@ function getUserNotificationSettingsTestCases() {
     );
 
     assert.isOk(notificationSettings);
-    assert.isTrue(notificationSettings!.length === 2);
     notificationSettings.forEach(setting => {
       assert.isTrue(setting!.userAddressId === userAddress.id);
+      assert.isTrue(setting?.notificationType?.showOnSettingPage);
     });
   });
 }

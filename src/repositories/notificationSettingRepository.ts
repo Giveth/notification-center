@@ -37,7 +37,8 @@ export const getUserNotificationSettings = async (
     )
     .where('notificationSetting.userAddressId = :userAddressId', {
       userAddressId: userAddressId,
-    });
+    })
+    .andWhere('notificationType.showOnSettingPage = true');
 
   if (category) {
     query = query.andWhere('notificationType.category = :category', {

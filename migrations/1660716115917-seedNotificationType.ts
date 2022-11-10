@@ -161,7 +161,9 @@ export const GivethNotificationTypes = {
   },
   DRAFTED_PROJECT_ACTIVATED: {
     name: 'Draft published',
-    description: 'Project draft has been published',
+    title: 'Project published',
+    description: 'When Project has been published',
+    showOnSettingPage: true,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconPublish',
     microService: MICRO_SERVICES.givethio,
@@ -169,7 +171,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.DRAFTED_PROJECT_ACTIVATED,
     pushNotifierService: null,
-    title: 'Project is published',
     content: 'Hurray! Your {project name} project is live 🥳',
     htmlTemplate: [
       {
@@ -935,7 +936,9 @@ export const GivethNotificationTypes = {
   },
   GIV_BACKS_ARE_READY_TO_CLAIM: {
     name: 'GIVbacks are ready to claim',
-    description: 'GIVbacks are ready to claim',
+    title: 'GIVbacks',
+    description: 'When GIVbacks are ready to be claimed after each round',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: 'IconUnstake',
@@ -943,7 +946,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_REJECTED,
     pushNotifierService: null,
-    title: 'GIVbacks are ready to claim',
     htmlTemplate: [
       {
         type: 'p',
@@ -1347,7 +1349,9 @@ export const GivethNotificationTypes = {
 
   PROJECT_UPDATED_OWNER: {
     name: 'Project updated - owner',
+    title: 'Project updates',
     description: 'You Posted an update on your project',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
@@ -1355,7 +1359,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: SegmentEvents.PROJECT_UPDATED_OWNER,
     pushNotifierService: null,
-    title: 'Project posted an update',
     htmlTemplate: [
       {
         type: 'p',
@@ -1421,7 +1424,9 @@ export const GivethNotificationTypes = {
   },
   PROJECT_RECEIVED_LIKE: {
     name: 'project liked',
-    description: 'project liked',
+    title: 'Project likes',
+    description: 'When someone liked your project',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconHeartFilled',
@@ -1429,7 +1434,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: null,
     pushNotifierService: null,
-    title: 'project liked',
     htmlTemplate: [
       {
         type: 'p',
@@ -1449,7 +1453,9 @@ export const GivethNotificationTypes = {
   },
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
     name: 'Project updates',
+    title: 'Project updates',
     description: 'When your liked project has an update',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
@@ -1458,7 +1464,6 @@ export const GivethNotificationTypes = {
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
     emailNotificationId: 'Project updated - Users who liked',
     pushNotifierService: null,
-    title: 'Project updated - Users Who Liked',
     htmlTemplate: [
       {
         type: 'a',
@@ -1650,6 +1655,10 @@ export const GivethNotificationTypes = {
   GIVPOWER_ALLOCATIONS_GROUP: {
     name: 'GIVpower Allocations',
     microService: MICRO_SERVICES.givethio,
+    showOnSettingPage: true,
+    title: 'GIVpower Allocations',
+    description:
+      'Shows your locked, unlocked and received amount of GIVpower and the amount automatically relocked.',
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null, // doesn't sent
@@ -1667,12 +1676,13 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_POWER,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
-    title: 'GIVpower Allocations',
-    description:
-      'Shows your locked, unlocked, received amount of GIVpower and the amount automatically relocked.',
   },
   GIVPOWER_SELF_BOOSTING_GROUP: {
     name: 'Your boost status',
+    title: 'Your boost status',
+    description:
+      'Shows when you boost a project, change the allocation of GIVpower.',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1691,12 +1701,12 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_POWER,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SELF_BOOSTING_STATUS,
-    title: 'Your boost status',
-    description:
-      'Shows when you boost a project, change the allocation of GIVpower.',
   },
   GIVPOWER_PROJECT_BOOSTING_GROUP: {
     name: 'Project boost status',
+    title: 'Project boost status',
+    description: 'Shows when your project receives a boost',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1713,11 +1723,13 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_POWER,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_BOOSTING_STATUS,
-    title: 'Project boost status',
-    description: 'Show when your project receives a boost',
   },
   PROJECT_STATUS_GROUP: {
     name: 'Project status',
+    title: 'Project status',
+    description:
+      'When your own Project has been listed, unlisted, cancelled, activated or deactivated.',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1725,23 +1737,24 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     isGroupParent: true,
     content:
-      'When Project has been listed, unlisted, cancelled, activated or deactivated.',
+      'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
     htmlTemplate: [
       {
         type: 'p',
         content:
-          'When Project has been listed, unlisted, cancelled, activated or deactivated.',
+          'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.PROJECT_STATUS,
-    title: 'Project status',
-    description:
-      'When Project has been listed, unlisted, cancelled, activated or deactivated.',
   },
   DONATIONS_GROUP: {
     name: 'Donations',
+    title: 'Donations',
+    description:
+      'When someone donates to your project, when you donate to a project, donation success and failure.',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1760,13 +1773,13 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
-    title: 'Donations',
-    description:
-      'When someone donates to your project, when you donate to a project, donation success and failure.',
   },
   STAKES_GROUP: {
     name: 'Stakes',
     microService: MICRO_SERVICES.givethio,
+    title: 'Stakes',
+    description: 'Shows when you stake or unstake on the GIVfarm',
+    showOnSettingPage: true,
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null,
@@ -1782,12 +1795,15 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
-    title: 'Stakes',
-    description: 'Show when you stake or unstake on the GIVfarm',
   },
   REWARDS_GROUP: {
     name: 'Rewards',
     microService: MICRO_SERVICES.givethio,
+    title: 'Rewards',
+    description:
+      'Shows when you have claimable rewards and your harvested rewards',
+    showOnSettingPage: true,
+
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null,
@@ -1804,12 +1820,13 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.REWARDS,
-    title: 'Rewards',
-    description:
-      'Shows when you have claimable rewards and you harvested rewards.',
   },
   LIKED_BY_YOU_PROJECT_GROUP: {
     name: 'Project status - Users Who Liked',
+    title: 'Project status',
+    description:
+      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+    showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1828,9 +1845,6 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    title: 'Project Liked',
-    description:
-      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
   },
 };
 

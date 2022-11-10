@@ -10,6 +10,7 @@ import {
   NotificationSetting,
   NOTIFICATION_CATEGORY_GROUPS,
 } from '../../entities/notificationSetting';
+import { NOTIFICATION_CATEGORY } from '../../types/general';
 
 const apiBaseUrl = serverUrl;
 
@@ -43,8 +44,9 @@ function getNotificationSettingsTestCases() {
   it('should return addresses filtered by category', async () => {
     const userAddress = await createNewUserAddressIfNotExists(walletAddress);
     const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+    const category = NOTIFICATION_CATEGORY.PROJECT_RELATED;
     const result = await Axios.get(
-      `${apiBaseUrl}/v1/notification_settings?limit=10&category=general`,
+      `${apiBaseUrl}/v1/notification_settings?limit=10&category=${category}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
@@ -52,7 +54,8 @@ function getNotificationSettingsTestCases() {
     const notifications = result.data.notificationSettings;
     assert.isOk(notifications);
     assert.isTrue(notifications[0]?.userAddressId === userAddress.id);
-    assert.isTrue(notifications[0]?.notificationType?.category === 'general');
+    assert.isTrue(notifications[0]?.notificationType?.category === category);
+    assert.isTrue(notifications[0]?.notificationType?.showOnSettingPage);
   });
 }
 
