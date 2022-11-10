@@ -156,8 +156,15 @@ export const createNotification = async (params: {
   segmentData?: any;
   projectId?: string;
 }) => {
-  const { notificationType, user, projectId, email, emailStatus, metadata, segmentData } =
-    params;
+  const {
+    notificationType,
+    user,
+    projectId,
+    email,
+    emailStatus,
+    metadata,
+    segmentData,
+  } = params;
 
   const notification = Notification.create({
     userAddress: user,

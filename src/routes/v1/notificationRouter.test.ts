@@ -1,5 +1,6 @@
 import {
   generateRandomEthereumAddress,
+  generateRandomTxHash,
   getAccessTokenForMockAuthMicroService,
   getGivethIoBasicAuth,
   serverUrl,
@@ -1537,6 +1538,49 @@ function sendNotificationTestCases() {
       metadata: {
         projectTitle,
         projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Made donation* notification,  success, segment is on', async () => {
+    const data = {
+      eventName: 'Made donation',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+      segment: {
+        analyticsUserId: 'givethId-255',
+        anonymousId: 'givethId-255',
+        payload: {
+          email: 'test@giveth.com',
+          title: 'How many photos is too many photos?',
+          firstName: 'firstName',
+          projectOwnerId: '68',
+          slug: 'how-many-photos-is-too-many-photos',
+          amount: 0.0001,
+          transactionId: generateRandomTxHash(),
+          transactionNetworkId: 5,
+          currency: 'ETH',
+          createdAt: '2022-11-10T07:36:13.182Z',
+          toWalletAddress: generateRandomEthereumAddress(),
+          donationValueUsd: 0.120492,
+          donationValueEth: 0.0001,
+          verified: true,
+          transakStatus: null,
+          fromWalletAddress: generateRandomEthereumAddress(),
+        },
       },
     };
 

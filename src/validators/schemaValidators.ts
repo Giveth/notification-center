@@ -55,11 +55,11 @@ export const sendNotificationValidator = Joi.object({
       currency: Joi.string(),
       createdAt: Joi.string(),
       toWalletAddress: Joi.string(),
-      fromWalletAddress: Joi.string(),
+      fromWalletAddress: Joi.string().allow(null),
       donationValueUsd: Joi.number(),
       donationValueEth: Joi.number(),
       verified: Joi.boolean(),
-      transakStatus: Joi.string(),
+      transakStatus: Joi.string().allow(null),
 
       //Project related attributes
       lastName: Joi.string(),

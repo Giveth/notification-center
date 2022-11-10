@@ -69,7 +69,7 @@ const donationTrackerSchema = Joi.object({
   donationValueUsd: Joi.number().greater(0).allow(null), // in case it fails
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
-  transakStatus: Joi.string().allow(undefined, null),
+  transakStatus: Joi.string().allow(null),
 });
 
 const projectTitleProjectLinkSchema = Joi.object({
