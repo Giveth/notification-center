@@ -42,7 +42,6 @@ export const SCHEMA_VALIDATORS_NAMES = {
   GIV_FARM_READY_TO_CLAIM: 'givFarmReadyToClaim',
   GIV_FARM_REWARD_HARVEST: 'givFarmRewardHarvest',
 
-  SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation', // verificationForm,
   MADE_DONATION: 'madeDonation',
   DONATION_RECEIVED: 'donationReceived',
   PROJECT_UPDATED_DONOR: 'projectUpdatedDonor',

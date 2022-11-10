@@ -1171,22 +1171,6 @@ export const GivethNotificationTypes = {
     ],
     content: 'You project {project name} is not verified anymore',
   },
-
-  // DAPP MAILER
-  SEND_EMAIL_CONFIRMATION: {
-    name: 'Send email confirmation',
-    description: 'Project Verification form email confirmation has been sent!',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon:'',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.SEND_EMAIL_CONFIRMATION,
-    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.DAPP_MAILER,
-    emailNotificationId: SegmentEvents.SEND_EMAIL_CONFIRMATION,
-    pushNotifierService: null,
-    title: 'Project verification email confirmation',
-    content: '', // Missing copy
-  },
-
   MADE_DONATION: {
     name: 'Made donation',
     description: 'User made a donation to a project',
