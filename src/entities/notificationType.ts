@@ -84,7 +84,7 @@ export class NotificationType extends BaseEntity {
   categoryGroup?: string;
 
   @Index()
-  @Column('text', { nullable: false })
+  @Column('text', { nullable: false , unique: true})
   name: string;
 
   @Column('text', { nullable: false })

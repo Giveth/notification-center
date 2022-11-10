@@ -1809,7 +1809,7 @@ export const GivethNotificationTypes = {
       'Shows when you have claimable rewards and you harvested rewards.',
   },
   LIKED_BY_YOU_PROJECT_GROUP: {
-    name: 'Project status',
+    name: 'Project status - Users Who Liked',
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
