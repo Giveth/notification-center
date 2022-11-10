@@ -45,7 +45,7 @@ import {
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
-import { findNotificationSettingByCategoryGroupAndUserAddress } from '../../repositories/notificationSettingRepository';
+import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
 import { SegmentAnalyticsSingleton } from '../../services/segment/segmentAnalyticsSingleton';
 
 @Route('/v1')
@@ -78,15 +78,12 @@ export class NotificationsController {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
       }
       const notificationSetting =
-        (await findNotificationSettingByCategoryGroupAndUserAddress({
-          categoryGroup: notificationType.categoryGroup as string,
+        await findNotificationSettingByNotificationTypeAndUserAddress({
+          notificationTypeId: notificationType.id,
           userAddressId: userAddress.id,
-        })) || {
-          allowEmailNotification: true,
-          allowNotifications: true,
-        };
-      //TODO Carlos please check this and talk with me about it later,  If notificationType doesnt belong to a groupCategory we assume email and other thing is enabled
-      logger.debug('notificationSetting ', {
+        });
+
+      logger.debug('notificationController.sendNotification()', {
         notificationSetting,
         notificationType,
       });
@@ -156,18 +153,18 @@ export class NotificationsController {
 
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
   /**
-     * @example limit "20"
-     * @example offset "0"
-     * @example category ""
-     * @example category "projectRelated"
-     * @example category "givEconomyRelated"
-     * @example category "general"
-     * @example isRead ""
-     * @example isRead "false"
-     * @example isRead "true"
-     * @example startTime "1659356987"
+   * @example limit "20"
+   * @example offset "0"
+   * @example category ""
+   * @example category "projectRelated"
+   * @example category "givEconomyRelated"
+   * @example category "general"
+   * @example isRead ""
+   * @example isRead "false"
+   * @example isRead "true"
+   * @example startTime "1659356987"
 
-     */
+   */
   @Get('/notifications/')
   @Security('JWT')
   public async getNotifications(

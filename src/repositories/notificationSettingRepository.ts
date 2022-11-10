@@ -48,27 +48,23 @@ export const getUserNotificationSettings = async (
   return query.take(take).skip(skip).getManyAndCount();
 };
 
-export const findNotificationSettingByCategoryGroupAndUserAddress =
+export const findNotificationSettingByNotificationTypeAndUserAddress =
   async (params: {
-    categoryGroup: string;
+    notificationTypeId: number;
     userAddressId: number;
   }): Promise<NotificationSetting | null> => {
-    const { categoryGroup, userAddressId } = params;
+    const { notificationTypeId, userAddressId } = params;
     try {
       return await NotificationSetting.createQueryBuilder('notificationSetting')
-        .leftJoinAndSelect(
-          'notificationSetting.notificationType',
-          'notificationType',
-        )
         .where('notificationSetting.userAddressId = :userAddressId', {
           userAddressId,
         })
-        .andWhere('notificationType.categoryGroup = :categoryGroup', {
-          categoryGroup,
-        })
-        .andWhere('notificationType.isGroupParent = :isGroupParent', {
-          isGroupParent: true,
-        })
+        .andWhere(
+          'notificationSetting.notificationTypeId = :notificationTypeId',
+          {
+            notificationTypeId,
+          },
+        )
         .getOne();
     } catch (e) {
       logger.error(

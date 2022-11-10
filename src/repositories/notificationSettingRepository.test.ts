@@ -1,11 +1,8 @@
 import { assert } from 'chai';
 import { generateRandomEthereumAddress } from '../../test/testUtils';
+import { NotificationSetting } from '../entities/notificationSetting';
 import {
-  NOTIFICATION_CATEGORY_GROUPS,
-  NotificationSetting,
-} from '../entities/notificationSetting';
-import {
-  findNotificationSettingByCategoryGroupAndUserAddress,
+  findNotificationSettingByNotificationTypeAndUserAddress,
   getUserNotificationSettings,
   updateUserNotificationSetting,
 } from './notificationSettingRepository';
@@ -58,39 +55,38 @@ function findNotificationSettingByNotificationTypeAndUserAddressTestCases() {
       SegmentEvents.PROJECT_LISTED,
     );
     const notificationSettings =
-      await findNotificationSettingByCategoryGroupAndUserAddress({
+      await findNotificationSettingByNotificationTypeAndUserAddress({
         userAddressId: userAddress.id,
-        categoryGroup: notificationType?.categoryGroup as string,
+        notificationTypeId: notificationType?.id as number,
       });
 
     assert.isOk(notificationSettings);
     assert.equal(
-      notificationSettings?.notificationType?.categoryGroup,
-      notificationType?.categoryGroup,
+      notificationSettings?.notificationTypeId,
+      notificationType?.id,
     );
-    assert.isTrue(notificationSettings?.notificationType?.isGroupParent);
     assert.equal(notificationSettings?.userAddressId, userAddress?.id);
   });
-  it('return null for invalid  categoryGroup', async () => {
+  it('return null for invalid  notificationType', async () => {
     const address = generateRandomEthereumAddress();
     const userAddress = await createNewUserAddressIfNotExists(address);
     const notificationSettings =
-      await findNotificationSettingByCategoryGroupAndUserAddress({
+      await findNotificationSettingByNotificationTypeAndUserAddress({
         userAddressId: userAddress.id,
-        categoryGroup: 'invalid category group',
+        notificationTypeId: 999999,
       });
 
     assert.isNull(notificationSettings);
   });
 
-  it('return null for invalid userAddress', async () => {
+  it('return null for invalid notificationAddress', async () => {
     const notificationType = await getNotificationTypeByEventName(
       SegmentEvents.PROJECT_LISTED,
     );
     const notificationSettings =
-      await findNotificationSettingByCategoryGroupAndUserAddress({
+      await findNotificationSettingByNotificationTypeAndUserAddress({
         userAddressId: 99999,
-        categoryGroup: NOTIFICATION_CATEGORY_GROUPS.DONATIONS,
+        notificationTypeId: notificationType?.id as number,
       });
     assert.isNull(notificationSettings);
   });
