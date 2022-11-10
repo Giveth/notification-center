@@ -45,7 +45,7 @@ import {
 import { EMAIL_STATUSES } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
-import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
+import { findNotificationSettingByCategoryGroupAndUserAddress } from '../../repositories/notificationSettingRepository';
 import { SegmentAnalyticsSingleton } from '../../services/segment/segmentAnalyticsSingleton';
 
 @Route('/v1')
@@ -77,21 +77,19 @@ export class NotificationsController {
       if (!notificationType) {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
       }
-      const notificationSetting =
-        await findNotificationSettingByNotificationTypeAndUserAddress({
-          notificationTypeId: notificationType.id,
+      let notificationSetting =
+        (await findNotificationSettingByCategoryGroupAndUserAddress({
+          categoryGroup: notificationType.categoryGroup as string,
           userAddressId: userAddress.id,
-        });
-      if (!notificationSetting) {
-        // Logically this part of code never should be executed
-        logger.error(
-          'Notification setting doenst exist for this notification Type and user',
-          {
-            notificationType,
-            userAddress,
-          },
-        );
-      }
+        })) || {
+          allowEmailNotification: true,
+          allowNotifications: true,
+        };
+      //TODO Carlos please check this and talk with me about it later,  If notificationType doesnt belong to a groupCategory we assume email and other thing is enabled
+      logger.debug('notificationSetting ', {
+        notificationSetting,
+        notificationType,
+      });
 
       const shouldSendEmail =
         body.sendEmail && notificationSetting?.allowEmailNotification;

@@ -54,8 +54,7 @@ const donationTrackerSchema = Joi.object({
   transactionId: Joi.string().required().pattern(txHashRegex).messages({
     'string.pattern.base': errorMessages.INVALID_TRANSACTION_ID,
   }),
-  transactionNetworkId: Joi.number()
-    .required(),
+  transactionNetworkId: Joi.number().required(),
   currency: Joi.string().required(),
   createdAt: Joi.string(),
   toWalletAddress: Joi.string().required().pattern(ethereumWalletAddressRegex),
