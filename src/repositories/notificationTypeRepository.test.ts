@@ -4,7 +4,7 @@ import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from './notificationTypeRepository';
-import {SegmentEvents} from "../services/segment/segmentAnalyticsSingleton";
+import { SegmentEvents } from '../services/segment/segmentAnalyticsSingleton';
 
 describe(
   'getNotificationTypeByEventName() test cases',

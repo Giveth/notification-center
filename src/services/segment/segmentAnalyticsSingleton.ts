@@ -1,6 +1,6 @@
 const segmentApiKey = process.env.SEGMENT_API_KEY;
 import { SegmentAnalytics } from 'segment-analytics-node';
-import {redisConfig} from "../redis";
+import { redisConfig } from '../redis';
 
 const options = {
   redisConnectionInfo: {
@@ -38,9 +38,6 @@ export enum SegmentEvents {
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
 }
 
-
-
-
 // one instance running
 export class SegmentAnalyticsSingleton {
   private static instance: SegmentAnalyticsSingleton;
@@ -55,16 +52,16 @@ export class SegmentAnalyticsSingleton {
 
   private constructor() {
     SegmentAnalyticsSingleton.segmentAnalyticsInstance = new SegmentAnalytics(
-        segmentApiKey as string,
-        options,
+      segmentApiKey as string,
+      options,
     );
     return this;
   }
 
   async identifyUser(user: {
-    segmentUserId: string,
-    firstName ?: string,
-    email ?: string
+    segmentUserId: string;
+    firstName?: string;
+    email?: string;
   }): Promise<void> {
     await SegmentAnalyticsSingleton.segmentAnalyticsInstance.identify({
       userId: user.segmentUserId,
@@ -76,18 +73,13 @@ export class SegmentAnalyticsSingleton {
     });
   }
 
-  async track(
-      params :{
-        eventName: string,
-        analyticsUserId ?: string,
-        properties: any,
-        anonymousId?: string ,
-      }
-  ): Promise<void> {
-    const { eventName,
-      analyticsUserId,
-      properties,
-      anonymousId} = params
+  async track(params: {
+    eventName: string;
+    analyticsUserId?: string;
+    properties: any;
+    anonymousId?: string;
+  }): Promise<void> {
+    const { eventName, analyticsUserId, properties, anonymousId } = params;
     const userId = (analyticsUserId || anonymousId) as string;
     await SegmentAnalyticsSingleton.segmentAnalyticsInstance.track({
       event: eventName,

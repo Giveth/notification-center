@@ -8,7 +8,7 @@ import {
 } from './notificationSettingRepository';
 import { createNewUserAddressIfNotExists } from './userAddressRepository';
 import { getNotificationTypeByEventName } from './notificationTypeRepository';
-import {SegmentEvents} from "../services/segment/segmentAnalyticsSingleton";
+import { SegmentEvents } from '../services/segment/segmentAnalyticsSingleton';
 
 // createNotificationSettingsForNewUser tested in userRepository
 describe(

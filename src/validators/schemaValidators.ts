@@ -61,17 +61,13 @@ export const sendNotificationValidator = Joi.object({
       verified: Joi.boolean(),
       transakStatus: Joi.string(),
 
-
-
       //Project related attributes
       lastName: Joi.string(),
       OwnerId: Joi.number(),
 
       // Project update
       update: Joi.string(),
-
-
-    })
+    }),
   }),
 });
 

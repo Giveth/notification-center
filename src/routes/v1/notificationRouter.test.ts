@@ -1528,26 +1528,6 @@ function sendNotificationTestCases() {
     }
   });
 
-  it('should create *Send email confirmation* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Send email confirmation',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {},
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivethIoBasicAuth(),
-      },
-    });
-    console.log('**result**', result.data);
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-
   it('should create *Made donation* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Made donation',

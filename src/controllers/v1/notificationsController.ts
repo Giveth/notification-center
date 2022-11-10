@@ -46,8 +46,7 @@ import { EMAIL_STATUSES } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
 import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
-import {SegmentAnalyticsSingleton} from "../../services/segment/segmentAnalyticsSingleton";
-
+import { SegmentAnalyticsSingleton } from '../../services/segment/segmentAnalyticsSingleton';
 
 @Route('/v1')
 @Tags('Notification')
@@ -84,7 +83,14 @@ export class NotificationsController {
           userAddressId: userAddress.id,
         });
       if (!notificationSetting) {
-        //TODO I dont know what should we do in this case
+        // Logically this part of code never should be executed
+        logger.error(
+          'Notification setting doenst exist for this notification Type and user',
+          {
+            notificationType,
+            userAddress,
+          },
+        );
       }
 
       const shouldSendEmail =
@@ -111,11 +117,10 @@ export class NotificationsController {
 
         await SegmentAnalyticsSingleton.getInstance().track({
           eventName: notificationType.emailNotificationId as string,
-          anonymousId:   body?.segment?.anonymousId,
+          anonymousId: body?.segment?.anonymousId,
           properties: segmentData,
-          analyticsUserId: body?.segment?.analyticsUserId
-
-        })
+          analyticsUserId: body?.segment?.analyticsUserId,
+        });
         emailStatus = EMAIL_STATUSES.SENT;
       }
 

@@ -17,7 +17,7 @@ export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
 // Using Analytics structure for all notifications
 
 // Define all joi schemas here
-const projectRelatedTrackerSchema =  Joi.object({
+const projectRelatedTrackerSchema = Joi.object({
   // seems we have to different schemas, not good TODO CHANGE ON IMPACT GRAPH
   email: Joi.string(),
   title: Joi.string().required(),
@@ -25,7 +25,6 @@ const projectRelatedTrackerSchema =  Joi.object({
   lastName: Joi.string(),
   OwnerId: Joi.string(),
   slug: Joi.string().required(),
-
 });
 
 const boostedSchema = Joi.object({
@@ -66,8 +65,7 @@ const donationTrackerSchema = Joi.object({
     'string.pattern.base': errorMessages.INVALID_DATE_FORMAT,
   }),
   toWalletAddress: Joi.string().required().pattern(ethereumWalletAddressRegex),
-  fromWalletAddress: Joi.string()
-    .pattern(ethereumWalletAddressRegex),
+  fromWalletAddress: Joi.string().pattern(ethereumWalletAddressRegex),
   donationValueUsd: Joi.number().greater(0).allow(null), // in case it fails
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
