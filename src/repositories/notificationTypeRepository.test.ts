@@ -1,10 +1,10 @@
 import { assert } from 'chai';
-import { SegmentEvents } from '../services/segment/analytics';
 import { MICRO_SERVICES } from '../utils/utils';
 import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from './notificationTypeRepository';
+import { SegmentEvents } from '../services/segment/segmentAnalyticsSingleton';
 
 describe(
   'getNotificationTypeByEventName() test cases',

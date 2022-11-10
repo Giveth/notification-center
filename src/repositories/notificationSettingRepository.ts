@@ -3,6 +3,7 @@ import { NotificationType } from '../entities/notificationType';
 import { NotificationSetting } from '../entities/notificationSetting';
 import { errorMessages } from '../utils/errorMessages';
 import { createQueryBuilder } from 'typeorm';
+import { logger } from '../utils/logger';
 
 export const createNotificationSettingsForNewUser = async (
   user: UserAddress,
@@ -46,6 +47,33 @@ export const getUserNotificationSettings = async (
 
   return query.take(take).skip(skip).getManyAndCount();
 };
+
+export const findNotificationSettingByNotificationTypeAndUserAddress =
+  async (params: {
+    notificationTypeId: number;
+    userAddressId: number;
+  }): Promise<NotificationSetting | null> => {
+    const { notificationTypeId, userAddressId } = params;
+    try {
+      return await NotificationSetting.createQueryBuilder('notificationSetting')
+        .where('notificationSetting.userAddressId = :userAddressId', {
+          userAddressId,
+        })
+        .andWhere(
+          'notificationSetting.notificationTypeId = :notificationTypeId',
+          {
+            notificationTypeId,
+          },
+        )
+        .getOne();
+    } catch (e) {
+      logger.error(
+        'findNotificationSettingByNotificationTypeAndUserAddress() error',
+        e,
+      );
+      throw e;
+    }
+  };
 
 export const updateUserNotificationSetting = async (params: {
   notificationSettingId: number;

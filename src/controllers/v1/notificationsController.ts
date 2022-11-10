@@ -43,11 +43,10 @@ import {
   getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
 import { EMAIL_STATUSES } from '../../entities/notification';
-import { getAnalytics, SegmentEvents } from '../../services/segment/analytics';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
-
-const analytics = getAnalytics();
+import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
+import { SegmentAnalyticsSingleton } from '../../services/segment/segmentAnalyticsSingleton';
 
 @Route('/v1')
 @Tags('Notification')
@@ -78,7 +77,25 @@ export class NotificationsController {
       if (!notificationType) {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
       }
-      let emailStatus = body.sendEmail
+      const notificationSetting =
+        await findNotificationSettingByNotificationTypeAndUserAddress({
+          notificationTypeId: notificationType.id,
+          userAddressId: userAddress.id,
+        });
+      if (!notificationSetting) {
+        // Logically this part of code never should be executed
+        logger.error(
+          'Notification setting doenst exist for this notification Type and user',
+          {
+            notificationType,
+            userAddress,
+          },
+        );
+      }
+
+      const shouldSendEmail =
+        body.sendEmail && notificationSetting?.allowEmailNotification;
+      let emailStatus = shouldSendEmail
         ? EMAIL_STATUSES.WAITING_TO_BE_SEND
         : EMAIL_STATUSES.NO_NEED_TO_SEND;
 
@@ -91,18 +108,31 @@ export class NotificationsController {
           notificationType?.schemaValidator as string
         ]?.metadata;
       if (body.sendSegment && segmentValidator) {
-        validateWithJoiSchema(body.segmentData, segmentValidator);
-        analytics.track(
-          notificationType.emailNotificationId!,
-          body.analyticsUserId,
-          body.segmentData,
-          body.anonymousId,
-        );
+        const segmentData = Object.assign({}, body.segment?.payload);
+        validateWithJoiSchema(segmentData, segmentValidator);
+        if (!shouldSendEmail) {
+          // Segment and autopilot will send email automatically so now we just can cancel sending event by make email empty
+          delete segmentData['email'];
+        }
+
+        await SegmentAnalyticsSingleton.getInstance().track({
+          eventName: notificationType.emailNotificationId as string,
+          anonymousId: body?.segment?.anonymousId,
+          properties: segmentData,
+          analyticsUserId: body?.segment?.analyticsUserId,
+        });
         emailStatus = EMAIL_STATUSES.SENT;
       }
 
       if (metadataValidator) {
         validateWithJoiSchema(body.metadata, metadataValidator);
+      }
+
+      if (!notificationSetting?.allowNotifications) {
+        return {
+          success: true,
+          message: errorMessages.USER_TURNED_OF_THIS_NOTIFICATION_TYPE,
+        };
       }
       await createNotification({
         notificationType,

@@ -23,6 +23,10 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_UNLISTED: 'projectUnlisted',
   PROJECT_EDITED: 'projectEdited',
   PROJECT_BADGE_REVOKED: 'projectBadgeRevoked',
+  PROJECT_BADGE_REVOKE_REMINDER: 'projectBadgeRevokeReminder',
+  PROJECT_BADGE_REVOKE_WARNING: 'projectBadgeRevokeWarning',
+  PROJECT_BADGE_REVOKE_LAST_WARNING: 'projectBadgeRevokeLastWarning',
+  PROJECT_BADGE_UP_FOR_REVOKING: 'projectBadgeUpForRevoking',
   PROJECT_VERIFIED: 'projectVerified',
   PROJECT_UNVERIFIED: 'projectUnverified',
   PROJECT_ACTIVATED: 'projectActivated',
@@ -38,7 +42,6 @@ export const SCHEMA_VALIDATORS_NAMES = {
   GIV_FARM_READY_TO_CLAIM: 'givFarmReadyToClaim',
   GIV_FARM_REWARD_HARVEST: 'givFarmRewardHarvest',
 
-  SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation', // verificationForm,
   MADE_DONATION: 'madeDonation',
   DONATION_RECEIVED: 'donationReceived',
   PROJECT_UPDATED_DONOR: 'projectUpdatedDonor',
@@ -118,6 +121,9 @@ export class NotificationType extends BaseEntity {
   // Notification title
   @Column('text', { nullable: true })
   title?: string;
+
+  @Column('text', { nullable: true })
+  icon?: string;
 
   // Notification text
   @Column('text', { nullable: true })
