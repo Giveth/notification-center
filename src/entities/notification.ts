@@ -52,7 +52,7 @@ export class Notification extends BaseEntity {
   isRead?: boolean;
 
   @Column('jsonb', { nullable: true, default: {} })
-  segmentData: string;
+  segmentData: any;
 
   // dynamic data considering segment structures, and validate with joi schema
   @Column('jsonb', { nullable: true, default: {} })
