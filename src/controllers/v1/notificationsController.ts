@@ -77,7 +77,7 @@ export class NotificationsController {
       if (!notificationType) {
         throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
       }
-      let notificationSetting =
+      const notificationSetting =
         (await findNotificationSettingByCategoryGroupAndUserAddress({
           categoryGroup: notificationType.categoryGroup as string,
           userAddressId: userAddress.id,
