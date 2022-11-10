@@ -140,13 +140,18 @@ export class NotificationsController {
         email: body.email,
         emailStatus,
         metadata: body?.metadata,
+        segmentData: body.segment,
         projectId,
       });
 
       return { success: true };
       // add if and logic for push notification (not in mvp)
     } catch (e) {
-      logger.error('sendNotification() error', e);
+      logger.error('sendNotification() error', {
+        error: e,
+        requestBody: body,
+        segmentPayload : body?.segment?.payload
+      });
       throw e;
     }
   }
