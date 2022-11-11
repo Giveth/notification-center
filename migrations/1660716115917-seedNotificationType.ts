@@ -1174,6 +1174,34 @@ export const GivethNotificationTypes = {
     ],
     content: 'You project {project name} is not verified anymore',
   },
+  PROJECT_UNVERIFIED_WHO_BOOSTED: {
+    name: 'Project unverified - Users Who Boosted',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: '',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED_WHO_BOOSTED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Project unverified - Users Who Boosted',
+    description: 'Project unverified - Users Who Boosted',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'The project that you boosted before',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' is not verified anymore',
+      },
+    ],
+    content: 'The project that you boosted before {project name} is not verified anymore',
+  },
   MADE_DONATION: {
     name: 'Made donation',
     description: 'User made a donation to a project',

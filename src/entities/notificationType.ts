@@ -29,6 +29,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_BADGE_UP_FOR_REVOKING: 'projectBadgeUpForRevoking',
   PROJECT_VERIFIED: 'projectVerified',
   PROJECT_UNVERIFIED: 'projectUnverified',
+  PROJECT_UNVERIFIED_WHO_BOOSTED: 'projectUnverifiedWhoBoosted',
   PROJECT_ACTIVATED: 'projectActivated',
   PROJECT_DEACTIVATED: 'projectDeactivated',
   PROJECT_CANCELLED: 'projectCancelled',

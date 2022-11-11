@@ -154,6 +154,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
+  projectUnverifiedWhoBoosted: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
   projectActivated: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
