@@ -282,6 +282,38 @@ function sendNotificationTestCases() {
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
   });
+  it('should create *Project listed* notification,  success, segment is on', async () => {
+    const data = {
+      eventName: 'Project listed',
+      sendEmail: true,
+      sendSegment: true,
+      segment: {
+        analyticsUserId: 'givethId-255',
+        anonymousId: 'givethId-255',
+        payload: {
+          title: 'Test verify and reject form emails',
+          lastName: 'Ranjbar',
+          firstName: 'Mohammad',
+          OwnerId: 255,
+          slug: 'test-verify-and-reject-form-emails'
+        }
+      },
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
   it('should create *Project listed* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
@@ -1553,7 +1585,7 @@ function sendNotificationTestCases() {
   it('should create *Made donation* notification,  success, segment is on', async () => {
     const data = {
       eventName: 'Made donation',
-      sendEmail: false,
+      sendEmail: true,
       sendSegment: true,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {

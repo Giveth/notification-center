@@ -23,7 +23,7 @@ const projectRelatedTrackerSchema = Joi.object({
   title: Joi.string().required(),
   firstName: Joi.string(),
   lastName: Joi.string(),
-  OwnerId: Joi.string(),
+  OwnerId: Joi.number(),
   slug: Joi.string().required(),
 });
 
