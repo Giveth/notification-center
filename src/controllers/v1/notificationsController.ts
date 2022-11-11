@@ -98,18 +98,14 @@ export class NotificationsController {
         SEGMENT_METADATA_SCHEMA_VALIDATOR[
           notificationType?.schemaValidator as string
         ]?.segment;
-      const metadataValidator =
-        SEGMENT_METADATA_SCHEMA_VALIDATOR[
-          notificationType?.schemaValidator as string
-        ]?.metadata;
-      if (body.sendSegment && segmentValidator) {
-        const segmentData = Object.assign({}, body.segment?.payload);
-        validateWithJoiSchema(segmentData, segmentValidator);
-        if (!shouldSendEmail) {
-          // Segment and autopilot will send email automatically so now we just can cancel sending event by make email empty
-          delete segmentData['email'];
-        }
 
+
+      if (shouldSendEmail && body.sendSegment && segmentValidator) {
+
+        //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
+        // And it's not good, we should find another solution to separate sending segment and email
+        const segmentData = body.segment?.payload;
+        validateWithJoiSchema(segmentData, segmentValidator);
         await SegmentAnalyticsSingleton.getInstance().track({
           eventName: notificationType.emailNotificationId as string,
           anonymousId: body?.segment?.anonymousId,
@@ -118,6 +114,11 @@ export class NotificationsController {
         });
         emailStatus = EMAIL_STATUSES.SENT;
       }
+
+      const metadataValidator =
+          SEGMENT_METADATA_SCHEMA_VALIDATOR[
+              notificationType?.schemaValidator as string
+              ]?.metadata;
 
       if (metadataValidator) {
         validateWithJoiSchema(body.metadata, metadataValidator);
