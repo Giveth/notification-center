@@ -124,7 +124,9 @@ export class NotificationsController {
         validateWithJoiSchema(body.metadata, metadataValidator);
       }
 
-      if (!notificationSetting?.allowNotifications) {
+      if (!notificationSetting?.allowDappPushNotification) {
+        //TODO In future we can add a create notification but with  disabledNotification:true
+        // So we can exclude them in list of notifications
         return {
           success: true,
           message: errorMessages.USER_TURNED_OF_THIS_NOTIFICATION_TYPE,
