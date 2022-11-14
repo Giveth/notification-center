@@ -295,8 +295,8 @@ function sendNotificationTestCases() {
           lastName: 'Ranjbar',
           firstName: 'Mohammad',
           OwnerId: 255,
-          slug: 'test-verify-and-reject-form-emails'
-        }
+          slug: 'test-verify-and-reject-form-emails',
+        },
       },
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {

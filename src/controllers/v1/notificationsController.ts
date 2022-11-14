@@ -99,9 +99,7 @@ export class NotificationsController {
           notificationType?.schemaValidator as string
         ]?.segment;
 
-
       if (shouldSendEmail && body.sendSegment && segmentValidator) {
-
         //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
         // And it's not good, we should find another solution to separate sending segment and email
         const segmentData = body.segment?.payload;
@@ -116,9 +114,9 @@ export class NotificationsController {
       }
 
       const metadataValidator =
-          SEGMENT_METADATA_SCHEMA_VALIDATOR[
-              notificationType?.schemaValidator as string
-              ]?.metadata;
+        SEGMENT_METADATA_SCHEMA_VALIDATOR[
+          notificationType?.schemaValidator as string
+        ]?.metadata;
 
       if (metadataValidator) {
         validateWithJoiSchema(body.metadata, metadataValidator);
