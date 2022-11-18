@@ -1181,7 +1181,7 @@ export const GivethNotificationTypes = {
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED_WHO_BOOSTED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: null,
+    emailNotificationId: SegmentEvents.PROJECT_UNVERIFIED_USERS_WHO_BOOSTED,
     pushNotifierService: null,
     title: 'Project unverified - Users Who Boosted',
     description: 'Project unverified - Users Who Boosted',
