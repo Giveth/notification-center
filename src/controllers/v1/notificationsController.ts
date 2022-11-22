@@ -33,6 +33,7 @@ import { User } from '../../types/general';
 import {
   countUnreadNotifications,
   createNotification,
+  findNotificationByTrackId,
   getNotifications,
   markNotificationGroupAsRead,
   markNotificationsAsRead,
@@ -65,6 +66,12 @@ export class NotificationsController {
     const { userWalletAddress, projectId } = body;
     try {
       validateWithJoiSchema(body, sendNotificationValidator);
+      if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
+        return {
+          success: true,
+          message: errorMessages.DUPLICATE_TRACK_ID,
+        };
+      }
       const userAddress = await createNewUserAddressIfNotExists(
         userWalletAddress as string,
       );
@@ -132,9 +139,10 @@ export class NotificationsController {
       }
       await createNotification({
         notificationType,
-        user: userAddress,
+        userAddress,
         email: body.email,
         emailStatus,
+        trackId: body?.trackId,
         metadata: body?.metadata,
         segmentData: body.segment,
         projectId,

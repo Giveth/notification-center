@@ -31,6 +31,7 @@ export const sendNotificationValidator = Joi.object({
   sendEmail: Joi.boolean(),
   sendSegment: Joi.boolean(),
   email: Joi.string(),
+  trackId: Joi.string(),
   userWalletAddress: Joi.string()
     .pattern(ethereumWalletAddressRegex)
     .required(),

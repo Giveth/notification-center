@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
+import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 
 describe('/notifications POST test cases', sendNotificationTestCases);
 describe('/notifications GET test cases', getNotificationTestCases);
@@ -54,7 +55,6 @@ function getNotificationTestCases() {
         authorization: getAccessTokenForMockAuthMicroService(walletAddress),
       },
     });
-    console.log('**result**', notificationResult.data);
     assert.equal(notificationResult.status, 200);
     assert.isOk(notificationResult.data);
     assert.equal(notificationResult.data.count, 3);
@@ -84,7 +84,6 @@ function sendNotificationTestCases() {
         authorization: getGivethIoBasicAuth(),
       },
     });
-    console.log('**result**', result.data);
     assert.equal(result.status, 200);
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
@@ -104,7 +103,6 @@ function sendNotificationTestCases() {
         authorization: getGivethIoBasicAuth(),
       },
     });
-    console.log('**result**', result.data);
     assert.equal(result.status, 200);
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
@@ -1244,7 +1242,6 @@ function sendNotificationTestCases() {
         authorization: getGivethIoBasicAuth(),
       },
     });
-    console.log('**result**', result.data);
     assert.equal(result.status, 200);
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
@@ -1264,7 +1261,6 @@ function sendNotificationTestCases() {
         authorization: getGivethIoBasicAuth(),
       },
     });
-    console.log('**result**', result.data);
     assert.equal(result.status, 200);
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
@@ -2145,5 +2141,66 @@ function sendNotificationTestCases() {
       );
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
+  });
+
+  it('should create notification successfully with passing trackId', async () => {
+    const trackId = generateRandomTxHash();
+    const data = {
+      eventName: 'Draft published',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      trackId,
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+    assert.isNotNull(await findNotificationByTrackId(trackId));
+  });
+
+  it('should throw error for repetitive trackId', async () => {
+    const trackId = generateRandomTxHash();
+    const data = {
+      eventName: 'Draft published',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      trackId,
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+    assert.isNotNull(await findNotificationByTrackId(trackId));
+    const duplicateResult = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(duplicateResult.status, 200);
+    assert.equal(
+      duplicateResult.data.message,
+      errorMessages.DUPLICATE_TRACK_ID,
+    );
   });
 }
