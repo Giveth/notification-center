@@ -2203,4 +2203,31 @@ function sendNotificationTestCases() {
       errorMessages.DUPLICATE_TRACK_ID,
     );
   });
+
+  it('should create notification successfully with passing creationTime', async () => {
+    const creationTime = new Date().getTime();
+    const trackId = generateRandomTxHash();
+    const data = {
+      eventName: 'Draft published',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      trackId,
+      creationTime,
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+    const createdNotification = await findNotificationByTrackId(trackId);
+    assert.equal(createdNotification?.createdAt.getTime(), creationTime);
+  });
 }

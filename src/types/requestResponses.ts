@@ -22,6 +22,11 @@ export type SendNotificationTypeRequest = {
    */
   sendSegment: boolean;
   /**
+   * @example 1667992708000
+   * @description milliseconds
+   */
+  creationTime: number;
+  /**
    * @example  false
    */
   sendDappNotification?: boolean;
