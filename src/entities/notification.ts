@@ -13,12 +13,15 @@ import { NotificationType } from './notificationType';
 import { UserAddress } from './userAddress';
 
 export class NotificationMetadata {
-  // name of recipient
-  name?: string;
+  /**
+   * @example "title"
+   */
+  projectTitle?: string;
 
-  // For donation emails it's needed
-  amount?: string;
-  currency?: string;
+  /**
+   * @example "project link"
+   */
+  projectLink?: string;
 }
 
 export const EMAIL_STATUSES = {
@@ -44,6 +47,9 @@ export class Notification extends BaseEntity {
 
   @Column('text', { nullable: true })
   email?: string;
+
+  @Column('text', { nullable: true, unique: true })
+  trackId?: string;
 
   @Column('text', { nullable: true })
   emailContent?: string;

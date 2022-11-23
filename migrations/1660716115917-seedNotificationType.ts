@@ -1200,7 +1200,8 @@ export const GivethNotificationTypes = {
         content: ' is not verified anymore',
       },
     ],
-    content: 'The project that you boosted before {project name} is not verified anymore',
+    content:
+      'The project that you boosted before {project name} is not verified anymore',
   },
   MADE_DONATION: {
     name: 'Made donation',

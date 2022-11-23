@@ -40,6 +40,12 @@ export class createNotification1660546929601 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'trackId',
+            type: 'varchar',
+            isNullable: true,
+            isUnique: true,
+          },
+          {
             name: 'isRead',
             type: 'boolean',
             isNullable: true,

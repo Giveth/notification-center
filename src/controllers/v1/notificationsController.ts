@@ -33,6 +33,7 @@ import { User } from '../../types/general';
 import {
   countUnreadNotifications,
   createNotification,
+  findNotificationByTrackId,
   getNotifications,
   markNotificationGroupAsRead,
   markNotificationsAsRead,
@@ -42,7 +43,7 @@ import {
   getNotificationTypeByEventName,
   getNotificationTypeByEventNameAndMicroservice,
 } from '../../repositories/notificationTypeRepository';
-import { EMAIL_STATUSES } from '../../entities/notification';
+import { EMAIL_STATUSES, Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
 import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
@@ -65,6 +66,13 @@ export class NotificationsController {
     const { userWalletAddress, projectId } = body;
     try {
       validateWithJoiSchema(body, sendNotificationValidator);
+      if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
+        // We dont throw error in this case but dont create new notification neither
+        return {
+          success: true,
+          message: errorMessages.DUPLICATED_TRACK_ID,
+        };
+      }
       const userAddress = await createNewUserAddressIfNotExists(
         userWalletAddress as string,
       );
@@ -130,15 +138,21 @@ export class NotificationsController {
           message: errorMessages.USER_TURNED_OF_THIS_NOTIFICATION_TYPE,
         };
       }
-      await createNotification({
+      const notificationData: Partial<Notification> = {
         notificationType,
-        user: userAddress,
+        userAddress,
         email: body.email,
         emailStatus,
+        trackId: body?.trackId,
         metadata: body?.metadata,
         segmentData: body.segment,
         projectId,
-      });
+      };
+      if (body.creationTime) {
+        // creationTime is optional and it's timestamp in milliseconds format
+        notificationData.createdAt = new Date(body.creationTime);
+      }
+      await createNotification(notificationData);
 
       return { success: true };
       // add if and logic for push notification (not in mvp)

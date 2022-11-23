@@ -10,6 +10,10 @@ export type SendNotificationTypeRequest = {
    */
   eventName: string;
   /**
+   * @example "Should be unique"
+   */
+  trackId?: string;
+  /**
    * @example false
    */
   sendEmail: boolean;
@@ -17,6 +21,11 @@ export type SendNotificationTypeRequest = {
    * @example false
    */
   sendSegment: boolean;
+  /**
+   * @example 1667992708000
+   * @description milliseconds
+   */
+  creationTime: number;
   /**
    * @example  false
    */
@@ -47,17 +56,7 @@ export type SendNotificationTypeRequest = {
      */
     anonymousId?: string;
   };
-  metadata?: {
-    /**
-     * @example "title"
-     */
-    projectTitle?: string;
-
-    /**
-     * @example "project link"
-     */
-    projectLink?: string;
-  };
+  metadata?: NotificationMetadata;
 };
 
 export type SendNotificationRequest = {

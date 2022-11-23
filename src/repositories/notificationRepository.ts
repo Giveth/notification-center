@@ -101,6 +101,16 @@ export const countUnreadNotifications = async (
   };
 };
 
+export const findNotificationByTrackId = async (
+  trackId: string,
+): Promise<Notification | null> => {
+  return Notification.createQueryBuilder('notification')
+    .where('notification."trackId" = :trackId', {
+      trackId,
+    })
+    .getOne();
+};
+
 export const baseNotificationQuery = (user: UserAddress) => {
   return Notification.createQueryBuilder('notification')
     .innerJoinAndSelect('notification.notificationType', 'notificationType')
@@ -147,34 +157,14 @@ export const getNotifications = async (params: {
   return query.take(limit).skip(skip).getManyAndCount();
 };
 
-export const createNotification = async (params: {
-  notificationType: NotificationType;
-  user: UserAddress;
-  email?: string;
-  emailStatus?: string;
-  metadata?: any;
-  segmentData?: any;
-  projectId?: string;
-}) => {
-  const {
-    notificationType,
-    user,
-    projectId,
-    email,
-    emailStatus,
-    metadata,
-    segmentData,
-  } = params;
-
-  const notification = Notification.create({
-    userAddress: user,
-    email,
-    metadata,
-    segmentData,
-    emailStatus,
-    projectId,
-    notificationType,
-  });
-
-  return notification.save();
+export const createNotification = async (
+  params: Partial<Notification>,
+): Promise<Notification> => {
+  try {
+    const notification = Notification.create(params);
+    return (await notification.save()) as Notification;
+  } catch (e) {
+    logger.error('createNotification error', e);
+    throw e;
+  }
 };
