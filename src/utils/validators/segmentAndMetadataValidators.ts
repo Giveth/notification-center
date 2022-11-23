@@ -21,8 +21,8 @@ const projectRelatedTrackerSchema = Joi.object({
   // seems we have to different schemas, not good TODO CHANGE ON IMPACT GRAPH
   email: Joi.string(),
   title: Joi.string().required(),
-  firstName: Joi.string(),
-  lastName: Joi.string(),
+  firstName: Joi.string().allow(null,''),
+  lastName: Joi.string().allow(null,''),
   OwnerId: Joi.number(),
   slug: Joi.string().required(),
 });
