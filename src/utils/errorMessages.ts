@@ -93,6 +93,7 @@ export const errorMessages = {
   CATEGORIES_LENGTH_SHOULD_NOT_BE_MORE_THAN_FIVE:
     'Please select no more than 5 categories',
   INVALID_NOTIFICATION_TYPE: 'Notification type invalid',
+  DUPLICATED_TRACK_ID: 'Duplicated trackId',
   CATEGORIES_MUST_BE_FROM_THE_FRONTEND_SUBSELECTION:
     'This category is not valid',
   INVALID_TX_HASH: 'Invalid txHash',

@@ -54,19 +54,18 @@ function createNotificationTestCases() {
 
     const result = await createNotification({
       notificationType: notificationType!,
-      user: userAddress,
+      userAddress,
       email: 'test@example.com',
       emailStatus: EMAIL_STATUSES.NO_NEED_TO_SEND,
       projectId: '1',
       metadata: {
-        name: 'Carlos',
-        amount: 10,
-        currency: 'DAI',
+        projectTitle: 'Carlos',
+        projectLink: 'https://givet.io/Carlos',
       },
     });
 
     assert.isOk(result);
-    assert.equal(result.userAddressId, userAddress.id);
+    assert.equal(result.userAddress.id, userAddress.id);
     assert.equal(result.notificationTypeId, notificationType!.id);
   });
 }
