@@ -2200,7 +2200,7 @@ function sendNotificationTestCases() {
     assert.equal(duplicateResult.status, 200);
     assert.equal(
       duplicateResult.data.message,
-      errorMessages.DUPLICATE_TRACK_ID,
+      errorMessages.DUPLICATED_TRACK_ID,
     );
   });
 
