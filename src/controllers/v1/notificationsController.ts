@@ -70,7 +70,7 @@ export class NotificationsController {
         // We dont throw error in this case but dont create new notification neither
         return {
           success: true,
-          message: errorMessages.DUPLICATE_TRACK_ID,
+          message: errorMessages.DUPLICATED_TRACK_ID,
         };
       }
       const userAddress = await createNewUserAddressIfNotExists(
