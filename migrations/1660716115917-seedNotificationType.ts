@@ -1379,7 +1379,7 @@ export const GivethNotificationTypes = {
   PROJECT_UPDATED_OWNER: {
     name: 'Project updated - owner',
     title: 'Project updates',
-    description: 'You Posted an update on your project',
+    description: 'Your project update',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1483,7 +1483,7 @@ export const GivethNotificationTypes = {
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
     name: 'Project updates',
     title: 'Project updates',
-    description: 'When your liked project has an update',
+    description: 'Your liked project update',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1757,7 +1757,7 @@ export const GivethNotificationTypes = {
     name: 'Project status',
     title: 'Project status',
     description:
-      'When your own Project has been listed, unlisted, cancelled, activated or deactivated.',
+      'Your project status',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
@@ -1766,12 +1766,12 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     isGroupParent: true,
     content:
-      'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
+      'Your project status',
     htmlTemplate: [
       {
         type: 'p',
         content:
-          'When your own Project has been listed, unlisted, cancelled, activated or deactivated',
+          'Your project status',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1854,7 +1854,7 @@ export const GivethNotificationTypes = {
     name: 'Project status - Users Who Liked',
     title: 'Project status',
     description:
-      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+      'Your liked project status',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
@@ -1863,12 +1863,12 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     isGroupParent: true,
     content:
-      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+      'Your liked project status',
     htmlTemplate: [
       {
         type: 'p',
         content:
-          'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+          'Your liked project status',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
