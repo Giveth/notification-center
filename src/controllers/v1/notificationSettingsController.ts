@@ -1,16 +1,23 @@
 import { Route, Tags, Body, Security, Inject, Get, Query, Put } from 'tsoa';
 import { logger } from '../../utils/logger';
 import {
+  findNotificationSettingById,
   getUserNotificationSettings,
   updateUserNotificationSetting,
 } from '../../repositories/notificationSettingRepository';
 import { UserAddress } from '../../entities/userAddress';
+import { errorMessages } from '../../utils/errorMessages';
+import {
+  sendNotificationValidator,
+  updateNotificationSettings,
+  updateOneNotificationSetting,
+  validateWithJoiSchema,
+} from '../../validators/schemaValidators';
 
 interface SettingParams {
   id: number;
-  allowNotifications?: string;
-  allowEmailNotification?: string;
-  allowDappPushNotification?: string;
+  allowEmailNotification: boolean;
+  allowDappPushNotification: boolean;
 }
 
 @Route('/v1/notification_settings')
@@ -32,19 +39,16 @@ export class NotificationSettingsController {
     const { settings } = body;
 
     try {
+      validateWithJoiSchema(body, updateNotificationSettings);
+
       const updatedNotifications = await Promise.all(
         settings.map(async setting => {
-          const {
-            id,
-            allowNotifications,
-            allowEmailNotification,
-            allowDappPushNotification,
-          } = setting;
+          const { id, allowEmailNotification, allowDappPushNotification } =
+            setting;
 
           const updatedNotification = await updateUserNotificationSetting({
             notificationSettingId: id,
             userAddressId: user.id,
-            allowNotifications,
             allowEmailNotification,
             allowDappPushNotification,
           });
@@ -66,9 +70,8 @@ export class NotificationSettingsController {
     @Body()
     body: {
       id: number;
-      allowNotifications?: string;
-      allowEmailNotification?: string;
-      allowDappPushNotification?: string;
+      allowEmailNotification: boolean;
+      allowDappPushNotification: boolean;
     },
     @Inject()
     params: {
@@ -76,22 +79,22 @@ export class NotificationSettingsController {
     },
   ) {
     const { user } = params;
-    const {
-      id,
-      allowNotifications,
-      allowEmailNotification,
-      allowDappPushNotification,
-    } = body;
+    const { id, allowEmailNotification, allowDappPushNotification } = body;
     try {
-      const updatedNotification = await updateUserNotificationSetting({
+      validateWithJoiSchema(body, updateOneNotificationSetting);
+
+      const notificationSetting = await findNotificationSettingById(id);
+
+      if (!notificationSetting) {
+        throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
+      }
+      const newSettingData = {
         notificationSettingId: id,
         userAddressId: user.id,
-        allowNotifications,
         allowEmailNotification,
         allowDappPushNotification,
-      });
-
-      return updatedNotification;
+      };
+      return await updateUserNotificationSetting(newSettingData);
     } catch (e) {
       logger.error('updateNotificationSetting() error', e);
       throw e;

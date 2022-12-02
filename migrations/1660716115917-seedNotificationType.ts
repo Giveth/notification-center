@@ -164,6 +164,7 @@ export const GivethNotificationTypes = {
     title: 'Project published',
     description: 'When Project has been published',
     showOnSettingPage: true,
+    isEmailEditable: true,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconPublish',
     microService: MICRO_SERVICES.givethio,
@@ -1756,22 +1757,21 @@ export const GivethNotificationTypes = {
   PROJECT_STATUS_GROUP: {
     name: 'Project status',
     title: 'Project status',
-    description:
-      'Your project status',
+    description: 'Your project status',
     showOnSettingPage: true,
+    isEmailEditable: true,
+    isWebEditable: false,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
     isGroupParent: true,
-    content:
-      'Your project status',
+    content: 'Your project status',
     htmlTemplate: [
       {
         type: 'p',
-        content:
-          'Your project status',
+        content: 'Your project status',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1784,6 +1784,7 @@ export const GivethNotificationTypes = {
     description:
       'When someone donates to your project, when you donate to a project, donation success and failure.',
     showOnSettingPage: true,
+    isEmailEditable: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1853,8 +1854,7 @@ export const GivethNotificationTypes = {
   LIKED_BY_YOU_PROJECT_GROUP: {
     name: 'Project status - Users Who Liked',
     title: 'Project status',
-    description:
-      'Your liked project status',
+    description: 'Your liked project status',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
@@ -1862,13 +1862,11 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     isGroupParent: true,
-    content:
-      'Your liked project status',
+    content: 'Your liked project status',
     htmlTemplate: [
       {
         type: 'p',
-        content:
-          'Your liked project status',
+        content: 'Your liked project status',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
