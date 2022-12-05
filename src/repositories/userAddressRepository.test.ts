@@ -5,7 +5,6 @@ import {
   sleep,
 } from '../../test/testUtils';
 import { NotificationSetting } from '../entities/notificationSetting';
-import { NotificationType } from '../entities/notificationType';
 import { MICRO_SERVICES } from '../utils/utils';
 import {
   createNewUserAddress,
@@ -59,11 +58,6 @@ function createNewUserAddressTestCases() {
     assert.isOk(user);
     assert.isTrue(givethNotificationSettings.length > 0);
     givethNotificationSettings.forEach(setting => {
-      assert.equal(
-        setting!.notificationType!.microService,
-        MICRO_SERVICES.givethio,
-      );
-
       assert.equal(setting!.userAddressId, user.id);
     });
   });

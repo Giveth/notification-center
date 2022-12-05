@@ -91,7 +91,7 @@ const getDonationPriceFailedMetadataSchema = Joi.object({
 const stakeUnStakeSchema = Joi.object({
   poolName: Joi.string().required(),
   transactionHash: Joi.string().required(),
-  network: Joi.string().required(),
+  network: Joi.number().required(),
   amount: Joi.number().required(),
 });
 const claimSchema = Joi.object({

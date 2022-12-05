@@ -100,6 +100,13 @@ export const getGivethIoBasicAuth = () => {
   });
 };
 
+export const getGivEconomyBasicAuth = () => {
+  return createBasicAuthentication({
+    secret: process.env.GIV_ECONOMY_THIRD_PARTY_SECRET as string,
+    username: process.env.GIV_ECONOMY_THIRD_PARTY_MICRO_SERVICE as string,
+  });
+};
+
 export const getAccessTokenForMockAuthMicroService = (
   walletAddress: string,
 ) => {

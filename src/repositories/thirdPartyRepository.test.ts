@@ -8,7 +8,7 @@ describe(
 
 // Giveth test login
 const username = 'givethio';
-const secret = 'givethio_secret';
+const secret = 'secret';
 
 function findThirdPartyBySecretTestCases() {
   it('should return microservice by name and secret', async () => {

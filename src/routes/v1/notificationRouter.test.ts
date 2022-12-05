@@ -2,6 +2,7 @@ import {
   generateRandomEthereumAddress,
   generateRandomTxHash,
   getAccessTokenForMockAuthMicroService,
+  getGivEconomyBasicAuth,
   getGivethIoBasicAuth,
   serverUrl,
   sleep,
@@ -1274,13 +1275,15 @@ function sendNotificationTestCases() {
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
         poolName: 'GIV farm',
-        amount: '20',
+        amount: '10',
+        network: 100,
+        transactionHash: generateRandomTxHash(),
       },
     };
 
     const result = await axios.post(sendNotificationUrl, data, {
       headers: {
-        authorization: getGivethIoBasicAuth(),
+        authorization: getGivEconomyBasicAuth(),
       },
     });
     assert.equal(result.status, 200);
@@ -1296,12 +1299,14 @@ function sendNotificationTestCases() {
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
           poolName: 'GIV farm',
+          network: 100,
+          transactionHash: generateRandomTxHash(),
         },
       };
 
       await axios.post(sendNotificationUrl, data, {
         headers: {
-          authorization: getGivethIoBasicAuth(),
+          authorization: getGivEconomyBasicAuth(),
         },
       });
       // If request doesn't fail, it means this test failed
@@ -1323,13 +1328,15 @@ function sendNotificationTestCases() {
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
         poolName: 'GIV farm',
-        amount: '20',
+        amount: '10',
+        network: 100,
+        transactionHash: generateRandomTxHash(),
       },
     };
 
     const result = await axios.post(sendNotificationUrl, data, {
       headers: {
-        authorization: getGivethIoBasicAuth(),
+        authorization: getGivEconomyBasicAuth(),
       },
     });
     assert.equal(result.status, 200);
@@ -1345,12 +1352,14 @@ function sendNotificationTestCases() {
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
           poolName: 'GIV farm',
+          network: 100,
+          transactionHash: generateRandomTxHash(),
         },
       };
 
       await axios.post(sendNotificationUrl, data, {
         headers: {
-          authorization: getGivethIoBasicAuth(),
+          authorization: getGivEconomyBasicAuth(),
         },
       });
       // If request doesn't fail, it means this test failed

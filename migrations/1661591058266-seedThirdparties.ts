@@ -10,7 +10,10 @@ export class seedThirdparties1661591058266 implements MigrationInterface {
       await queryRunner.query(`
                   INSERT INTO third_party(
                   "microService", secret, "isActive")
-                  VALUES ('givethio', 'givethio_secret', true);
+                  VALUES 
+                    ('givethio', 'secret', true),
+                    ('giveconomy-notification-service', 'secret', true)
+                    ;
                 `);
     }
   }
