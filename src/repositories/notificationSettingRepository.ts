@@ -76,13 +76,34 @@ export const findNotificationSettingByNotificationTypeAndUserAddress =
     }
   };
 
+export const findNotificationSettingById = async (
+  id: number,
+): Promise<NotificationSetting | null> => {
+  try {
+    return await NotificationSetting.createQueryBuilder('notificationSetting')
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
+      .where('notificationSetting.id = :id', {
+        id,
+      })
+      .getOne();
+  } catch (e) {
+    logger.error(
+      'findNotificationSettingByNotificationTypeAndUserAddress() error',
+      e,
+    );
+    throw e;
+  }
+};
+
 export const updateUserNotificationSetting = async (params: {
   notificationSettingId: number;
   userAddressId: number;
-  allowNotifications?: string;
-  allowEmailNotification?: string;
-  allowDappPushNotification?: string;
-}) => {
+  allowEmailNotification: boolean;
+  allowDappPushNotification: boolean;
+}): Promise<NotificationSetting> => {
   const notificationSetting = await NotificationSetting.createQueryBuilder(
     'notificationSetting',
   )
@@ -102,15 +123,13 @@ export const updateUserNotificationSetting = async (params: {
   if (!notificationSetting)
     throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
 
-  if (params.allowNotifications)
-    notificationSetting.allowNotifications =
-      params.allowNotifications === 'true';
-  if (params.allowEmailNotification)
-    notificationSetting.allowEmailNotification =
-      params.allowEmailNotification === 'true';
-  if (params.allowDappPushNotification)
+  if (notificationSetting.notificationType?.isEmailEditable) {
+    notificationSetting.allowEmailNotification = params.allowEmailNotification;
+  }
+  if (notificationSetting.notificationType?.isWebEditable) {
     notificationSetting.allowDappPushNotification =
-      params.allowDappPushNotification === 'true';
+      params.allowDappPushNotification;
+  }
 
   if (
     notificationSetting?.notificationType?.isGroupParent &&
@@ -119,7 +138,6 @@ export const updateUserNotificationSetting = async (params: {
     await updateChildNotificationSettings({
       categoryGroup: notificationSetting?.notificationType?.categoryGroup,
       userAddressId: params.userAddressId,
-      allowNotifications: notificationSetting.allowNotifications,
       allowEmailNotification: notificationSetting.allowEmailNotification,
       allowDappPushNotification: notificationSetting.allowDappPushNotification,
     });
@@ -131,9 +149,8 @@ export const updateUserNotificationSetting = async (params: {
 export const updateChildNotificationSettings = async (params: {
   categoryGroup: string;
   userAddressId: number;
-  allowNotifications?: boolean;
-  allowEmailNotification?: boolean;
-  allowDappPushNotification?: boolean;
+  allowEmailNotification: boolean;
+  allowDappPushNotification: boolean;
 }) => {
   // Grab type ids
   const notificationTypes = await NotificationType.createQueryBuilder(
@@ -153,14 +170,12 @@ export const updateChildNotificationSettings = async (params: {
   if (notificationTypeIds.length === 0) return;
 
   await NotificationSetting.query(`
-    UPDATE notification_setting
-    SET "allowNotifications" = ${
-      params.allowNotifications
-    }, "allowEmailNotification" = ${
-    params.allowEmailNotification
-  }, "allowDappPushNotification" = ${params.allowDappPushNotification}
-    WHERE "notificationTypeId" IN (${notificationTypeIds.join(
-      ',',
-    )}) AND "userAddressId" = ${params.userAddressId}
+        UPDATE notification_setting
+        SET "allowEmailNotification" = ${
+          params.allowEmailNotification
+        }, "allowDappPushNotification" = ${params.allowDappPushNotification}
+        WHERE "notificationTypeId" IN (${notificationTypeIds.join(
+          ',',
+        )}) AND "userAddressId" = ${params.userAddressId}
   `);
 };

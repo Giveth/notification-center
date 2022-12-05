@@ -83,6 +83,19 @@ export class NotificationType extends BaseEntity {
   @Column('boolean', { default: false })
   showOnSettingPage?: boolean;
 
+  // https://github.com/Giveth/impact-graph/issues/746
+  @Column('boolean', { nullable: true, default: false })
+  isEmailEditable: boolean;
+
+  @Column('boolean', { nullable: true, default: true })
+  isWebEditable: boolean;
+
+  @Column('boolean', { nullable: true, default: false })
+  emailDefaultValue: boolean;
+
+  @Column('boolean', { nullable: true, default: false })
+  webDefaultValue: boolean;
+
   @Index()
   @Column('text', { nullable: true })
   categoryGroup?: string;

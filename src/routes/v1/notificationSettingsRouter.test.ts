@@ -11,6 +11,7 @@ import {
   NOTIFICATION_CATEGORY_GROUPS,
 } from '../../entities/notificationSetting';
 import { NOTIFICATION_CATEGORY } from '../../types/general';
+import { not } from 'joi';
 
 const apiBaseUrl = serverUrl;
 
@@ -70,41 +71,25 @@ function updateNotificationsTestCases() {
         'notificationType',
       )
       .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
-      .andWhere(
-        'notificationType.isGroupParent = true AND notificationType.categoryGroup = :categoryGroup',
-        { categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS },
-      )
+      .andWhere('notificationType.isEmailEditable = true')
+      .andWhere('notificationType.isWebEditable = true')
       .getOne();
     const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
     const result = await Axios.put(
-      `${apiBaseUrl}/v1/notification_settings/${notificationSetting!.id}`,
+      `${apiBaseUrl}/v1/notification_settings/${notificationSetting?.id}`,
       {
         id: notificationSetting!.id,
-        allowEmailNotification: 'false',
-        allowDappPushNotification: 'false',
+        allowEmailNotification: false,
+        allowDappPushNotification: false,
       },
       { headers: { Authorization: `Bearer ${jwtToken}` } },
     );
 
     const updatedNotification = result.data;
     assert.isOk(result);
-    // didnt update this value so it remains true
-    assert.isTrue(updatedNotification.allowNotifications === true);
-    assert.isTrue(
-      updatedNotification.allowNotifications ===
-        notificationSetting?.allowNotifications,
-    );
-    assert.isTrue(updatedNotification.allowEmailNotification === false);
-    assert.isTrue(
-      updatedNotification.allowEmailNotification !==
-        notificationSetting?.allowEmailNotification,
-    );
-    assert.isTrue(updatedNotification.allowDappPushNotification === false);
-    assert.isTrue(
-      updatedNotification.allowDappPushNotification !==
-        notificationSetting?.allowDappPushNotification,
-    );
 
+    assert.isFalse(updatedNotification.allowEmailNotification);
+    assert.isFalse(updatedNotification.allowDappPushNotification);
     //validate child notifications of the group are updated
     const updatedChildSettings = await NotificationSetting.createQueryBuilder(
       'notificationSetting',
@@ -121,10 +106,68 @@ function updateNotificationsTestCases() {
       .getMany();
 
     updatedChildSettings.forEach(setting => {
-      assert.isTrue(setting.allowNotifications === true);
-      assert.isTrue(setting.allowEmailNotification === false);
-      assert.isTrue(setting.allowDappPushNotification === false);
+      assert.isTrue(setting.allowNotifications);
+      assert.isTrue(setting.allowEmailNotification);
+      assert.isTrue(setting.allowDappPushNotification);
     });
+  });
+  it('should update notification setting, when isEmailEditable is false should not change email setting', async () => {
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const notificationSetting = await NotificationSetting.createQueryBuilder(
+      'notificationSetting',
+    )
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
+      .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .andWhere('notificationType.isEmailEditable = false')
+      .andWhere('notificationSetting.allowDappPushNotification = true')
+      .getOne();
+    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+    const result = await Axios.put(
+      `${apiBaseUrl}/v1/notification_settings/${notificationSetting?.id}`,
+      {
+        id: notificationSetting!.id,
+        allowEmailNotification: false,
+        allowDappPushNotification: false,
+      },
+      { headers: { Authorization: `Bearer ${jwtToken}` } },
+    );
+
+    const updatedNotification = result.data;
+    assert.isOk(result);
+
+    assert.isTrue(updatedNotification.allowEmailNotification);
+  });
+  it('should update notification setting, when isWebEditable is false should not change dapp push notification setting', async () => {
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const notificationSetting = await NotificationSetting.createQueryBuilder(
+      'notificationSetting',
+    )
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
+      .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .andWhere('notificationType.isWebEditable = false')
+      .andWhere('notificationSetting.allowDappPushNotification = true')
+      .getOne();
+    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
+    const result = await Axios.put(
+      `${apiBaseUrl}/v1/notification_settings/${notificationSetting?.id}`,
+      {
+        id: notificationSetting!.id,
+        allowEmailNotification: false,
+        allowDappPushNotification: false,
+      },
+      { headers: { Authorization: `Bearer ${jwtToken}` } },
+    );
+
+    const updatedNotification = result.data;
+    assert.isOk(result);
+
+    assert.isTrue(updatedNotification.allowDappPushNotification);
   });
 }
 
@@ -134,7 +177,13 @@ function updateMultipleNotificationsTestCases() {
     const notificationSettings = await NotificationSetting.createQueryBuilder(
       'notificationSetting',
     )
+      .leftJoinAndSelect(
+        'notificationSetting.notificationType',
+        'notificationType',
+      )
       .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
+      .andWhere('notificationType.isEmailEditable = true')
+      .andWhere('notificationType.isWebEditable = true')
       .take(2)
       .getMany();
 
@@ -145,8 +194,8 @@ function updateMultipleNotificationsTestCases() {
         settings: notificationSettings.map(setting => {
           return {
             id: setting!.id,
-            allowEmailNotification: 'false',
-            allowDappPushNotification: 'false',
+            allowEmailNotification: false,
+            allowDappPushNotification: false,
           };
         }),
       },
@@ -156,8 +205,8 @@ function updateMultipleNotificationsTestCases() {
     const updatedNotifications: any[] = Object.values(result.data);
     assert.isOk(result);
     // didnt update this value so it remains true
-    assert.isTrue(updatedNotifications[0].allowNotifications === true);
-    assert.isTrue(updatedNotifications[1].allowNotifications === true);
+    assert.isTrue(updatedNotifications[0].allowNotifications);
+    assert.isTrue(updatedNotifications[1].allowNotifications);
 
     const updatedNotification1 = updatedNotifications.find((setting: any) => {
       return setting.id === notificationSettings[0].id;
@@ -172,12 +221,12 @@ function updateMultipleNotificationsTestCases() {
       updatedNotification1.allowNotifications ===
         notificationSettings[0]?.allowNotifications,
     );
-    assert.isTrue(updatedNotification1.allowEmailNotification === false);
+    assert.isFalse(updatedNotification1.allowEmailNotification);
     assert.isTrue(
       updatedNotification1.allowEmailNotification !==
         notificationSettings[0]?.allowEmailNotification,
     );
-    assert.isTrue(updatedNotification1.allowDappPushNotification === false);
+    assert.isFalse(updatedNotification1.allowDappPushNotification);
     assert.isTrue(
       updatedNotification1.allowDappPushNotification !==
         notificationSettings[0]?.allowDappPushNotification,
@@ -188,12 +237,12 @@ function updateMultipleNotificationsTestCases() {
       updatedNotification2.allowNotifications ===
         notificationSettings[1]?.allowNotifications,
     );
-    assert.isTrue(updatedNotification2.allowEmailNotification === false);
+    assert.isFalse(updatedNotification2.allowEmailNotification);
     assert.isTrue(
       updatedNotification2.allowEmailNotification !==
         notificationSettings[1]?.allowEmailNotification,
     );
-    assert.isTrue(updatedNotification2.allowDappPushNotification === false);
+    assert.isFalse(updatedNotification2.allowDappPushNotification);
     assert.isTrue(
       updatedNotification2.allowDappPushNotification !==
         notificationSettings[1]?.allowDappPushNotification,

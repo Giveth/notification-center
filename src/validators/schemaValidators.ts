@@ -73,6 +73,23 @@ export const sendNotificationValidator = Joi.object({
   }),
 });
 
+export const updateNotificationSettings = Joi.object({
+  settings: Joi.array()
+    .required()
+    .items(
+      Joi.object({
+        id: Joi.number().required(),
+        allowEmailNotification: Joi.boolean().required(),
+        allowDappPushNotification: Joi.boolean().required(),
+      }),
+    ),
+});
+export const updateOneNotificationSetting = Joi.object({
+  id: Joi.number().required(),
+  allowEmailNotification: Joi.boolean().required(),
+  allowDappPushNotification: Joi.boolean().required(),
+});
+
 export const getNotificationsValidator = Joi.object({
   // TODO should fill it
 });
