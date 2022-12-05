@@ -863,7 +863,7 @@ export const GivethNotificationTypes = {
   STAKE: {
     name: 'Stake',
     description: 'Stake',
-    microService: MICRO_SERVICES.givethio,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: 'IconStake',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_FARM_STAKE,
@@ -900,7 +900,7 @@ export const GivethNotificationTypes = {
   UN_STAKE: {
     name: 'UnStake',
     description: 'UnStake',
-    microService: MICRO_SERVICES.givethio,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: 'IconUnstake',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_FARM_UN_STAKE,

@@ -17,6 +17,7 @@ export const NETWORK_IDS = {
 
 export const MICRO_SERVICES = {
   givethio: 'givethio',
+  givEconomyNotificationMicroService: 'giveconomy-notification-service',
   trace: 'trace',
 };
 
