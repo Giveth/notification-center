@@ -38,6 +38,30 @@ export class createNotificationType1660540253547 implements MigrationInterface {
             default: false,
           },
           {
+            name: 'webDefaultValue',
+            type: 'boolean',
+            isNullable: false,
+            default: true,
+          },
+          {
+            name: 'emailDefaultValue',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
+            name: 'isWebEditable',
+            type: 'boolean',
+            isNullable: false,
+            default: true,
+          },
+          {
+            name: 'isEmailEditable',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
             name: 'categoryGroup',
             type: 'text',
             isNullable: true,
