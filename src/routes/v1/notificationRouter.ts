@@ -5,6 +5,7 @@ import {
 } from '../../middlewares/authentication';
 import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
+import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 
 export const notificationRouter = express.Router();
 
@@ -71,15 +72,13 @@ notificationRouter.put(
 );
 
 notificationRouter.get(
-  '/notifications/countUnread',
-  validateAuthMicroserviceJwt,
+  '/notifications/countUnread/:walletAddress',
   async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
-
+    const walletAddress = req.params.walletAddress as string;
     try {
-      const result = await notificationsController.countUnreadNotifications({
-        user,
-      });
+      const result = await notificationsController.countUnreadNotifications(
+        walletAddress,
+      );
       return sendStandardResponse({ res, result });
     } catch (e) {
       next(e);

@@ -14,6 +14,7 @@ import {
 import { logger } from '../../utils/logger';
 
 import {
+  countUnreadValidator,
   sendNotificationValidator,
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
@@ -218,16 +219,20 @@ export class NotificationsController {
     }
   }
 
-  @Get('/notifications/countUnread')
+  /**
+   * @example walletAddress "0xcebd435a44f1f4bf952c5a543e82e51deb2b0bb6"
+   */
+  @Get('/notifications/countUnread/:walletAddress')
   @Security('JWT')
   public async countUnreadNotifications(
-    @Inject()
-    params: {
-      user: UserAddress;
-    },
+    @Path('walletAddress') walletAddress: string,
   ): Promise<CountUnreadNotificationsResponse> {
-    const { user } = params;
     try {
+      validateWithJoiSchema({ walletAddress }, countUnreadValidator);
+      const user = await createNewUserAddressIfNotExists(
+        walletAddress.toLowerCase(),
+      );
+
       return countUnreadNotifications(user);
     } catch (e) {
       logger.error('countUnreadNotifications() error', e);

@@ -21,7 +21,9 @@ const throwHttpErrorIfJoiValidatorFails = (
     throw error;
   }
 };
-
+export const countUnreadValidator = Joi.object({
+  walletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
+});
 export const sendNotificationValidator = Joi.object({
   projectId: Joi.string(),
   analyticsUserId: Joi.string(),
