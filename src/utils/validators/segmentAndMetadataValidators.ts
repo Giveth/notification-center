@@ -92,7 +92,7 @@ const stakeUnStakeSchema = Joi.object({
   poolName: Joi.string().required(),
   transactionHash: Joi.string().required(),
   network: Joi.number().required(),
-  amount: Joi.number().required(),
+  amount: Joi.string().required(),
 });
 const claimSchema = Joi.object({
   round: Joi.number().required(),
