@@ -82,3 +82,11 @@ jobs:
           username: ${{ secrets.STAGING_USERNAME }}
           privateKey: ${{ secrets.STAGING_PRIVATE_KEY}}
 
+      - name: Production deploy
+        if: github.ref == 'refs/heads/main'
+        uses: garygrossgarten/github-action-ssh@v0.6.4
+        with:
+          command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          privateKey: ${{ secrets.PRODUCTION_PRIVATE_KEY}}
