@@ -1379,8 +1379,8 @@ export const GivethNotificationTypes = {
 
   PROJECT_UPDATED_OWNER: {
     name: 'Project updated - owner',
-    title: 'Project updates',
-    description: 'Your project update',
+    title: 'Your project update',
+    description: 'You Posted an update on your project',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1483,8 +1483,8 @@ export const GivethNotificationTypes = {
   },
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
     name: 'Project updates',
-    title: 'Project updates',
-    description: 'Your liked project update',
+    title: 'Your liked project update',
+    description: 'You Posted an update on your project',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1756,8 +1756,8 @@ export const GivethNotificationTypes = {
   },
   PROJECT_STATUS_GROUP: {
     name: 'Project status',
-    title: 'Project status',
-    description: 'Your project status',
+    title: 'Your project status',
+    description: 'When your own project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     isEmailEditable: true,
     isWebEditable: false,
@@ -1853,8 +1853,8 @@ export const GivethNotificationTypes = {
   },
   LIKED_BY_YOU_PROJECT_GROUP: {
     name: 'Project status - Users Who Liked',
-    title: 'Project status',
-    description: 'Your liked project status',
+    title: 'Your liked project status',
+    description: 'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
