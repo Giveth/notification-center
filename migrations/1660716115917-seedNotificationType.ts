@@ -1492,7 +1492,7 @@ export const GivethNotificationTypes = {
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
     name: 'Project updates',
     title: 'Your liked project update',
-    description: 'You Posted an update on your project',
+    description: 'When your liked project has an update',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
