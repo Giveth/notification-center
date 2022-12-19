@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import {Column, MigrationInterface, QueryRunner} from 'typeorm';
 import {
   NotificationType,
   SCHEMA_VALIDATORS_NAMES,
@@ -873,6 +873,10 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
     title: 'Stake',
+    isEmailEditable: false,
+    isWebEditable: false,
+    emailDefaultValue: false,
+    webDefaultValue: false,
     htmlTemplate: [
       {
         type: 'p',
@@ -909,6 +913,10 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
+    isEmailEditable: false,
+    isWebEditable: false,
+    emailDefaultValue: false,
+    webDefaultValue: false,
     title: 'UnStake',
     htmlTemplate: [
       {
@@ -1809,7 +1817,7 @@ export const GivethNotificationTypes = {
     microService: MICRO_SERVICES.givethio,
     title: 'Stakes',
     description: 'Shows when you stake or unstake on the GIVfarm',
-    showOnSettingPage: true,
+    showOnSettingPage: false,
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null,
