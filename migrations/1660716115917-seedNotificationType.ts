@@ -1642,9 +1642,9 @@ export const GivethNotificationTypes = {
     content: 'You locked {amount} & recieved {amount} GIVpower',
   },
   YOU_UNLOCKED_GIVPOWER: {
-    name: '{amount} unlocked.',
+    name: 'givPower unlocked',
     description: 'User unlocked GIVpower',
-    microService: MICRO_SERVICES.givethio,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_POWER,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_UNLOCKED_GIVPOWER,
@@ -1662,6 +1662,7 @@ export const GivethNotificationTypes = {
         type: 'p',
         content: ' unlocked.',
       },
+
     ],
     content: '{amount} unlocked.',
   },

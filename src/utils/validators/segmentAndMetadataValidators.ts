@@ -45,6 +45,10 @@ const projectBoostedSchema = Joi.object({
 const givPowerLockedSchema = Joi.object({
   amount: Joi.number()?.greater(0).required(),
 });
+const givPowerUnLockedSchema = Joi.object({
+  amount: Joi.number()?.greater(0).required(),
+  round: Joi.number()?.greater(0).required(),
+});
 
 const donationTrackerSchema = Joi.object({
   email: Joi.string().allow(null, ''), // if anonymous
@@ -241,7 +245,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   givPowerUserLockedGivPower: { metadata: givPowerLockedSchema, segment: null },
   givPowerUserUnlockedGivPower: {
-    metadata: givPowerLockedSchema,
+    metadata: givPowerUnLockedSchema,
     segment: null,
   },
   givPowerUserGivPowerRelockedAutoMatically: {

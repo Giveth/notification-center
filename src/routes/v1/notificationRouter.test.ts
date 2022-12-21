@@ -1320,6 +1320,56 @@ function sendNotificationTestCases() {
     }
   });
 
+  it('should create *Unlock* notification,  success, segment is off', async () => {
+    const data = {
+      eventName: 'givPower unlocked',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        amount: 10,
+        round: 13,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivEconomyBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Unlock* notification,  failed invalid metadata, segment is off', async () => {
+    try {
+      const data = {
+        eventName: 'givPower unlocked',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        metadata: {
+          round: 11
+        },
+      };
+
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivEconomyBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+          e.response.data.message,
+          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"amount" is required');
+    }
+  });
+
+
   it('should create *UnStake* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'UnStake',
