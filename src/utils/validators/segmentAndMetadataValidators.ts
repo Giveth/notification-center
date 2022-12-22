@@ -46,7 +46,7 @@ const givPowerLockedSchema = Joi.object({
   amount: Joi.number()?.greater(0).required(),
 });
 const givPowerUnLockedSchema = Joi.object({
-  amount: Joi.number()?.greater(0).required(),
+  amount: Joi.string().required(),
   round: Joi.number()?.greater(0).required(),
 });
 
