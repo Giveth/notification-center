@@ -1352,7 +1352,10 @@ function sendNotificationTestCases() {
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
-          round: 11
+          round: 11,
+          poolName: 'GIVpower',
+          transactionHash: generateRandomTxHash(),
+          network: 100,
         },
       };
 
