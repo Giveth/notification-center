@@ -43,11 +43,18 @@ const projectBoostedSchema = Joi.object({
 });
 
 const givPowerLockedSchema = Joi.object({
-  amount: Joi.number()?.greater(0).required(),
+  poolName: Joi.string().required(),
+  amount: Joi.string().required(),
+  round: Joi.number()?.greater(0).required(),
+  transactionHash: Joi.string().required(),
+  network: Joi.number().required(),
 });
 const givPowerUnLockedSchema = Joi.object({
-  amount: Joi.number()?.greater(0).required(),
+  poolName: Joi.string().required(),
+  amount: Joi.string().required(),
   round: Joi.number()?.greater(0).required(),
+  transactionHash: Joi.string().required(),
+  network: Joi.number().required(),
 });
 
 const donationTrackerSchema = Joi.object({
