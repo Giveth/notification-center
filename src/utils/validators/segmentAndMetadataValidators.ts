@@ -186,6 +186,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
+  projectBoosted: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
   sendEmailConfirmation: {
     metadata: null,
     segment: projectRelatedTrackerSchema,
