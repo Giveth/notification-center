@@ -952,8 +952,8 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: 'IconGIVBack',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_BACK_IS_READY_TO_CLAIM,
-    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.GIVBACK_IS_READY_TO_CLAIM,
+    emailNotifierService: null,
+    emailNotificationId: null,
     pushNotifierService: null,
     htmlTemplate: [
       {
