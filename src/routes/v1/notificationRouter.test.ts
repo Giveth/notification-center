@@ -1431,12 +1431,15 @@ function sendNotificationTestCases() {
 
   it('should create *GIVbacks are ready to claim* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'GIVbacks are ready to claim',
+      eventName: 'GIVback is ready to claim',
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        round: 5,
+        contractName: 'Gnosis Chain Token Distro',
+        amount: '10',
+        network: 100,
+        transactionHash: generateRandomTxHash(),
       },
     };
 
@@ -1452,7 +1455,7 @@ function sendNotificationTestCases() {
   it('should create *GIVbacks are ready to claim* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'GIVbacks are ready to claim',
+        eventName: 'GIVback is ready to claim',
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
