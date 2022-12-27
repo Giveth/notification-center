@@ -948,7 +948,7 @@ export const GivethNotificationTypes = {
     title: 'GIVback',
     description: 'When GIVback is ready to be claimed after each round',
     showOnSettingPage: true,
-    microService: MICRO_SERVICES.givethio,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: 'IconGIVBack',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_BACK_IS_READY_TO_CLAIM,
@@ -980,7 +980,7 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'Your GIVback {amount} GIV is ready to claim! \n{Click here} to take a shortcut.',
+      'Your GIVback {amount} GIV is ready to claim! \n[Click here] to take a shortcut.',
   },
   PROJECT_EDITED: {
     name: 'Project edited',
