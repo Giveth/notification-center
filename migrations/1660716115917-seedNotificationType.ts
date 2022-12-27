@@ -1,4 +1,4 @@
-import {Column, MigrationInterface, QueryRunner} from 'typeorm';
+import { Column, MigrationInterface, QueryRunner } from 'typeorm';
 import {
   NotificationType,
   SCHEMA_VALIDATORS_NAMES,
@@ -1662,7 +1662,6 @@ export const GivethNotificationTypes = {
         type: 'p',
         content: ' unlocked.',
       },
-
     ],
     content: '{amount} unlocked.',
   },
@@ -1766,7 +1765,8 @@ export const GivethNotificationTypes = {
   PROJECT_STATUS_GROUP: {
     name: 'Project status',
     title: 'Your project status',
-    description: 'When your own project has been listed, unlisted, cancelled, activated or deactivated',
+    description:
+      'When your own project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     isEmailEditable: true,
     isWebEditable: false,
@@ -1863,7 +1863,8 @@ export const GivethNotificationTypes = {
   LIKED_BY_YOU_PROJECT_GROUP: {
     name: 'Project status - Users Who Liked',
     title: 'Your liked project status',
-    description: 'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
+    description:
+      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,

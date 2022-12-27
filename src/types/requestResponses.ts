@@ -4,15 +4,12 @@ interface BaseNotificationResponse {
   trackId?: string;
 }
 
-export type SendNotificationTypeRequest = {
+interface BaseSendNotificationTypeRequest {
   /**
    * @example "Made donation"
    */
   eventName: string;
-  /**
-   * @example "Should be unique"
-   */
-  trackId?: string;
+
   /**
    * @example false
    */
@@ -57,51 +54,33 @@ export type SendNotificationTypeRequest = {
     anonymousId?: string;
   };
   metadata?: NotificationMetadata;
-};
+}
 
-export type SendNotificationRequest = {
+export interface SendNotificationRequest
+  extends BaseSendNotificationTypeRequest {
   /**
-   * @example "1"
+   * @example "Should be unique"
    */
-  userId: string;
+  trackId?: string;
+}
 
+interface SendNotificationTypeRequestBulkItem
+  extends BaseSendNotificationTypeRequest {
   /**
-   * @example "1"
+   * @example "Should be unique"
    */
-  projectId: string;
+  trackId: string;
+}
 
-  metadata: {
-    /**
-     * @example "https://giveth.io/project/test-project
-     */
-    projectLink?: string;
-
-    /**
-     * @example "Test project"
-     */
-    projectTitle?: string;
-  };
-
-  /**
-   * @example "y@giveth.io"
-   */
-  email: string;
-
-  /**
-   * @example "projectListed"
-   */
-  notificationTemplate: number;
-
-  /**
-   * @example true
-   */
-  sendEmail: boolean;
-};
+export interface sendBulkNotificationRequest {
+  notifications: SendNotificationTypeRequestBulkItem[];
+}
 
 export interface SendNotificationResponse extends BaseNotificationResponse {
   success: boolean;
   message?: string;
 }
+
 export interface GetNotificationsResponse extends BaseNotificationResponse {
   notifications: Notification[];
   count: number;

@@ -24,7 +24,9 @@ const throwHttpErrorIfJoiValidatorFails = (
 export const countUnreadValidator = Joi.object({
   walletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
 });
+
 export const sendNotificationValidator = Joi.object({
+  trackId: Joi.string(),
   projectId: Joi.string(),
   analyticsUserId: Joi.string(),
   anonymousId: Joi.string(),
@@ -33,7 +35,6 @@ export const sendNotificationValidator = Joi.object({
   sendEmail: Joi.boolean(),
   sendSegment: Joi.boolean(),
   email: Joi.string(),
-  trackId: Joi.string(),
   creationTime: Joi.number(),
   userWalletAddress: Joi.string()
     .pattern(ethereumWalletAddressRegex)
@@ -75,6 +76,20 @@ export const sendNotificationValidator = Joi.object({
   }),
 });
 
+export const sendBulkNotificationValidator = Joi.object({
+  notifications: Joi.array()
+    .required()
+    .min(1)
+    .max(100)
+    .items(
+      sendNotificationValidator.concat(
+        Joi.object({
+          trackId: Joi.string().required(),
+        }),
+      ),
+    ),
+});
+
 export const updateNotificationSettings = Joi.object({
   settings: Joi.array()
     .required()
@@ -86,6 +101,7 @@ export const updateNotificationSettings = Joi.object({
       }),
     ),
 });
+
 export const updateOneNotificationSetting = Joi.object({
   id: Joi.number().required(),
   allowEmailNotification: Joi.boolean().required(),

@@ -13,6 +13,7 @@ import {
   updateOneNotificationSetting,
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
+import { StandardError } from '../../types/StandardError';
 
 interface SettingParams {
   id: number;
@@ -86,7 +87,10 @@ export class NotificationSettingsController {
       const notificationSetting = await findNotificationSettingById(id);
 
       if (!notificationSetting) {
-        throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
+        throw new StandardError({
+          message: errorMessages.NOTIFICATION_SETTING_NOT_FOUND,
+          httpStatusCode: 400,
+        });
       }
       const newSettingData = {
         notificationSettingId: id,

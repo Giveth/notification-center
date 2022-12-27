@@ -4,6 +4,7 @@ import { NotificationSetting } from '../entities/notificationSetting';
 import { errorMessages } from '../utils/errorMessages';
 import { createQueryBuilder } from 'typeorm';
 import { logger } from '../utils/logger';
+import { StandardError } from '../types/StandardError';
 
 export const createNotificationSettingsForNewUser = async (
   user: UserAddress,
@@ -120,9 +121,12 @@ export const updateUserNotificationSetting = async (params: {
     )
     .getOne();
 
-  if (!notificationSetting)
-    throw new Error(errorMessages.NOTIFICATION_SETTING_NOT_FOUND);
-
+  if (!notificationSetting) {
+    throw new StandardError({
+      message: errorMessages.NOTIFICATION_SETTING_NOT_FOUND,
+      httpStatusCode: 400,
+    });
+  }
   if (notificationSetting.notificationType?.isEmailEditable) {
     notificationSetting.allowEmailNotification = params.allowEmailNotification;
   }

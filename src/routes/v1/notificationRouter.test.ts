@@ -11,11 +11,14 @@ import axios from 'axios';
 import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
+import { generateRandomString } from '../../utils/utils';
 
 describe('/notifications POST test cases', sendNotificationTestCases);
+describe('/notificationsBulk POST test cases', sendBulkNotificationsTestCases);
 describe('/notifications GET test cases', getNotificationTestCases);
 
 const sendNotificationUrl = `${serverUrl}/v1/thirdParty/notifications`;
+const sendBulkNotificationsUrl = `${serverUrl}/v1/thirdParty/notificationsBulk`;
 const getNotificationUrl = `${serverUrl}/v1/notifications`;
 const projectTitle = 'project title';
 const projectLink = 'https://giveth.io/project/project-title';
@@ -1368,13 +1371,12 @@ function sendNotificationTestCases() {
       assert.isTrue(false);
     } catch (e: any) {
       assert.equal(
-          e.response.data.message,
-          errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
       assert.equal(e.response.data.description, '"amount" is required');
     }
   });
-
 
   it('should create *UnStake* notification,  success, segment is off', async () => {
     const data = {
@@ -2294,5 +2296,186 @@ function sendNotificationTestCases() {
     assert.isTrue(result.data.success);
     const createdNotification = await findNotificationByTrackId(trackId);
     assert.equal(createdNotification?.createdAt.getTime(), creationTime);
+  });
+}
+
+function sendBulkNotificationsTestCases() {
+  it('should create two *project liked* notifications,  success, segment is off', async () => {
+    const data = {
+      notifications: [
+        {
+          eventName: 'project liked',
+          sendEmail: false,
+          sendSegment: false,
+          userWalletAddress: generateRandomEthereumAddress(),
+          trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+          metadata: {
+            projectTitle,
+            projectLink,
+          },
+        },
+        {
+          eventName: 'project liked',
+          sendEmail: false,
+          sendSegment: false,
+          userWalletAddress: generateRandomEthereumAddress(),
+          trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+          metadata: {
+            projectTitle,
+            projectLink,
+          },
+        },
+      ],
+    };
+    const result = await axios.post(sendBulkNotificationsUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+    assert.isOk(
+      await findNotificationByTrackId(data.notifications[0].trackId as string),
+    );
+    assert.isOk(
+      await findNotificationByTrackId(data.notifications[1].trackId as string),
+    );
+  });
+  it('should create two *project liked* notifications, success 100 notification', async () => {
+    const notifications = [];
+    for (let i = 0; i < 100; i++) {
+      notifications.push({
+        eventName: 'project liked',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+        metadata: {
+          projectTitle,
+          projectLink,
+        },
+      });
+    }
+    const data = {
+      notifications,
+    };
+    const result = await axios.post(sendBulkNotificationsUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+    for (const notification of data.notifications) {
+      assert.isOk(
+        await findNotificationByTrackId(notification.trackId as string),
+      );
+    }
+  });
+  it('should create two *project liked* notifications, failed for more than 100', async () => {
+    const notifications = [];
+    for (let i = 0; i < 101; i++) {
+      notifications.push({
+        eventName: 'project liked',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+        metadata: {
+          projectTitle,
+          projectLink,
+        },
+      });
+    }
+    const data = {
+      notifications,
+    };
+    try {
+      await axios.post(sendBulkNotificationsUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(
+        e.response.data.description,
+        '"notifications" must contain less than or equal to 100 items',
+      );
+    }
+  });
+  it('should create two *project liked* notifications, failed for empty array', async () => {
+    const data = {
+      notifications: [],
+    };
+    try {
+      await axios.post(sendBulkNotificationsUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(
+        e.response.data.description,
+        '"notifications" must contain at least 1 items',
+      );
+    }
+  });
+  it('should create two *project liked* notifications, failed if one notification had problem (but correct notification would be saved in DB)', async () => {
+    const data = {
+      notifications: [
+        {
+          eventName: 'project liked',
+          sendEmail: false,
+          sendSegment: false,
+          userWalletAddress: generateRandomEthereumAddress(),
+          trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+          metadata: {
+            projectTitle,
+            projectLink,
+          },
+        },
+        {
+          eventName: 'project liked2',
+          trackId: `${new Date().getTime()}-${generateRandomString(30)}`,
+          sendEmail: false,
+          sendSegment: false,
+          userWalletAddress: generateRandomEthereumAddress(),
+          metadata: {
+            projectTitle,
+            projectLink,
+          },
+        },
+      ],
+    };
+    try {
+      await axios.post(sendBulkNotificationsUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessages.INVALID_NOTIFICATION_TYPE,
+      );
+      assert.isOk(
+        await findNotificationByTrackId(
+          data.notifications[0].trackId as string,
+        ),
+      );
+    }
   });
 }
