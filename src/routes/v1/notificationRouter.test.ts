@@ -2432,7 +2432,7 @@ function sendBulkNotificationsTestCases() {
       );
     }
   });
-  it('should create two *project liked* notifications, failed if one notification had problem (but correct notification would be saved in DB)', async () => {
+  it('should create two *project liked* notifications, failed if one notification had problem', async () => {
     const data = {
       notifications: [
         {
@@ -2470,11 +2470,6 @@ function sendBulkNotificationsTestCases() {
       assert.equal(
         e.response.data.message,
         errorMessages.INVALID_NOTIFICATION_TYPE,
-      );
-      assert.isOk(
-        await findNotificationByTrackId(
-          data.notifications[0].trackId as string,
-        ),
       );
     }
   });
