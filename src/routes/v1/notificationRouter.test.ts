@@ -1459,7 +1459,11 @@ function sendNotificationTestCases() {
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {},
+        metadata: {
+          contractName: 'Gnosis Chain Token Distro',
+          network: 100,
+          transactionHash: generateRandomTxHash(),
+        },
       };
 
       await axios.post(sendNotificationUrl, data, {
@@ -1474,7 +1478,7 @@ function sendNotificationTestCases() {
         e.response.data.message,
         errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
-      assert.equal(e.response.data.description, '"round" is required');
+      assert.equal(e.response.data.description, '"amount" is required');
     }
   });
 
