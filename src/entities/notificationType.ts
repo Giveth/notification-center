@@ -59,6 +59,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   USER_UNLOCKED_GIVPOWER: 'givPowerUserUnlockedGivPower',
   USER_GIVPOWER_RELOCKED_AUTOMATICALLY:
     'givPowerUserGivPowerRelockedAutoMatically',
+  GIV_BACK_IS_READY_TO_CLAIM: 'givBackReadyToClaim',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 

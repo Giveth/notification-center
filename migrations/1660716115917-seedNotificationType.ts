@@ -892,7 +892,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'a',
-        content: '$poolName',
+        content: '$contractName',
         href: '/givfarm',
       },
       {
@@ -900,7 +900,7 @@ export const GivethNotificationTypes = {
         content: ' was successful.',
       },
     ],
-    content: 'Staking {amount} of {poolName} was successful.',
+    content: 'Staking {amount} of {contractName} was successful.',
   },
   UN_STAKE: {
     name: 'UnStake',
@@ -933,7 +933,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'a',
-        content: '$poolName',
+        content: '$contractName',
         href: '/givfarm',
       },
       {
@@ -941,32 +941,32 @@ export const GivethNotificationTypes = {
         content: ' was successful.',
       },
     ],
-    content: 'Unstaking {amount} of {poolname} was successful.',
+    content: 'Unstaking {amount} of {contractName} was successful.',
   },
-  GIV_BACKS_ARE_READY_TO_CLAIM: {
-    name: 'GIVbacks are ready to claim',
-    title: 'GIVbacks',
-    description: 'When GIVbacks are ready to be claimed after each round',
+  GIV_BACK_IS_READY_TO_CLAIM: {
+    name: 'GIVback is ready to claim',
+    title: 'GIVback',
+    description: 'When GIVback is ready to be claimed after each round',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
-    icon: 'IconUnstake',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_FARM_READY_TO_CLAIM,
+    icon: 'IconGIVBack',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_BACK_IS_READY_TO_CLAIM,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.PROJECT_REJECTED,
+    emailNotificationId: SegmentEvents.GIVBACK_IS_READY_TO_CLAIM,
     pushNotifierService: null,
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Your GIVbacks for round ',
+        content: 'Your GIVback ',
       },
       {
         type: 'b',
-        content: '$round',
+        content: '$amount',
       },
       {
         type: 'p',
-        content: ' are ready to claim! ',
+        content: ' GIV is ready to claim! ',
       },
       { type: 'br' },
       {
@@ -980,7 +980,7 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'Your GIVbacks for round {round number} are ready to claim! \n{Click here} to take a shortcut.',
+      'Your GIVback {amount} GIV is ready to claim! \n{Click here} to take a shortcut.',
   },
   PROJECT_EDITED: {
     name: 'Project edited',

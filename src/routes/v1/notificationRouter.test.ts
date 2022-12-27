@@ -1274,7 +1274,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIV farm',
+        contractName: 'GIV farm',
         amount: '10',
         network: 100,
         transactionHash: generateRandomTxHash(),
@@ -1298,7 +1298,7 @@ function sendNotificationTestCases() {
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
-          poolName: 'GIV farm',
+          contractName: 'GIV farm',
           network: 100,
           transactionHash: generateRandomTxHash(),
         },
@@ -1327,7 +1327,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIVpower',
+        contractName: 'GIVpower',
         amount: '10',
         round: 13,
         transactionHash: generateRandomTxHash(),
@@ -1353,7 +1353,7 @@ function sendNotificationTestCases() {
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
           round: 11,
-          poolName: 'GIVpower',
+          contractName: 'GIVpower',
           transactionHash: generateRandomTxHash(),
           network: 100,
         },
@@ -1383,7 +1383,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIV farm',
+        contractName: 'GIV farm',
         amount: '10',
         network: 100,
         transactionHash: generateRandomTxHash(),
@@ -1407,7 +1407,7 @@ function sendNotificationTestCases() {
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
-          poolName: 'GIV farm',
+          contractName: 'GIV farm',
           network: 100,
           transactionHash: generateRandomTxHash(),
         },
