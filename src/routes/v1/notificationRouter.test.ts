@@ -1274,7 +1274,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIV farm',
+        contractName: 'GIV farm',
         amount: '10',
         network: 100,
         transactionHash: generateRandomTxHash(),
@@ -1298,7 +1298,7 @@ function sendNotificationTestCases() {
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
-          poolName: 'GIV farm',
+          contractName: 'GIV farm',
           network: 100,
           transactionHash: generateRandomTxHash(),
         },
@@ -1327,7 +1327,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIVpower',
+        contractName: 'GIVpower',
         amount: '10',
         round: 13,
         transactionHash: generateRandomTxHash(),
@@ -1353,7 +1353,7 @@ function sendNotificationTestCases() {
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
           round: 11,
-          poolName: 'GIVpower',
+          contractName: 'GIVpower',
           transactionHash: generateRandomTxHash(),
           network: 100,
         },
@@ -1383,7 +1383,7 @@ function sendNotificationTestCases() {
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        poolName: 'GIV farm',
+        contractName: 'GIV farm',
         amount: '10',
         network: 100,
         transactionHash: generateRandomTxHash(),
@@ -1407,7 +1407,7 @@ function sendNotificationTestCases() {
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
         metadata: {
-          poolName: 'GIV farm',
+          contractName: 'GIV farm',
           network: 100,
           transactionHash: generateRandomTxHash(),
         },
@@ -1431,12 +1431,15 @@ function sendNotificationTestCases() {
 
   it('should create *GIVbacks are ready to claim* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'GIVbacks are ready to claim',
+      eventName: 'GIVback is ready to claim',
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
       metadata: {
-        round: 5,
+        contractName: 'Gnosis Chain Token Distro',
+        amount: '10',
+        network: 100,
+        transactionHash: generateRandomTxHash(),
       },
     };
 
@@ -1452,11 +1455,15 @@ function sendNotificationTestCases() {
   it('should create *GIVbacks are ready to claim* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'GIVbacks are ready to claim',
+        eventName: 'GIVback is ready to claim',
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {},
+        metadata: {
+          contractName: 'Gnosis Chain Token Distro',
+          network: 100,
+          transactionHash: generateRandomTxHash(),
+        },
       };
 
       await axios.post(sendNotificationUrl, data, {
@@ -1471,7 +1478,7 @@ function sendNotificationTestCases() {
         e.response.data.message,
         errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
-      assert.equal(e.response.data.description, '"round" is required');
+      assert.equal(e.response.data.description, '"amount" is required');
     }
   });
 

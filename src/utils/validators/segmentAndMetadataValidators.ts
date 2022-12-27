@@ -43,14 +43,14 @@ const projectBoostedSchema = Joi.object({
 });
 
 const givPowerLockedSchema = Joi.object({
-  poolName: Joi.string().required(),
+  contractName: Joi.string().required(),
   amount: Joi.string().required(),
   round: Joi.number()?.greater(0).required(),
   transactionHash: Joi.string().required(),
   network: Joi.number().required(),
 });
 const givPowerUnLockedSchema = Joi.object({
-  poolName: Joi.string().required(),
+  contractName: Joi.string().required(),
   amount: Joi.string().required(),
   round: Joi.number()?.greater(0).required(),
   transactionHash: Joi.string().required(),
@@ -100,7 +100,7 @@ const getDonationPriceFailedMetadataSchema = Joi.object({
   txLink: Joi.string().required(),
 });
 const stakeUnStakeSchema = Joi.object({
-  poolName: Joi.string().required(),
+  contractName: Joi.string().required(),
   transactionHash: Joi.string().required(),
   network: Joi.number().required(),
   amount: Joi.string().required(),
@@ -114,6 +114,12 @@ const adminMessageSchema = Joi.object({
   content: Joi.string().required(),
   instruction: Joi.string().required(),
   href: Joi.string().required(),
+});
+const givBackReadyClaimSchema = Joi.object({
+  contractName: Joi.string().required(),
+  transactionHash: Joi.string().required(),
+  network: Joi.number().required(),
+  amount: Joi.string().required(),
 });
 
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
@@ -259,6 +265,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: givPowerLockedSchema,
     segment: null,
   },
+  givBackReadyToClaim: {
+    metadata: givBackReadyClaimSchema,
+    segment: null,
+  }
 };
 
 function throwHttpErrorIfJoiValidatorFails(
