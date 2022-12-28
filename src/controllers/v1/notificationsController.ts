@@ -39,7 +39,6 @@ import { Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { sendNotification } from '../../services/notificationService';
 import { StandardError } from '../../types/StandardError';
-import { not } from 'joi';
 
 @Route('/v1')
 @Tags('Notification')

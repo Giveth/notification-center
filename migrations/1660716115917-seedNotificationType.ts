@@ -1,4 +1,4 @@
-import { Column, MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 import {
   NotificationType,
   SCHEMA_VALIDATORS_NAMES,

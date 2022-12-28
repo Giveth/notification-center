@@ -8,7 +8,6 @@ import {
 import { UserAddress } from '../../entities/userAddress';
 import { errorMessages } from '../../utils/errorMessages';
 import {
-  sendNotificationValidator,
   updateNotificationSettings,
   updateOneNotificationSetting,
   validateWithJoiSchema,
