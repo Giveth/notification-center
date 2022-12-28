@@ -39,6 +39,7 @@ import { Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { sendNotification } from '../../services/notificationService';
 import { StandardError } from '../../types/StandardError';
+import { not } from 'joi';
 
 @Route('/v1')
 @Tags('Notification')
@@ -81,6 +82,15 @@ export class NotificationsController {
     const { microService } = params;
     try {
       validateWithJoiSchema(body, sendBulkNotificationValidator);
+      const trackIdsSet = new Set(
+        body.notifications.map(notification => notification.trackId),
+      );
+      if (trackIdsSet.size !== body.notifications.length) {
+        throw new StandardError({
+          message: errorMessages.THERE_IS_SOME_ITEMS_WITH_SAME_TRACK_ID,
+          httpStatusCode: 400,
+        });
+      }
       await Promise.all(
         body.notifications.map(item => sendNotification(item, microService)),
       );

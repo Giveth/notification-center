@@ -4,7 +4,12 @@ interface BaseNotificationResponse {
   trackId?: string;
 }
 
-interface BaseSendNotificationTypeRequest {
+export interface SendNotificationRequest {
+  /**
+   * @example "Should be unique"
+   */
+  trackId?: string;
+
   /**
    * @example "Made donation"
    */
@@ -56,16 +61,7 @@ interface BaseSendNotificationTypeRequest {
   metadata?: NotificationMetadata;
 }
 
-export interface SendNotificationRequest
-  extends BaseSendNotificationTypeRequest {
-  /**
-   * @example "Should be unique"
-   */
-  trackId?: string;
-}
-
-interface SendNotificationTypeRequestBulkItem
-  extends BaseSendNotificationTypeRequest {
+interface SendNotificationTypeRequestBulkItem extends SendNotificationRequest {
   /**
    * @example "Should be unique"
    */

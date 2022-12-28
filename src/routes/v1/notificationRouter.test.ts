@@ -2410,6 +2410,50 @@ function sendBulkNotificationsTestCases() {
       );
     }
   });
+  it('should create two *project liked* notifications, failed because two notifications have same trackIds', async () => {
+    const trackId = `${new Date().getTime()}-${generateRandomString(30)}`;
+    const notifications = [
+      {
+        eventName: 'project liked',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        trackId,
+        metadata: {
+          projectTitle,
+          projectLink,
+        },
+      },
+      {
+        eventName: 'project liked',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        trackId,
+        metadata: {
+          projectTitle,
+          projectLink,
+        },
+      },
+    ];
+    try {
+      await axios.post(
+        sendBulkNotificationsUrl,
+        { notifications },
+        {
+          headers: {
+            authorization: getGivethIoBasicAuth(),
+          },
+        },
+      );
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessages.THERE_IS_SOME_ITEMS_WITH_SAME_TRACK_ID,
+      );
+    }
+  });
   it('should create two *project liked* notifications, failed for empty array', async () => {
     const data = {
       notifications: [],
