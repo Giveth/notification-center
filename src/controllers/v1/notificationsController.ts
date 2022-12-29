@@ -9,12 +9,12 @@ import {
   Query,
   Put,
   Path,
-  Example,
 } from 'tsoa';
 import { logger } from '../../utils/logger';
 
 import {
   countUnreadValidator,
+  sendBulkNotificationValidator,
   sendNotificationValidator,
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
@@ -22,33 +22,23 @@ import {
   CountUnreadNotificationsResponse,
   GetNotificationsResponse,
   ReadAllNotificationsRequestType,
-  ReadAllNotificationsResponse,
   ReadSingleNotificationResponse,
-  SendNotificationRequest,
   SendNotificationResponse,
-  SendNotificationTypeRequest,
+  SendNotificationRequest,
+  sendBulkNotificationRequest,
 } from '../../types/requestResponses';
-import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
-import { StandardError } from '../../types/StandardError';
-import { User } from '../../types/general';
+import { errorMessages } from '../../utils/errorMessages';
 import {
   countUnreadNotifications,
-  createNotification,
-  findNotificationByTrackId,
   getNotifications,
   markNotificationGroupAsRead,
   markNotificationsAsRead,
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
-import {
-  getNotificationTypeByEventName,
-  getNotificationTypeByEventNameAndMicroservice,
-} from '../../repositories/notificationTypeRepository';
-import { EMAIL_STATUSES, Notification } from '../../entities/notification';
+import { Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
-import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../../utils/validators/segmentAndMetadataValidators';
-import { findNotificationSettingByNotificationTypeAndUserAddress } from '../../repositories/notificationSettingRepository';
-import { SegmentAnalyticsSingleton } from '../../services/segment/segmentAnalyticsSingleton';
+import { sendNotification } from '../../services/notificationService';
+import { StandardError } from '../../types/StandardError';
 
 @Route('/v1')
 @Tags('Notification')
@@ -57,105 +47,16 @@ export class NotificationsController {
   @Security('basicAuth')
   public async sendNotification(
     @Body()
-    body: SendNotificationTypeRequest,
+    body: SendNotificationRequest,
     @Inject()
     params: {
       microService: string;
     },
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
-    const { userWalletAddress, projectId } = body;
     try {
       validateWithJoiSchema(body, sendNotificationValidator);
-      if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
-        // We dont throw error in this case but dont create new notification neither
-        return {
-          success: true,
-          message: errorMessages.DUPLICATED_TRACK_ID,
-        };
-      }
-      const userAddress = await createNewUserAddressIfNotExists(
-        userWalletAddress as string,
-      );
-      const notificationType =
-        await getNotificationTypeByEventNameAndMicroservice({
-          eventName: body.eventName,
-          microService,
-        });
-
-      if (!notificationType) {
-        throw new Error(errorMessages.INVALID_NOTIFICATION_TYPE);
-      }
-      const notificationSetting =
-        await findNotificationSettingByNotificationTypeAndUserAddress({
-          notificationTypeId: notificationType.id,
-          userAddressId: userAddress.id,
-        });
-
-      logger.debug('notificationController.sendNotification()', {
-        notificationSetting,
-        notificationType,
-      });
-
-      const shouldSendEmail =
-        body.sendEmail && notificationSetting?.allowEmailNotification;
-      let emailStatus = shouldSendEmail
-        ? EMAIL_STATUSES.WAITING_TO_BE_SEND
-        : EMAIL_STATUSES.NO_NEED_TO_SEND;
-
-      const segmentValidator =
-        SEGMENT_METADATA_SCHEMA_VALIDATOR[
-          notificationType?.schemaValidator as string
-        ]?.segment;
-
-      if (shouldSendEmail && body.sendSegment && segmentValidator) {
-        //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
-        // And it's not good, we should find another solution to separate sending segment and email
-        const segmentData = body.segment?.payload;
-        validateWithJoiSchema(segmentData, segmentValidator);
-        await SegmentAnalyticsSingleton.getInstance().track({
-          eventName: notificationType.emailNotificationId as string,
-          anonymousId: body?.segment?.anonymousId,
-          properties: segmentData,
-          analyticsUserId: body?.segment?.analyticsUserId,
-        });
-        emailStatus = EMAIL_STATUSES.SENT;
-      }
-
-      const metadataValidator =
-        SEGMENT_METADATA_SCHEMA_VALIDATOR[
-          notificationType?.schemaValidator as string
-        ]?.metadata;
-
-      if (metadataValidator) {
-        validateWithJoiSchema(body.metadata, metadataValidator);
-      }
-
-      if (!notificationSetting?.allowDappPushNotification) {
-        //TODO In future we can add a create notification but with  disabledNotification:true
-        // So we can exclude them in list of notifications
-        return {
-          success: true,
-          message: errorMessages.USER_TURNED_OF_THIS_NOTIFICATION_TYPE,
-        };
-      }
-      const notificationData: Partial<Notification> = {
-        notificationType,
-        userAddress,
-        email: body.email,
-        emailStatus,
-        trackId: body?.trackId,
-        metadata: body?.metadata,
-        segmentData: body.segment,
-        projectId,
-      };
-      if (body.creationTime) {
-        // creationTime is optional and it's timestamp in milliseconds format
-        notificationData.createdAt = new Date(body.creationTime);
-      }
-      await createNotification(notificationData);
-
-      return { success: true };
+      return sendNotification(body, microService);
       // add if and logic for push notification (not in mvp)
     } catch (e) {
       logger.error('sendNotification() error', {
@@ -167,20 +68,54 @@ export class NotificationsController {
     }
   }
 
+  @Post('/thirdParty/notificationsBulk')
+  @Security('basicAuth')
+  public async sendBulkNotification(
+    @Body()
+    body: sendBulkNotificationRequest,
+    @Inject()
+    params: {
+      microService: string;
+    },
+  ): Promise<SendNotificationResponse> {
+    const { microService } = params;
+    try {
+      validateWithJoiSchema(body, sendBulkNotificationValidator);
+      const trackIdsSet = new Set(
+        body.notifications.map(notification => notification.trackId),
+      );
+      if (trackIdsSet.size !== body.notifications.length) {
+        throw new StandardError({
+          message: errorMessages.THERE_IS_SOME_ITEMS_WITH_SAME_TRACK_ID,
+          httpStatusCode: 400,
+        });
+      }
+      await Promise.all(
+        body.notifications.map(item => sendNotification(item, microService)),
+      );
+      return { success: true };
+    } catch (e) {
+      logger.error('sendBulkNotification() error', {
+        error: e,
+      });
+      throw e;
+    }
+  }
+
   // https://tsoa-community.github.io/docs/examples.html#parameter-examples
   /**
-   * @example limit "20"
-   * @example offset "0"
-   * @example category ""
-   * @example category "projectRelated"
-   * @example category "givEconomyRelated"
-   * @example category "general"
-   * @example isRead ""
-   * @example isRead "false"
-   * @example isRead "true"
-   * @example startTime "1659356987"
+     * @example limit "20"
+     * @example offset "0"
+     * @example category ""
+     * @example category "projectRelated"
+     * @example category "givEconomyRelated"
+     * @example category "general"
+     * @example isRead ""
+     * @example isRead "false"
+     * @example isRead "true"
+     * @example startTime "1659356987"
 
-   */
+     */
   @Get('/notifications/')
   @Security('JWT')
   public async getNotifications(
@@ -258,7 +193,10 @@ export class NotificationsController {
         userAddressId: user.id,
       });
       if (!notification) {
-        throw new Error(errorMessages.NOTIFICATION_NOT_FOUND);
+        throw new StandardError({
+          message: errorMessages.NOTIFICATION_NOT_FOUND,
+          httpStatusCode: 404,
+        });
       }
       return {
         notification,

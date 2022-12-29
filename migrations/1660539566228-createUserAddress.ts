@@ -2,7 +2,6 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableForeignKey,
 } from 'typeorm';
 
 export class createUserAddress1660539566228 implements MigrationInterface {

@@ -27,6 +27,25 @@ notificationRouter.post(
   },
 );
 
+notificationRouter.post(
+  '/thirdParty/notificationsBulk',
+  authenticateThirdPartyServiceToken,
+  async (req: Request, res: Response, next) => {
+    const { microService } = res.locals;
+    try {
+      const result = await notificationsController.sendBulkNotification(
+        req.body,
+        {
+          microService,
+        },
+      );
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
 notificationRouter.get(
   '/notifications',
   validateAuthMicroserviceJwt,
