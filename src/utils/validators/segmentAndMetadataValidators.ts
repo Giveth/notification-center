@@ -112,8 +112,8 @@ const claimSchema = Joi.object({
 const adminMessageSchema = Joi.object({
   linkTitle: Joi.string().required(),
   content: Joi.string().required(),
-  instruction: Joi.string().required(),
-  href: Joi.string().required(),
+  instruction: Joi.string(),
+  href: Joi.string(),
 });
 const givBackReadyClaimSchema = Joi.object({
   contractName: Joi.string().required(),
@@ -268,7 +268,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   givBackReadyToClaim: {
     metadata: givBackReadyClaimSchema,
     segment: null,
-  }
+  },
 };
 
 function throwHttpErrorIfJoiValidatorFails(
