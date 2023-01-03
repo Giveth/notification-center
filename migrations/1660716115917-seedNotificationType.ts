@@ -320,6 +320,30 @@ export const GivethNotificationTypes = {
     content:
       'The {project name} that you donated before is no longer visible.\n{reason}',
   },
+  PROJECT_BOOSTED: {
+    name: 'Project boosted',
+    description: 'Project has been boosted',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: '',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BOOSTED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Someone boosted your project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      }
+    ],
+    content:
+      'Someone boosted your project {projectName}!',
+  },
   PROJECT_CANCELLED: {
     name: 'Project cancelled',
     description: 'Project has been cancelled',
