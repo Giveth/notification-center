@@ -34,6 +34,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_ACTIVATED: 'projectActivated',
   PROJECT_DEACTIVATED: 'projectDeactivated',
   PROJECT_CANCELLED: 'projectCancelled',
+  PROJECT_BOOSTED: 'projectBoosted',
   VERIFICATION_FORM_SENT: 'verificationFormSent',
   VERIFICATION_FORM_Reapply_Reminder: 'verificationFormReapplyReminder',
   VERIFICATION_FORM_REJECTED: 'verificationFormRejected',
