@@ -165,6 +165,52 @@ function sendNotificationTestCases() {
     }
   });
 
+  it('should create *Raw HTML Broadcast* notification,  success, segment is off', async () => {
+    const data = {
+      eventName: 'Raw HTML Broadcast',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        html: '<p>dasl;dksa;lkd;laskd;askd;alsdas <strong>hi</strong></p>',
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Raw HTML Broadcast* notification,  failed invalid metadata, segment is off', async () => {
+    try {
+      const data = {
+        eventName: 'Raw HTML Broadcast',
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        metadata: {},
+      };
+
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"html" is required');
+    }
+  });
+
   it('should create *draft project saved* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'The project saved as draft',

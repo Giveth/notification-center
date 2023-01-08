@@ -115,6 +115,10 @@ const adminMessageSchema = Joi.object({
   instruction: Joi.string(),
   href: Joi.string(),
 });
+
+const rawHtmlBroadcastSchema = Joi.object({
+  html: Joi.string().required(),
+});
 const givBackReadyClaimSchema = Joi.object({
   contractName: Joi.string().required(),
   transactionHash: Joi.string().required(),
@@ -250,6 +254,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   givFarmUnStake: { metadata: stakeUnStakeSchema, segment: null },
   givFarmReadyToClaim: { metadata: claimSchema, segment: null },
   adminMessage: { metadata: adminMessageSchema, segment: null },
+  rawHtmlBroadcast: { metadata: rawHtmlBroadcastSchema, segment: null },
   givPowerUserBoosted: { metadata: boostedSchema, segment: null },
   givPowerUserChangedBoostedAllocation: { metadata: null, segment: null },
   givPowerProjectHasBeenBoosted: {

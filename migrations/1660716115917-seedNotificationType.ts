@@ -1720,7 +1720,7 @@ export const GivethNotificationTypes = {
     title: 'Your boost status',
     description:
       'Shows when you boost a project, change the allocation of GIVpower.',
-    showOnSettingPage: true,
+    showOnSettingPage: false,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1882,6 +1882,28 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
+  },
+
+  RAW_HTML: {
+    name: 'Raw HTML Broadcast',
+    description: 'Raw HTML Broadcast',
+    microService: MICRO_SERVICES.givethio,
+    category: 'general',
+    icon: 'IconAdminNotif',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.RAW_HTML_BROADCAST,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Raw HTML Broadcast',
+    htmlTemplate: [
+      {
+        type: 'html',
+        content: '$html',
+      },
+    ],
+    Content: {
+      html: '',
+    },
   },
 };
 
