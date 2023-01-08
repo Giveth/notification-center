@@ -41,13 +41,13 @@ export class NotificationSetting extends BaseEntity {
   allowDappPushNotification: boolean;
 
   @Index()
-  @ManyToOne(type => NotificationType, { eager: true, nullable: true })
-  notificationType?: NotificationType;
+  @ManyToOne(type => NotificationType, { eager: true })
+  notificationType: NotificationType;
   @RelationId(
     (notificationSetting: NotificationSetting) =>
       notificationSetting.notificationType,
   )
-  notificationTypeId?: number | null;
+  notificationTypeId: number;
 
   @Index()
   @ManyToOne(type => UserAddress, { eager: true, nullable: false })

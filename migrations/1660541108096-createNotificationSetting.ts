@@ -42,7 +42,7 @@ export class createNotificationSetting1660541108096
           {
             name: 'notificationTypeId',
             type: 'int',
-            isNullable: true,
+            isNullable: false,
           },
           {
             name: 'userAddressId',

@@ -46,7 +46,7 @@ export const getUserNotificationSettings = async (
       category: category,
     });
   }
-
+  query.orderBy('notificationTypeId', 'ASC');
   return query.take(take).skip(skip).getManyAndCount();
 };
 

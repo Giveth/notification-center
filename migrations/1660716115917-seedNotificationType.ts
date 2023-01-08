@@ -339,10 +339,9 @@ export const GivethNotificationTypes = {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
-      }
+      },
     ],
-    content:
-      'Someone boosted your project {projectName}!',
+    content: 'Someone boosted your project {projectName}!',
   },
   PROJECT_CANCELLED: {
     name: 'Project cancelled',
