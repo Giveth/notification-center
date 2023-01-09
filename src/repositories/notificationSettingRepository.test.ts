@@ -45,6 +45,30 @@ function getUserNotificationSettingsTestCases() {
       assert.isTrue(setting?.notificationType?.showOnSettingPage);
     });
   });
+  it('return notification settings order by notificationTypeId', async () => {
+    const userAddress = await createNewUserAddressIfNotExists(
+      generateRandomEthereumAddress(),
+    );
+
+    const [notificationSettings] = await getUserNotificationSettings(
+      100,
+      0,
+      userAddress.id,
+    );
+
+    assert.isOk(notificationSettings);
+    notificationSettings.forEach(setting => {
+      assert.isTrue(setting!.userAddressId === userAddress.id);
+      assert.isTrue(setting?.notificationType?.showOnSettingPage);
+    });
+
+    for (let i = 1; i < notificationSettings.length; i++) {
+      assert.isTrue(
+        notificationSettings[i]?.notificationTypeId >
+          notificationSettings[i - 1]?.notificationTypeId,
+      );
+    }
+  });
 }
 
 function findNotificationSettingByNotificationTypeAndUserAddressTestCases() {

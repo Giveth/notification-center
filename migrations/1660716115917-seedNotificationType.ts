@@ -320,6 +320,29 @@ export const GivethNotificationTypes = {
     content:
       'The {project name} that you donated before is no longer visible.\n{reason}',
   },
+  PROJECT_BOOSTED: {
+    name: 'Project boosted',
+    description: 'Project has been boosted',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: '',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BOOSTED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'Someone boosted your project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+    ],
+    content: 'Someone boosted your project {projectName}!',
+  },
   PROJECT_CANCELLED: {
     name: 'Project cancelled',
     description: 'Project has been cancelled',
@@ -873,6 +896,10 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
     title: 'Stake',
+    isEmailEditable: false,
+    isWebEditable: false,
+    emailDefaultValue: false,
+    webDefaultValue: false,
     htmlTemplate: [
       {
         type: 'p',
@@ -888,7 +915,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'a',
-        content: '$poolName',
+        content: '$contractName',
         href: '/givfarm',
       },
       {
@@ -896,7 +923,7 @@ export const GivethNotificationTypes = {
         content: ' was successful.',
       },
     ],
-    content: 'Staking {amount} of {poolName} was successful.',
+    content: 'Staking {amount} of {contractName} was successful.',
   },
   UN_STAKE: {
     name: 'UnStake',
@@ -909,6 +936,10 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.STAKING,
+    isEmailEditable: false,
+    isWebEditable: false,
+    emailDefaultValue: false,
+    webDefaultValue: false,
     title: 'UnStake',
     htmlTemplate: [
       {
@@ -925,7 +956,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'a',
-        content: '$poolName',
+        content: '$contractName',
         href: '/givfarm',
       },
       {
@@ -933,32 +964,32 @@ export const GivethNotificationTypes = {
         content: ' was successful.',
       },
     ],
-    content: 'Unstaking {amount} of {poolname} was successful.',
+    content: 'Unstaking {amount} of {contractName} was successful.',
   },
-  GIV_BACKS_ARE_READY_TO_CLAIM: {
-    name: 'GIVbacks are ready to claim',
-    title: 'GIVbacks',
-    description: 'When GIVbacks are ready to be claimed after each round',
+  GIV_BACK_IS_READY_TO_CLAIM: {
+    name: 'GIVback is ready to claim',
+    title: 'GIVback',
+    description: 'When GIVback is ready to be claimed after each round',
     showOnSettingPage: true,
-    microService: MICRO_SERVICES.givethio,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
-    icon: 'IconUnstake',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_FARM_READY_TO_CLAIM,
-    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.PROJECT_REJECTED,
+    icon: 'IconGIVBack',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.GIV_BACK_IS_READY_TO_CLAIM,
+    emailNotifierService: null,
+    emailNotificationId: null,
     pushNotifierService: null,
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Your GIVbacks for round ',
+        content: 'Your GIVback ',
       },
       {
         type: 'b',
-        content: '$round',
+        content: '$amount',
       },
       {
         type: 'p',
-        content: ' are ready to claim! ',
+        content: ' GIV is ready to claim! ',
       },
       { type: 'br' },
       {
@@ -972,7 +1003,7 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'Your GIVbacks for round {round number} are ready to claim! \n{Click here} to take a shortcut.',
+      'Your GIVback {amount} GIV is ready to claim! \n[Click here] to take a shortcut.',
   },
   PROJECT_EDITED: {
     name: 'Project edited',
@@ -1379,8 +1410,8 @@ export const GivethNotificationTypes = {
 
   PROJECT_UPDATED_OWNER: {
     name: 'Project updated - owner',
-    title: 'Project updates',
-    description: 'Your project update',
+    title: 'Your project update',
+    description: 'You Posted an update on your project',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1483,8 +1514,8 @@ export const GivethNotificationTypes = {
   },
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
     name: 'Project updates',
-    title: 'Project updates',
-    description: 'Your liked project update',
+    title: 'Your liked project update',
+    description: 'When your liked project has an update',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1511,7 +1542,7 @@ export const GivethNotificationTypes = {
     name: 'You boosted',
     description: 'User boosted a project',
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_BOOSTED,
     emailNotifierService: null,
@@ -1548,7 +1579,7 @@ export const GivethNotificationTypes = {
     name: 'You changed the allocation',
     description: 'User changed boosted allocation',
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_CHANGED_BOOSTED_ALLOCATION,
     emailNotifierService: null,
@@ -1568,7 +1599,7 @@ export const GivethNotificationTypes = {
     name: 'Your project has been boosted.',
     description: 'Project has received a boosting',
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_HAS_BEEN_BOOSTED,
     emailNotifierService: null,
@@ -1601,7 +1632,7 @@ export const GivethNotificationTypes = {
     name: 'You locked {amount} & recieved {amount} GIVpower',
     description: 'User locked GIVpower',
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_LOCKED_GIVPOWER,
     emailNotifierService: null,
@@ -1634,10 +1665,10 @@ export const GivethNotificationTypes = {
     content: 'You locked {amount} & recieved {amount} GIVpower',
   },
   YOU_UNLOCKED_GIVPOWER: {
-    name: '{amount} unlocked.',
+    name: 'givPower unlocked',
     description: 'User unlocked GIVpower',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    microService: MICRO_SERVICES.givEconomyNotificationMicroService,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_UNLOCKED_GIVPOWER,
     emailNotifierService: null,
@@ -1661,7 +1692,7 @@ export const GivethNotificationTypes = {
     name: '{amount} re-locked automatically',
     description: 'User unlocked GIVpower',
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_POWER,
+    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
     schemaValidator:
       SCHEMA_VALIDATORS_NAMES.USER_GIVPOWER_RELOCKED_AUTOMATICALLY,
@@ -1712,7 +1743,7 @@ export const GivethNotificationTypes = {
     title: 'Your boost status',
     description:
       'Shows when you boost a project, change the allocation of GIVpower.',
-    showOnSettingPage: true,
+    showOnSettingPage: false,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
     emailNotifierService: null,
@@ -1756,8 +1787,9 @@ export const GivethNotificationTypes = {
   },
   PROJECT_STATUS_GROUP: {
     name: 'Project status',
-    title: 'Project status',
-    description: 'Your project status',
+    title: 'Your project status',
+    description:
+      'When your own project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     isEmailEditable: true,
     isWebEditable: false,
@@ -1809,7 +1841,7 @@ export const GivethNotificationTypes = {
     microService: MICRO_SERVICES.givethio,
     title: 'Stakes',
     description: 'Shows when you stake or unstake on the GIVfarm',
-    showOnSettingPage: true,
+    showOnSettingPage: false,
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null,
@@ -1853,8 +1885,9 @@ export const GivethNotificationTypes = {
   },
   LIKED_BY_YOU_PROJECT_GROUP: {
     name: 'Project status - Users Who Liked',
-    title: 'Project status',
-    description: 'Your liked project status',
+    title: 'Your liked project status',
+    description:
+      'When your liked Project has been listed, unlisted, cancelled, activated or deactivated',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
@@ -1872,6 +1905,28 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
+  },
+
+  RAW_HTML: {
+    name: 'Raw HTML Broadcast',
+    description: 'Raw HTML Broadcast',
+    microService: MICRO_SERVICES.givethio,
+    category: 'general',
+    icon: 'IconAdminNotif',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.RAW_HTML_BROADCAST,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Raw HTML Broadcast',
+    htmlTemplate: [
+      {
+        type: 'html',
+        content: '$html',
+      },
+    ],
+    Content: {
+      html: '',
+    },
   },
 };
 

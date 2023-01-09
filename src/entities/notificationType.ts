@@ -17,6 +17,7 @@ import { NotificationSetting } from './notificationSetting';
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
   ADMIN_MESSAGE: 'adminMessage',
+  RAW_HTML_BROADCAST: 'rawHtmlBroadcast',
   DRAFTED_PROJECT_SAVED: 'draftedProjectSavedValidator',
   DRAFTED_PROJECT_ACTIVATED: 'draftedProjectPublishedValidator',
   PROJECT_LISTED: 'projectListed',
@@ -33,6 +34,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_ACTIVATED: 'projectActivated',
   PROJECT_DEACTIVATED: 'projectDeactivated',
   PROJECT_CANCELLED: 'projectCancelled',
+  PROJECT_BOOSTED: 'projectBoosted',
   VERIFICATION_FORM_SENT: 'verificationFormSent',
   VERIFICATION_FORM_Reapply_Reminder: 'verificationFormReapplyReminder',
   VERIFICATION_FORM_REJECTED: 'verificationFormRejected',
@@ -59,6 +61,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   USER_UNLOCKED_GIVPOWER: 'givPowerUserUnlockedGivPower',
   USER_GIVPOWER_RELOCKED_AUTOMATICALLY:
     'givPowerUserGivPowerRelockedAutoMatically',
+  GIV_BACK_IS_READY_TO_CLAIM: 'givBackReadyToClaim',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
