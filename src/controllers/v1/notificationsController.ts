@@ -80,6 +80,7 @@ export class NotificationsController {
   ): Promise<SendNotificationResponse> {
     const { microService } = params;
     try {
+      logger.info('sendBulkNotification body', body)
       validateWithJoiSchema(body, sendBulkNotificationValidator);
       const trackIdsSet = new Set(
         body.notifications.map(notification => notification.trackId),
