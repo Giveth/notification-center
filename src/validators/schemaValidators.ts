@@ -34,7 +34,7 @@ export const sendNotificationValidator = Joi.object({
   sendDappNotification: Joi.boolean(),
   sendEmail: Joi.boolean(),
   sendSegment: Joi.boolean(),
-  email: Joi.string().allow(null),
+  email: Joi.string().allow(null).allow(''),
   creationTime: Joi.number(),
   userWalletAddress: Joi.string()
     .pattern(ethereumWalletAddressRegex)
