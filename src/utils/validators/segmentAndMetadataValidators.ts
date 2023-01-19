@@ -212,10 +212,6 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: donationTrackerSchema,
   },
-  projectUpdatedDonor: {
-    metadata: projectTitleProjectLinkSchema,
-    segment: projectRelatedTrackerSchema,
-  },
   projectUpdatedOwner: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
@@ -240,7 +236,11 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
-  projectUpdatedWhoLiked: {
+  projectUpdateAddedWhoSupported: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
+  projectUpdateAddedOwner: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },

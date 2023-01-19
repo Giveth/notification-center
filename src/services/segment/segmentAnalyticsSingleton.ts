@@ -23,8 +23,6 @@ export enum SegmentEvents {
   PROJECT_BADGE_UP_FOR_REVOKING = 'Project badge up for revoking',
   PROJECT_VERIFIED = 'Project verified',
   PROJECT_REJECTED = 'Project rejected',
-  GIVBACKS_ARE_READY_TO_CLAIM = 'We dont have event yet',
-  GIVBACK_IS_READY_TO_CLAIM = 'We dont have event yet',
   PROJECT_UNVERIFIED = 'Project unverified',
   PROJECT_UNVERIFIED_USERS_WHO_BOOSTED = 'Project unverified - Users Who Boosted',
   PROJECT_ACTIVATED = 'Project activated',
@@ -32,11 +30,7 @@ export enum SegmentEvents {
   PROJECT_CANCELLED = 'Project cancelled',
   MADE_DONATION = 'Made donation',
   DONATION_RECEIVED = 'Donation received',
-  PROJECT_UPDATED_DONOR = 'Project updated - donor',
-  PROJECT_UPDATED_OWNER = 'Project updated - owner',
-  PROJECT_CREATED = 'Project created',
-  UPDATED_PROFILE = 'Updated profile',
-  GET_DONATION_PRICE_FAILED = 'Get Donation Price Failed',
+  PROJECT_UPDATE_ADDED_OWNER = 'Project update added - owner',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
 }
 
