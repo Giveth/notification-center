@@ -14,6 +14,7 @@ export enum NOTIFICATION_CATEGORY {
 
 export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_UNLISTED_SUPPORTED='Project unlisted - Users who supported',
+  PROJECT_LISTED_SUPPORTED='Project listed - Users who supported',
   PROJECT_UNLISTED_OWNER='Project unlisted',
   PROJECT_LISTED_OWNER='Project listed',
   DRAFT_PUBLISHED_OWNER='Draft published',
@@ -24,6 +25,8 @@ export enum NOTIFICATION_TYPE_NAMES {
   INCOMPLETE_PROFILE='Incomplete profile',
   WELCOME='Welcome',
   ADMIN_MESSAGE='Admin message',
-  PROJECT_BOOSTED_OWNER='Project boosted'
+  PROJECT_BOOSTED_OWNER='Project boosted',
+  PROJECT_CANCELLED_OWNER='Project cancelled',
+  PROJECT_CANCELLED_SUPPORTED='Project cancelled - Users who supported',
 
 }

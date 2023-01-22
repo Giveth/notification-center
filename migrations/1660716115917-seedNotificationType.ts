@@ -218,6 +218,42 @@ export const GivethNotificationTypes = {
     ],
     content: 'Nice! Your {project name} project is listed.',
   },
+  PROJECT_LISTED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
+    description: 'Project has been listed!',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: 'Iconlisted',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_LISTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Project is listed',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'The ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' that you are supporting is visible now.',
+      },
+      {
+        type: 'br',
+      },
+      {
+        type: 'p',
+        content: '$reason',
+      },
+    ],
+    content:
+        'The {project name} that you are supporting is visible now',
+  },
   PROJECT_UNLISTED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
     description: 'Project has been unlisted!',
@@ -247,7 +283,7 @@ export const GivethNotificationTypes = {
     ],
     content: 'Your {project name} project is no longer visible.',
   },
-  PROJECT_UNLISTED_FOR_DONORS: {
+  PROJECT_UNLISTED_FOR_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
     description: 'Project has been unlisted!',
     microService: MICRO_SERVICES.givethio,
@@ -307,7 +343,7 @@ export const GivethNotificationTypes = {
     content: 'Someone boosted your project {projectName}!',
   },
   PROJECT_CANCELLED: {
-    name: 'Project cancelled',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_OWNER,
     description: 'Project has been cancelled',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -343,44 +379,8 @@ export const GivethNotificationTypes = {
     content:
       'The {project name} project has been cancelled by admin action.\n{reason}',
   },
-  PROJECT_CANCELLED_FOR_DONORS: {
-    name: 'Project cancelled - Donors',
-    description: 'Project has been cancelled',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconDeactivated',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CANCELLED,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is cancelled by admin',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' project that you donated before has been cancelled',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
-      },
-    ],
-    content:
-      'The {project name} project that you donated before has been cancelled.\n{reason}',
-  },
-  PROJECT_CANCELLED_FOR_USERS_WHO_LIKED: {
-    name: 'Project cancelled - Users Who Liked',
+  PROJECT_CANCELLED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
     description: 'Project has been cancelled',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -403,7 +403,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project that you liked has been cancelled.',
+        content: ' project that you are supporting has been cancelled.',
       },
       {
         type: 'br',
@@ -414,7 +414,7 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'The {project name} project that you liked has been cancelled.\n{reason}',
+      'The {project name} project that you are supporting has been cancelled.\n{reason}',
   },
 
   PROJECT_ACTIVATED: {

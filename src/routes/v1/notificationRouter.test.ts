@@ -488,9 +488,59 @@ function sendNotificationTestCases() {
     }
   });
 
+
+  it('should create *Project listed - Users who supported* notification,  success, segment is off', async () => {
+    const data = {
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Project listed - Users who supported* notification,  failed invalid metadata, segment is off', async () => {
+    try {
+      const data = {
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        metadata: {
+          projectLink,
+        },
+      };
+
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"projectTitle" is required');
+    }
+  });
+
   it('should create *Project cancelled* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'Project cancelled',
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_OWNER,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -512,7 +562,7 @@ function sendNotificationTestCases() {
   it('should create *Project cancelled* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'Project cancelled',
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_OWNER,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
@@ -536,10 +586,9 @@ function sendNotificationTestCases() {
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
-  it('should create *Project cancelled - Donors* notification,  success, segment is off', async () => {
+  it('should create *Project cancelled - Users who supported* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'Project cancelled - Donors',
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -558,59 +607,10 @@ function sendNotificationTestCases() {
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
   });
-  it('should create *Project cancelled - Donors* notification,  failed invalid metadata, segment is off', async () => {
+  it('should create *Project cancelled - Users who supported* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'Project cancelled - Donors',
-        sendEmail: false,
-        sendSegment: false,
-        userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {
-          projectLink,
-        },
-      };
-
-      await axios.post(sendNotificationUrl, data, {
-        headers: {
-          authorization: getGivethIoBasicAuth(),
-        },
-      });
-      // If request doesn't fail, it means this test failed
-      assert.isTrue(false);
-    } catch (e: any) {
-      assert.equal(
-        e.response.data.message,
-        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
-      );
-      assert.equal(e.response.data.description, '"projectTitle" is required');
-    }
-  });
-
-  it('should create *Project cancelled - Users Who Liked* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Project cancelled - Users Who Liked',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {
-        projectTitle,
-        projectLink,
-      },
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivethIoBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-  it('should create *Project cancelled - Users Who Liked* notification,  failed invalid metadata, segment is off', async () => {
-    try {
-      const data = {
-        eventName: 'Project cancelled - Users Who Liked',
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
