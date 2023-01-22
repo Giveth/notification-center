@@ -4,7 +4,7 @@ import {
   SCHEMA_VALIDATORS_NAMES,
 } from '../src/entities/notificationType';
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
-import { NOTIFICATION_CATEGORY } from '../src/types/general';
+import {NOTIFICATION_CATEGORY, NOTIFICATION_TYPE_NAMES} from '../src/types/general';
 import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationSetting';
 import { SegmentEvents } from '../src/services/segment/segmentAnalyticsSingleton';
 
@@ -12,7 +12,7 @@ import { SegmentEvents } from '../src/services/segment/segmentAnalyticsSingleton
 // icons https://gist.github.com/MohammadPCh/31e2b750dd9aa54edb21dcc6e7332efb
 export const GivethNotificationTypes = {
   EMAIL_NOTIFICATIONS: {
-    name: 'Email notifications',
+    name: NOTIFICATION_TYPE_NAMES.EMAIL_NOTIFICATION,
     description: 'Turn on/off all email notifications',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -26,7 +26,7 @@ export const GivethNotificationTypes = {
     isGlobal: true,
   },
   DAPP_NOTIFICATIONS: {
-    name: 'Dapp notifications',
+    name: NOTIFICATION_TYPE_NAMES.DAPP_NOTIFICATIONS,
     description: 'Turn on/off all Dapp notifications',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -41,7 +41,7 @@ export const GivethNotificationTypes = {
   },
   // SEGMENT
   INCOMPLETE_PROFILE: {
-    name: 'Incomplete profile',
+    name: NOTIFICATION_TYPE_NAMES.INCOMPLETE_PROFILE,
     description: 'Please complete your profile',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -60,7 +60,7 @@ export const GivethNotificationTypes = {
     ],
   },
   WELCOME: {
-    name: 'Welcome',
+    name: NOTIFICATION_TYPE_NAMES.WELCOME,
     description: "Welcome to Giveth! ❤️ So happy you're here.",
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -79,7 +79,7 @@ export const GivethNotificationTypes = {
     content: "Welcome to Giveth! ❤️ So happy you're here.",
   },
   COMPLETE_PROFILE: {
-    name: 'The profile has been completed',
+    name: NOTIFICATION_TYPE_NAMES.PROFILE_HAS_BEEN_COMPLETED,
     description: 'Thanks for completing your profile',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -98,7 +98,7 @@ export const GivethNotificationTypes = {
     content: 'Done! Your profile is complete 🙂',
   },
   ADMIN_MESSAGE: {
-    name: 'Admin message',
+    name: NOTIFICATION_TYPE_NAMES.ADMIN_MESSAGE,
     description: 'Admin message',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -131,7 +131,7 @@ export const GivethNotificationTypes = {
     },
   },
   DRAFTED_PROJECT_SAVED: {
-    name: 'The project saved as draft',
+    name: NOTIFICATION_TYPE_NAMES.DRAFT_PROJECT_HAS_BEEN_SAVED_OWNER,
     description: 'The project saved as draft',
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconFile',
@@ -160,7 +160,7 @@ export const GivethNotificationTypes = {
     ],
   },
   DRAFTED_PROJECT_ACTIVATED: {
-    name: 'Draft published',
+    name: NOTIFICATION_TYPE_NAMES.DRAFT_PUBLISHED_OWNER,
     title: 'Project published',
     description: 'When Project has been published',
     showOnSettingPage: true,
@@ -190,7 +190,7 @@ export const GivethNotificationTypes = {
     ],
   },
   PROJECT_LISTED: {
-    name: 'Project listed',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_OWNER,
     description: 'Project has been listed!',
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconListed',
@@ -219,7 +219,7 @@ export const GivethNotificationTypes = {
     content: 'Nice! Your {project name} project is listed.',
   },
   PROJECT_UNLISTED: {
-    name: 'Project unlisted',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
     description: 'Project has been unlisted!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -248,7 +248,7 @@ export const GivethNotificationTypes = {
     content: 'Your {project name} project is no longer visible.',
   },
   PROJECT_UNLISTED_FOR_DONORS: {
-    name: 'Project unlisted - Donors',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
     description: 'Project has been unlisted!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -270,7 +270,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' that you donated before is no longer visible.',
+        content: ' that you are supporting is no longer visible.',
       },
       {
         type: 'br',
@@ -281,47 +281,10 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'The {project name} that you donated before is no longer visible.\n{reason}',
-  },
-  PROJECT_UNLISTED_FOR_USERS_WHO_LIKED: {
-    name: 'Project unlisted - Users Who Liked',
-    description: 'Project has been unlisted!',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconUnlisted',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNLISTED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is unlisted',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' that you liked is no longer visible.',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
-      },
-    ],
-    content:
-      'The {project name} that you donated before is no longer visible.\n{reason}',
+      'The {project name} that you are supporting is no longer visible.\n{reason}',
   },
   PROJECT_BOOSTED: {
-    name: 'Project boosted',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_BOOSTED_OWNER,
     description: 'Project has been boosted',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,

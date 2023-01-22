@@ -12,6 +12,7 @@ import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 import { generateRandomString } from '../../utils/utils';
+import {NOTIFICATION_TYPE_NAMES} from "../../types/general";
 
 describe('/notifications POST test cases', sendNotificationTestCases);
 describe('/notificationsBulk POST test cases', sendBulkNotificationsTestCases);
@@ -392,7 +393,7 @@ function sendNotificationTestCases() {
 
   it('should create *Project unlisted* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'Project unlisted',
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -414,7 +415,7 @@ function sendNotificationTestCases() {
   it('should create *Project unlisted* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'Project unlisted',
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
@@ -438,10 +439,9 @@ function sendNotificationTestCases() {
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
-  it('should create *Project unlisted - Donors* notification,  success, segment is off', async () => {
+  it('should create *Project unlisted - Users who supported* notification,  success, segment is off', async () => {
     const data = {
-      eventName: 'Project unlisted - Donors',
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -460,59 +460,10 @@ function sendNotificationTestCases() {
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
   });
-  it('should create *Project unlisted - Donors* notification,  failed invalid metadata, segment is off', async () => {
+  it('should create *Project unlisted - Users who supported* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
-        eventName: 'Project unlisted - Donors',
-        sendEmail: false,
-        sendSegment: false,
-        userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {
-          projectLink,
-        },
-      };
-
-      await axios.post(sendNotificationUrl, data, {
-        headers: {
-          authorization: getGivethIoBasicAuth(),
-        },
-      });
-      // If request doesn't fail, it means this test failed
-      assert.isTrue(false);
-    } catch (e: any) {
-      assert.equal(
-        e.response.data.message,
-        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
-      );
-      assert.equal(e.response.data.description, '"projectTitle" is required');
-    }
-  });
-
-  it('should create *Project unlisted - Users Who Liked* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Project unlisted - Users Who Liked',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {
-        projectTitle,
-        projectLink,
-      },
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivethIoBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-  it('should create *Project unlisted - Users Who Liked* notification,  failed invalid metadata, segment is off', async () => {
-    try {
-      const data = {
-        eventName: 'Project unlisted - Users Who Liked',
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),

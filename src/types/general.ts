@@ -11,3 +11,19 @@ export enum NOTIFICATION_CATEGORY {
   GIV_ECONOMY = 'givEconomy',
   GIV_POWER = 'givPower',
 }
+
+export enum NOTIFICATION_TYPE_NAMES {
+  PROJECT_UNLISTED_SUPPORTED='Project unlisted - Users who supported',
+  PROJECT_UNLISTED_OWNER='Project unlisted',
+  PROJECT_LISTED_OWNER='Project listed',
+  DRAFT_PUBLISHED_OWNER='Draft published',
+  DRAFT_PROJECT_HAS_BEEN_SAVED_OWNER='The project saved as draft',
+  EMAIL_NOTIFICATION='Email notifications',
+  DAPP_NOTIFICATIONS='Dapp notifications',
+  PROFILE_HAS_BEEN_COMPLETED='The profile has been completed',
+  INCOMPLETE_PROFILE='Incomplete profile',
+  WELCOME='Welcome',
+  ADMIN_MESSAGE='Admin message',
+  PROJECT_BOOSTED_OWNER='Project boosted'
+
+}
