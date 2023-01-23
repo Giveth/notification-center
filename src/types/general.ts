@@ -28,5 +28,13 @@ export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_BOOSTED_OWNER='Project boosted',
   PROJECT_CANCELLED_OWNER='Project cancelled',
   PROJECT_CANCELLED_SUPPORTED='Project cancelled - Users who supported',
+  PROJECT_ACTIVATED_OWNER='Project activated',
+  PROJECT_ACTIVATED_SUPPORTED='Project activated - Users who supported',
+  PROJECT_DEACTIVATED_OWNER='Project deactivated',
+  PROJECT_DEACTIVATED_SUPPORTED='Project deactivated - Users who supported',
+  PROJECT_VERIFIED_OWNER='Project verified',
+  PROJECT_VERIFIED_SUPPORTED='Project verified - Users who supported',
+  PROJECT_UNVERIFIED_OWNER='Project unverified',
+  PROJECT_UNVERIFIED_SUPPORTED='Project unverified - Users who supported',
 
 }

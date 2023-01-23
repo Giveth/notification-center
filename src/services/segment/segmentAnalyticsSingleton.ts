@@ -24,7 +24,7 @@ export enum SegmentEvents {
   PROJECT_VERIFIED = 'Project verified',
   PROJECT_REJECTED = 'Project rejected',
   PROJECT_UNVERIFIED = 'Project unverified',
-  PROJECT_UNVERIFIED_USERS_WHO_BOOSTED = 'Project unverified - Users Who Boosted',
+  PROJECT_UNVERIFIED_USERS_WHO_SUPPORTED = 'Project unverified - Users who supported',
   PROJECT_ACTIVATED = 'Project activated',
   PROJECT_DEACTIVATED = 'Project deactivated',
   PROJECT_CANCELLED = 'Project cancelled',

@@ -180,7 +180,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
-  projectUnverifiedWhoBoosted: {
+  projectUnverifiedWhoSupported: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
