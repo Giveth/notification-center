@@ -4,7 +4,7 @@ import {
   SCHEMA_VALIDATORS_NAMES,
 } from '../src/entities/notificationType';
 import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
-import { NOTIFICATION_CATEGORY } from '../src/types/general';
+import {NOTIFICATION_CATEGORY, NOTIFICATION_TYPE_NAMES} from '../src/types/general';
 import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationSetting';
 import { SegmentEvents } from '../src/services/segment/segmentAnalyticsSingleton';
 
@@ -12,7 +12,7 @@ import { SegmentEvents } from '../src/services/segment/segmentAnalyticsSingleton
 // icons https://gist.github.com/MohammadPCh/31e2b750dd9aa54edb21dcc6e7332efb
 export const GivethNotificationTypes = {
   EMAIL_NOTIFICATIONS: {
-    name: 'Email notifications',
+    name: NOTIFICATION_TYPE_NAMES.EMAIL_NOTIFICATION,
     description: 'Turn on/off all email notifications',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -26,7 +26,7 @@ export const GivethNotificationTypes = {
     isGlobal: true,
   },
   DAPP_NOTIFICATIONS: {
-    name: 'Dapp notifications',
+    name: NOTIFICATION_TYPE_NAMES.DAPP_NOTIFICATIONS,
     description: 'Turn on/off all Dapp notifications',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -41,7 +41,7 @@ export const GivethNotificationTypes = {
   },
   // SEGMENT
   INCOMPLETE_PROFILE: {
-    name: 'Incomplete profile',
+    name: NOTIFICATION_TYPE_NAMES.INCOMPLETE_PROFILE,
     description: 'Please complete your profile',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -60,7 +60,7 @@ export const GivethNotificationTypes = {
     ],
   },
   WELCOME: {
-    name: 'Welcome',
+    name: NOTIFICATION_TYPE_NAMES.WELCOME,
     description: "Welcome to Giveth! ❤️ So happy you're here.",
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -79,7 +79,7 @@ export const GivethNotificationTypes = {
     content: "Welcome to Giveth! ❤️ So happy you're here.",
   },
   COMPLETE_PROFILE: {
-    name: 'The profile has been completed',
+    name: NOTIFICATION_TYPE_NAMES.PROFILE_HAS_BEEN_COMPLETED,
     description: 'Thanks for completing your profile',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -98,7 +98,7 @@ export const GivethNotificationTypes = {
     content: 'Done! Your profile is complete 🙂',
   },
   ADMIN_MESSAGE: {
-    name: 'Admin message',
+    name: NOTIFICATION_TYPE_NAMES.ADMIN_MESSAGE,
     description: 'Admin message',
     microService: MICRO_SERVICES.givethio,
     category: 'general',
@@ -131,7 +131,7 @@ export const GivethNotificationTypes = {
     },
   },
   DRAFTED_PROJECT_SAVED: {
-    name: 'The project saved as draft',
+    name: NOTIFICATION_TYPE_NAMES.DRAFT_PROJECT_HAS_BEEN_SAVED_OWNER,
     description: 'The project saved as draft',
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconFile',
@@ -160,7 +160,7 @@ export const GivethNotificationTypes = {
     ],
   },
   DRAFTED_PROJECT_ACTIVATED: {
-    name: 'Draft published',
+    name: NOTIFICATION_TYPE_NAMES.DRAFT_PUBLISHED_OWNER,
     title: 'Project published',
     description: 'When Project has been published',
     showOnSettingPage: true,
@@ -190,7 +190,7 @@ export const GivethNotificationTypes = {
     ],
   },
   PROJECT_LISTED: {
-    name: 'Project listed',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_OWNER,
     description: 'Project has been listed!',
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconListed',
@@ -218,8 +218,44 @@ export const GivethNotificationTypes = {
     ],
     content: 'Nice! Your {project name} project is listed.',
   },
+  PROJECT_LISTED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
+    description: 'Project has been listed!',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: 'Iconlisted',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_LISTED,
+    emailNotifierService: null,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    title: 'Project is listed',
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'The ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+      {
+        type: 'p',
+        content: ' that you are supporting is visible now.',
+      },
+      {
+        type: 'br',
+      },
+      {
+        type: 'p',
+        content: '$reason',
+      },
+    ],
+    content:
+        'The {project name} that you are supporting is visible now',
+  },
   PROJECT_UNLISTED: {
-    name: 'Project unlisted',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
     description: 'Project has been unlisted!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -247,8 +283,8 @@ export const GivethNotificationTypes = {
     ],
     content: 'Your {project name} project is no longer visible.',
   },
-  PROJECT_UNLISTED_FOR_DONORS: {
-    name: 'Project unlisted - Donors',
+  PROJECT_UNLISTED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
     description: 'Project has been unlisted!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -270,7 +306,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' that you donated before is no longer visible.',
+        content: ' that you are supporting is no longer visible.',
       },
       {
         type: 'br',
@@ -281,47 +317,10 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'The {project name} that you donated before is no longer visible.\n{reason}',
-  },
-  PROJECT_UNLISTED_FOR_USERS_WHO_LIKED: {
-    name: 'Project unlisted - Users Who Liked',
-    description: 'Project has been unlisted!',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconUnlisted',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNLISTED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is unlisted',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' that you liked is no longer visible.',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
-      },
-    ],
-    content:
-      'The {project name} that you donated before is no longer visible.\n{reason}',
+      'The {project name} that you are supporting is no longer visible.\n{reason}',
   },
   PROJECT_BOOSTED: {
-    name: 'Project boosted',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_BOOSTED_OWNER,
     description: 'Project has been boosted',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -344,7 +343,7 @@ export const GivethNotificationTypes = {
     content: 'Someone boosted your project {projectName}!',
   },
   PROJECT_CANCELLED: {
-    name: 'Project cancelled',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_OWNER,
     description: 'Project has been cancelled',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -380,13 +379,14 @@ export const GivethNotificationTypes = {
     content:
       'The {project name} project has been cancelled by admin action.\n{reason}',
   },
-  PROJECT_CANCELLED_FOR_DONORS: {
-    name: 'Project cancelled - Donors',
+  PROJECT_CANCELLED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
     description: 'Project has been cancelled',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconDeactivated',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CANCELLED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_GROUP,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -403,7 +403,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project that you donated before has been cancelled',
+        content: ' project that you are supporting has been cancelled.',
       },
       {
         type: 'br',
@@ -414,48 +414,11 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'The {project name} project that you donated before has been cancelled.\n{reason}',
-  },
-  PROJECT_CANCELLED_FOR_USERS_WHO_LIKED: {
-    name: 'Project cancelled - Users Who Liked',
-    description: 'Project has been cancelled',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconDeactivated',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_CANCELLED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is cancelled by admin',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' project that you liked has been cancelled.',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
-      },
-    ],
-    content:
-      'The {project name} project that you liked has been cancelled.\n{reason}',
+      'The {project name} project that you are supporting has been cancelled.\n{reason}',
   },
 
   PROJECT_ACTIVATED: {
-    name: 'Project activated',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_ACTIVATED_OWNER,
     description: 'Project has been activated!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -483,14 +446,14 @@ export const GivethNotificationTypes = {
     ],
     content: 'The {project name} project is active now.',
   },
-
-  PROJECT_ACTIVATED_FOR_DONORS: {
-    name: 'Project activated - Donors',
+  PROJECT_ACTIVATED_FOR_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_ACTIVATED_SUPPORTED,
     description: 'Project has been activated!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: 'IconActivated',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_ACTIVATED,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_GROUP,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -507,44 +470,14 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project that you donated before is active now.',
+        content: '  project that you are supporting is active now.',
       },
     ],
-    content:
-      'The {project name} project that you donated before is active now.',
-  },
-  PROJECT_ACTIVATED_FOR_USERS_WHO_LIKED: {
-    name: 'Project activated - Users Who Liked',
-    description: 'Project has been activated!',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconActivated',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_ACTIVATED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is activated',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: '  project that you liked is active now.',
-      },
-    ],
-    content: 'The {project name} project that you liked is active now.',
+    content: 'The {project name} project that you are supporting is active now.',
   },
 
   PROJECT_DEACTIVATED: {
-    name: 'Project deactivated',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_DEACTIVATED_OWNER,
     description: 'Project has been deactivated',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -572,8 +505,8 @@ export const GivethNotificationTypes = {
     ],
     content: 'The {project name} project is de-actived.',
   },
-  PROJECT_DEACTIVATED_DONORS: {
-    name: 'Project deactivated - Donors',
+  PROJECT_DEACTIVATED_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_DEACTIVATED_SUPPORTED,
     description: 'Project has been deactivated',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -595,7 +528,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project that you donated before is de-actived.',
+        content: ' project that you are supporting is de-actived.',
       },
       {
         type: 'br',
@@ -606,47 +539,10 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      'The {project name} project that you donated before is de-actived.\n{reason}',
-  },
-  PROJECT_DEACTIVATED_USERS_WHO_LIKED: {
-    name: 'Project deactivated - Users Who Liked',
-    description: 'Project has been deactivated',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconDeactivated',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_DEACTIVATED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project is deactivated',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' project that you liked is de-actived',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
-      },
-    ],
-    content:
-      'The {project name} project that you liked is de-actived.\n{reason}',
+      'The {project name} project that you are supporting is de-actived.\n{reason}',
   },
   PROJECT_VERIFIED: {
-    name: 'Project verified',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_OWNER,
     description: 'Project has been verified!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -673,8 +569,8 @@ export const GivethNotificationTypes = {
     ],
     content: 'Well done! {project name} project is officially verified! 🎉',
   },
-  PROJECT_VERIFIED_DONORS: {
-    name: 'Project verified - Donors',
+  PROJECT_VERIFIED_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_SUPPORTED,
     description: 'Project has been verified!',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -696,40 +592,11 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' that you donated before has received verified badge!',
+        content: ' that you are supporting has received verified badge!',
       },
     ],
     content:
-      'The {project name} that you donated before has received verified badge!',
-  },
-  PROJECT_VERIFIED_USERS_WHO_LIKED: {
-    name: 'Project verified - Users Who Liked',
-    description: 'Project has been verified!',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: 'IconVerifiedBadge',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_VERIFIED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project verified',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'The ',
-      },
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' that you liked has received verified badge!',
-      },
-    ],
-    content: 'The {project name} that you liked has received verified badge!',
+      'The {project name} that you are supporting has received verified badge!',
   },
   VERIFICATION_FORM_SENT: {
     name: 'Form sent (Under review)',
@@ -1179,7 +1046,7 @@ export const GivethNotificationTypes = {
     content: 'You project {project name} would lose verification badge soon',
   },
   PROJECT_UNVERIFIED: {
-    name: 'Project unverified',
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_OWNER,
     description: 'Project has been unverified',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1206,14 +1073,14 @@ export const GivethNotificationTypes = {
     ],
     content: 'You project {project name} is not verified anymore',
   },
-  PROJECT_UNVERIFIED_WHO_BOOSTED: {
-    name: 'Project unverified - Users Who Boosted',
+  PROJECT_UNVERIFIED_SUPPORTERS: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_SUPPORTED,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED_WHO_BOOSTED,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UNVERIFIED_WHO_SUPPORTED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.PROJECT_UNVERIFIED_USERS_WHO_BOOSTED,
+    emailNotificationId: SegmentEvents.PROJECT_UNVERIFIED_USERS_WHO_SUPPORTED,
     pushNotifierService: null,
     title: 'Project unverified - Users Who Boosted',
     description: 'Project unverified - Users Who Boosted',
@@ -1358,58 +1225,8 @@ export const GivethNotificationTypes = {
     ],
     content: 'Your project update was successful.',
   },
-  NEW_PROJECT_UPDATE_DONORS: {
-    name: 'Project update - Donors',
-    description: 'Project update - Donors',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.DISCUSSION,
-    icon: 'IconFile',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_DONOR,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project update - Donors',
-    htmlTemplate: [
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' that you donated before posted an update.',
-      },
-    ],
-    content: '{Project name} that you donated before posted an update.',
-  },
-  NEW_PROJECT_UPDATE_USERS_WHO_LIKED: {
-    name: 'Project update - Users Who Liked',
-    description: 'Project update - Users Who Liked',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.DISCUSSION,
-    icon: 'IconFile',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_WHO_LIKED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    title: 'Project update - Users Who Liked',
-    htmlTemplate: [
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: 'that you liked before posted an update.',
-      },
-    ],
-    content: '{Project name} that you liked before posted an update.',
-  },
-
-  PROJECT_UPDATED_OWNER: {
-    name: 'Project updated - owner',
+  PROJECT_UPDATE_ADDED_OWNER: {
+    name: 'Project update added - owner',
     title: 'Your project update',
     description: 'You Posted an update on your project',
     showOnSettingPage: true,
@@ -1418,7 +1235,7 @@ export const GivethNotificationTypes = {
     icon: '',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.PROJECT_UPDATED_OWNER,
+    emailNotificationId: SegmentEvents.PROJECT_UPDATE_ADDED_OWNER,
     pushNotifierService: null,
     htmlTemplate: [
       {
@@ -1427,31 +1244,6 @@ export const GivethNotificationTypes = {
       },
     ],
     content: 'Your project update was successful.', // Missing copy
-  },
-  PROJECT_UPDATED_DONOR: {
-    name: 'Project updated - donor',
-    description:
-      'Send notification to donors that the project has added an updated',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: '',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_EDITED,
-    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: SegmentEvents.PROJECT_UPDATED_DONOR,
-    pushNotifierService: null,
-    title: 'Project posted an update',
-    htmlTemplate: [
-      {
-        type: 'a',
-        content: '$projectTitle',
-        href: '$projectLink',
-      },
-      {
-        type: 'p',
-        content: ' that you donated before posted an update.',
-      },
-    ],
-    content: '{Project name} that you donated before posted an update.',
   },
 
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
@@ -1512,18 +1304,18 @@ export const GivethNotificationTypes = {
     ],
     content: 'Nice! Your project {project name} received a like',
   },
-  NEW_PROJECT_UPDATE_FOR_USERS_WHO_LIKED: {
-    name: 'Project updates',
-    title: 'Your liked project update',
-    description: 'When your liked project has an update',
+  NEW_PROJECT_UPDATE_FOR_USERS_WHO_SUPPORTED: {
+    name: 'Project update added - Users who supported',
+    title: 'Supported project updated',
+    description: 'When your supported project has an update',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_WHO_LIKED,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_UPDATED_ADDED_WHO_SUPPORTS,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_GROUP,
     emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
-    emailNotificationId: 'Project updated - Users who liked',
+    emailNotificationId: 'Project update added - Users who supported',
     pushNotifierService: null,
     htmlTemplate: [
       {
@@ -1533,10 +1325,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: 'that you liked before posted an update.',
+        content: 'that you are supporting posted an update.',
       },
     ],
-    content: '{Project name} that you liked before posted an update.',
+    content: '{Project name} that you are supporting posted an update.',
   },
   YOU_BOOSTED: {
     name: 'You boosted',
@@ -1904,7 +1696,7 @@ export const GivethNotificationTypes = {
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.LIKED_BY_YOU_PROJECT_GROUP,
+    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_GROUP,
   },
 
   RAW_HTML: {

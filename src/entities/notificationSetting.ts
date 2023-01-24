@@ -16,7 +16,7 @@ export const NOTIFICATION_CATEGORY_GROUPS = {
   GIVPOWER_ALLOCATIONS: 'givPowerAllocations',
   PROJECT_BOOSTING_STATUS: 'projectBoostStatus',
   SELF_BOOSTING_STATUS: 'yourBoostStatus',
-  LIKED_BY_YOU_PROJECT_GROUP: 'likedByYouProjects',
+  SUPPORTED_BY_YOU_PROJECT_GROUP: 'supportedByYouProjects',
   PROJECT_STATUS: 'projectStatus',
   DONATIONS: 'donations',
   STAKING: 'stakes',
