@@ -162,7 +162,7 @@ export const GivethNotificationTypes = {
   DRAFTED_PROJECT_ACTIVATED: {
     name: NOTIFICATION_TYPE_NAMES.DRAFT_PUBLISHED_OWNER,
     title: 'Project published',
-    description: 'When Project has been published',
+    description: 'Notify me when my project has been published.',
     showOnSettingPage: true,
     isEmailEditable: true,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1228,7 +1228,7 @@ export const GivethNotificationTypes = {
   PROJECT_UPDATE_ADDED_OWNER: {
     name: 'Project update added - owner',
     title: 'Your project update',
-    description: 'You Posted an update on your project',
+    description: 'Notify me when my project has been edited, or an update has been published.',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1278,7 +1278,7 @@ export const GivethNotificationTypes = {
   PROJECT_RECEIVED_LIKE: {
     name: 'project liked',
     title: 'Project likes',
-    description: 'When someone liked your project',
+    description: 'Notify me when someone likes my project.',
     showOnSettingPage: true,
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1566,11 +1566,11 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     isGroupParent: true,
-    content: 'Show when your project receives a boost',
+    content: 'Notify me when a new address boosts my project with GIVpower.',
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Show when your project receives a boost',
+        content: 'Notify me when a new address boosts my project with GIVpower.',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
@@ -1581,7 +1581,7 @@ export const GivethNotificationTypes = {
     name: 'Project status',
     title: 'Your project status',
     description:
-      'When your own project has been listed, unlisted, cancelled, activated or deactivated',
+      'Notify me when a project I own has been listed, unlisted, cancelled, activated or deactivated.',
     showOnSettingPage: true,
     isEmailEditable: true,
     isWebEditable: false,
@@ -1606,7 +1606,7 @@ export const GivethNotificationTypes = {
     name: 'Donations',
     title: 'Donations',
     description:
-      'When someone donates to your project, when you donate to a project, donation success and failure.',
+      'Notify me when my project receives a donation.',
     showOnSettingPage: true,
     isEmailEditable: true,
     microService: MICRO_SERVICES.givethio,
@@ -1616,12 +1616,12 @@ export const GivethNotificationTypes = {
     pushNotifierService: null,
     isGroupParent: true,
     content:
-      'When someone donates to your project, when you donate to a project, donation success and failure.',
+      'Notify me when my project receives a donation.',
     htmlTemplate: [
       {
         type: 'p',
         content:
-          'When someone donates to your project, when you donate to a project, donation success and failure.',
+          'Notify me when my project receives a donation.',
       },
     ],
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
