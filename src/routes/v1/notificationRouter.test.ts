@@ -12,7 +12,7 @@ import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 import { generateRandomString } from '../../utils/utils';
-import {NOTIFICATION_TYPE_NAMES} from "../../types/general";
+import { NOTIFICATION_TYPE_NAMES } from '../../types/general';
 
 describe('/notifications POST test cases', sendNotificationTestCases);
 describe('/notificationsBulk POST test cases', sendBulkNotificationsTestCases);
@@ -487,7 +487,6 @@ function sendNotificationTestCases() {
       assert.equal(e.response.data.description, '"projectTitle" is required');
     }
   });
-
 
   it('should create *Project listed - Users who supported* notification,  success, segment is off', async () => {
     const data = {
@@ -1081,97 +1080,6 @@ function sendNotificationTestCases() {
     }
   });
 
-  it('should create *Claim* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Claim',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {},
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivethIoBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-
-  it('should create *Rewards harvested* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Rewards harvested',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {},
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivethIoBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-
-  it('should create *Stake* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'Stake',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {
-        contractName: 'GIV farm',
-        amount: '10',
-        network: 100,
-        transactionHash: generateRandomTxHash(),
-      },
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivEconomyBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-  it('should create *Stake* notification,  failed invalid metadata, segment is off', async () => {
-    try {
-      const data = {
-        eventName: 'Stake',
-        sendEmail: false,
-        sendSegment: false,
-        userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {
-          contractName: 'GIV farm',
-          network: 100,
-          transactionHash: generateRandomTxHash(),
-        },
-      };
-
-      await axios.post(sendNotificationUrl, data, {
-        headers: {
-          authorization: getGivEconomyBasicAuth(),
-        },
-      });
-      // If request doesn't fail, it means this test failed
-      assert.isTrue(false);
-    } catch (e: any) {
-      assert.equal(
-        e.response.data.message,
-        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
-      );
-      assert.equal(e.response.data.description, '"amount" is required');
-    }
-  });
-
   it('should create *Unlock* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'givPower unlocked',
@@ -1208,59 +1116,6 @@ function sendNotificationTestCases() {
           contractName: 'GIVpower',
           transactionHash: generateRandomTxHash(),
           network: 100,
-        },
-      };
-
-      await axios.post(sendNotificationUrl, data, {
-        headers: {
-          authorization: getGivEconomyBasicAuth(),
-        },
-      });
-      // If request doesn't fail, it means this test failed
-      assert.isTrue(false);
-    } catch (e: any) {
-      assert.equal(
-        e.response.data.message,
-        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
-      );
-      assert.equal(e.response.data.description, '"amount" is required');
-    }
-  });
-
-  it('should create *UnStake* notification,  success, segment is off', async () => {
-    const data = {
-      eventName: 'UnStake',
-      sendEmail: false,
-      sendSegment: false,
-      userWalletAddress: generateRandomEthereumAddress(),
-      metadata: {
-        contractName: 'GIV farm',
-        amount: '10',
-        network: 100,
-        transactionHash: generateRandomTxHash(),
-      },
-    };
-
-    const result = await axios.post(sendNotificationUrl, data, {
-      headers: {
-        authorization: getGivEconomyBasicAuth(),
-      },
-    });
-    assert.equal(result.status, 200);
-    assert.isOk(result.data);
-    assert.isTrue(result.data.success);
-  });
-  it('should create *UnStake* notification,  failed invalid metadata, segment is off', async () => {
-    try {
-      const data = {
-        eventName: 'UnStake',
-        sendEmail: false,
-        sendSegment: false,
-        userWalletAddress: generateRandomEthereumAddress(),
-        metadata: {
-          contractName: 'GIV farm',
-          network: 100,
-          transactionHash: generateRandomTxHash(),
         },
       };
 

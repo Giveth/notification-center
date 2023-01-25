@@ -16,10 +16,13 @@ export const NOTIFICATION_CATEGORY_GROUPS = {
   GIVPOWER_ALLOCATIONS: 'givPowerAllocations',
   PROJECT_BOOSTING_STATUS: 'projectBoostStatus',
   SELF_BOOSTING_STATUS: 'yourBoostStatus',
-  SUPPORTED_BY_YOU_PROJECT_GROUP: 'supportedByYouProjects',
+  SUPPORTED_BY_YOU_PROJECT_STATUS_CHANGE_GROUP:
+    'supportedByYouProjectsStatusChange',
+  SUPPORTED_BY_YOU_PROJECT_HAS_NEW_UPDATE_GROUP:
+    'supportedByYouProjectsHasNewUpdate',
   PROJECT_STATUS: 'projectStatus',
-  DONATIONS: 'donations',
-  STAKING: 'stakes',
+  DONATIONS_MADE: 'donationsMade',
+  DONATIONS_RECEIVED: 'donationsReceived',
   REWARDS: 'rewards',
   GIVBACKS: 'givBacks',
 };
