@@ -1550,31 +1550,6 @@ export const GivethNotificationTypes = {
     categoryGroup:
       NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_STATUS_CHANGE_GROUP,
   },
-  SUPPORT_BY_YOU_PROJECT_HAS_AN_UPDATE_GROUP: {
-    name: 'Project update - Users Who Supported',
-    title: 'Supported project updated',
-    description:
-      'Notify me when a project I liked, boosted or donated to has an update',
-    showOnSettingPage: true,
-    microService: MICRO_SERVICES.givethio,
-    schemaValidator: null,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    isGroupParent: true,
-    content: 'Supported projects status',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'Supported projects status',
-      },
-    ],
-    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
-    icon: '',
-    categoryGroup:
-      NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_HAS_NEW_UPDATE_GROUP,
-  },
-
   RAW_HTML: {
     name: 'Raw HTML Broadcast',
     description: 'Raw HTML Broadcast',
