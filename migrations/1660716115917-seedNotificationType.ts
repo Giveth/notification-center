@@ -207,7 +207,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Nice! Your ',
+        content: 'Congrats! ',
       },
       {
         type: 'a',
@@ -216,10 +216,11 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project is listed.',
+        content: ' is now listed on the Giveth projects page.',
       },
     ],
-    content: 'Nice! Your {project name} project is listed.',
+    content:
+      'Congrats! {project name} is now listed on the Giveth projects page',
   },
   PROJECT_LISTED_FOR_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
@@ -234,27 +235,18 @@ export const GivethNotificationTypes = {
     title: 'Project is listed',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' that you are supporting is visible now.',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
+        content:
+          ', which you supported, is now listed on the Giveth projects page.',
       },
     ],
-    content: 'The {project name} that you are supporting is visible now',
+    content:
+      '{project name}, which you supported, is now listed on the Giveth projects page',
   },
   PROJECT_UNLISTED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
@@ -270,17 +262,23 @@ export const GivethNotificationTypes = {
     title: 'Project is unlisted',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'Your ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' project is no longer visible.',
+        content: ' did not meet our ',
+      },
+      {
+        type: 'a',
+        content: 'guidelines for listed projects',
+        href: 'https://docs.giveth.io/dapps/listedUnlisted/#listed-projects',
+      },
+      {
+        type: 'p',
+        content:
+          '{project name} did not meet our guidelines for listed projects and has been hidden from the projects page. You can still share your project directly via the project URL.',
       },
     ],
     content: 'Your {project name} project is no longer visible.',
@@ -298,24 +296,22 @@ export const GivethNotificationTypes = {
     title: 'Project is unlisted',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' that you are supporting is no longer visible.',
+        content: ', which you supported, did not meet our ',
       },
       {
-        type: 'br',
+        type: 'a',
+        content: 'guidelines for listed projects',
+        href: 'https://docs.giveth.io/dapps/listedUnlisted/#listed-projects',
       },
       {
         type: 'p',
-        content: '$reason',
+        content: ' and has been hidden from the projects page.',
       },
     ],
     content:
@@ -358,28 +354,27 @@ export const GivethNotificationTypes = {
     title: 'Project is cancelled by admin',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' project has been cancelled by admin action.',
+        content:
+          ' has been canceled by an admin because it failed to adhere to our ',
       },
       {
-        type: 'br',
+        type: 'a',
+        content: 'terms of use',
+        href: 'https://giveth.io/tos',
       },
       {
         type: 'p',
-        content: '$reason',
+        content: '.',
       },
     ],
     content:
-      'The {project name} project has been cancelled by admin action.\n{reason}',
+      '{project name} has been canceled by an admin because it failed to adhere to our terms of use',
   },
   PROJECT_CANCELLED_FOR_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
@@ -396,24 +391,23 @@ export const GivethNotificationTypes = {
     title: 'Project is cancelled by admin',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' project that you are supporting has been cancelled.',
+        content:
+          ', which you supported, has been canceled by an admin because it failed to adhere to our ',
       },
       {
-        type: 'br',
+        type: 'a',
+        content: 'terms of use',
+        href: 'https://giveth.io/tos',
       },
       {
         type: 'p',
-        content: '$reason',
+        content: '.',
       },
     ],
     content:
@@ -464,21 +458,18 @@ export const GivethNotificationTypes = {
     title: 'Project is activated',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: '  project that you are supporting is active now.',
+        content:
+          ' , which you supported, has been reactivated by the project owner.',
       },
     ],
     content:
-      'The {project name} project that you are supporting is active now.',
+      '{project name}, which you supported, has been reactivated by the project owner',
   },
 
   PROJECT_DEACTIVATED: {
@@ -496,7 +487,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'The ',
+        content: 'You have deactivated your project ',
       },
       {
         type: 'a',
@@ -505,10 +496,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project is de-actived.',
+        content: '.',
       },
     ],
-    content: 'The {project name} project is de-actived.',
+    content: 'You have deactivated your project {project name}.',
   },
   PROJECT_DEACTIVATED_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_DEACTIVATED_SUPPORTED,
@@ -523,28 +514,18 @@ export const GivethNotificationTypes = {
     title: 'Project is deactivated',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' project that you are supporting is de-actived.',
-      },
-      {
-        type: 'br',
-      },
-      {
-        type: 'p',
-        content: '$reason',
+        content:
+          ', which you supported, has been deactivated by the project owner.',
       },
     ],
     content:
-      'The {project name} project that you are supporting is de-actived.\n{reason}',
+      '{project name}, which you supported, has been deactivated by the project owner.',
   },
   PROJECT_VERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_OWNER,
@@ -560,7 +541,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Well done! ',
+        content: 'Congrats! ',
       },
       {
         type: 'a',
@@ -569,10 +550,30 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' project is officially verified! 🎉',
+        content: ' is now verified. Your community can now take advantage of ',
+      },
+      {
+        type: 'a',
+        content: 'GIVbacks',
+        href: 'https://docs.giveth.io/giveconomy/givbacks',
+      },
+      {
+        type: 'p',
+        content: ' and ',
+      },
+      {
+        type: 'a',
+        content: 'GIVpower',
+        href: 'https://docs.giveth.io/giveconomy/givpower',
+      },
+
+      {
+        type: 'p',
+        content: '.',
       },
     ],
-    content: 'Well done! {project name} project is officially verified! 🎉',
+    content:
+      'Congrats! {project name} is now verified. Your community can now take advantage of GIVbacks and GIVpower.',
   },
   PROJECT_VERIFIED_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_SUPPORTED,
@@ -588,7 +589,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'The ',
+        content: 'Amazing! ',
       },
       {
         type: 'a',
@@ -597,7 +598,26 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' that you are supporting has received verified badge!',
+        content:
+          'which you supported, is now verified. You can now donate and receive ',
+      },
+      {
+        type: 'a',
+        content: 'GIVbacks',
+        href: 'https://docs.giveth.io/giveconomy/givbacks',
+      },
+      {
+        type: 'p',
+        content: ' and or boost it with ',
+      },
+      {
+        type: 'a',
+        content: 'GIVpower',
+        href: 'https://docs.giveth.io/giveconomy/givpower',
+      },
+      {
+        type: 'p',
+        content: '.',
       },
     ],
     content:
@@ -645,27 +665,27 @@ export const GivethNotificationTypes = {
     title: 'Form rejected',
     htmlTemplate: [
       {
-        type: 'p',
-        content: "We can't verify the ",
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: '.',
+        content:
+          'has not been approved for verification. Learn more about our verification requirements ',
       },
       {
-        type: 'br',
+        type: 'a',
+        content: 'here',
+        href: 'https://docs.giveth.io/dapps/projectVerification',
       },
       {
         type: 'p',
-        content: '$reason',
+        content: '.',
       },
     ],
-    content: "We can't verify the {project name}. {reason}.\n{instruction}",
+    content:
+      '{project name} has not been approved for verification. Learn more about our verification requirements here.',
   },
   REAPPLY_VERIFICATION_FORM_REMINDER: {
     name: 'Re-apply for verification reminder',
@@ -788,20 +808,27 @@ export const GivethNotificationTypes = {
     title: 'Project verification revoked',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'Your Project ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' is not verified anymore',
+        content:
+          ' has lost its verification status. Learn more about our verification requirements ',
+      },
+      {
+        type: 'a',
+        content: 'here',
+        href: 'https://docs.giveth.io/dapps/projectVerification',
+      },
+      {
+        type: 'p',
+        content: '.',
       },
     ],
-    content: 'You project {project name} is not verified anymore',
+    content:
+      '{project name} has lost its verification status. Learn more about our verification requirements here.',
   },
   PROJECT_BADGE_REVOKE_REMINDER: {
     name: 'Project badge revoke reminder',
@@ -933,20 +960,27 @@ export const GivethNotificationTypes = {
     title: 'Project verification removed',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'Your Project ',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
       {
         type: 'p',
-        content: ' is not verified anymore',
+        content:
+          ' has lost its verification status. Learn more about our verification requirements ',
+      },
+      {
+        type: 'a',
+        content: 'here',
+        href: 'https://docs.giveth.io/dapps/projectVerification',
+      },
+      {
+        type: 'p',
+        content: '.',
       },
     ],
-    content: 'You project {project name} is not verified anymore',
+    content:
+      '{project name} has lost its verification status. Learn more about our verification requirements here.',
   },
   PROJECT_UNVERIFIED_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_SUPPORTED,
@@ -961,21 +995,29 @@ export const GivethNotificationTypes = {
     description: 'Project unverified - Users Who Boosted',
     htmlTemplate: [
       {
-        type: 'p',
-        content: 'The project that you boosted before',
-      },
-      {
         type: 'a',
         content: '$projectTitle',
         href: '$projectLink',
       },
+
       {
         type: 'p',
-        content: ' is not verified anymore',
+        content:
+          ', which you supported, has lost its verification status. Learn more about our verification requirements',
+      },
+      {
+        type: 'a',
+        content: 'here',
+        href: 'https://docs.giveth.io/dapps/projectVerification',
+      },
+
+      {
+        type: 'p',
+        content: '.',
       },
     ],
     content:
-      'The project that you boosted before {project name} is not verified anymore',
+      '{project name}, which you supported, has lost its verification status. Learn more about our verification requirements here.',
   },
   MADE_DONATION: {
     name: 'Made donation',
@@ -1202,10 +1244,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: 'that you are supporting posted an update.',
+        content: ', which you supported, has a new update!',
       },
     ],
-    content: '{Project name} that you are supporting posted an update.',
+    content: '{Project name} , which you supported, has a new update!',
   },
   YOU_BOOSTED: {
     name: 'You boosted',
