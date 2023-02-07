@@ -1339,45 +1339,9 @@ export const GivethNotificationTypes = {
     ],
     content: 'Your project {project name} has been boosted by {user name}',
   },
-  YOU_LOCKED_GIVPOWER: {
-    name: 'You locked {amount} & recieved {amount} GIVpower',
-    description: 'User locked GIVpower',
-    microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
-    icon: '',
-    schemaValidator: SCHEMA_VALIDATORS_NAMES.USER_LOCKED_GIVPOWER,
-    emailNotifierService: null,
-    emailNotificationId: null,
-    pushNotifierService: null,
-    categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
-    title: 'You locked {amount} & recieved {amount} GIVpower',
-    htmlTemplate: [
-      {
-        type: 'p',
-        content: 'You locked ',
-      },
-      {
-        type: 'p',
-        content: '$amount',
-      },
-      {
-        type: 'p',
-        content: ' & recieved ',
-      },
-      {
-        type: 'p',
-        content: '$amount',
-      },
-      {
-        type: 'p',
-        content: ' GIVpower',
-      },
-    ],
-    content: 'You locked {amount} & recieved {amount} GIVpower',
-  },
   YOU_UNLOCKED_GIVPOWER: {
     name: 'givPower unlocked',
-    description: 'User unlocked GIVpower',
+    description: 'GIVpower unlocked automatically',
     microService: MICRO_SERVICES.givEconomyNotificationMicroService,
     category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     icon: '',
@@ -1386,18 +1350,14 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     categoryGroup: NOTIFICATION_CATEGORY_GROUPS.GIVPOWER_ALLOCATIONS,
-    title: '{amount} unlocked.',
+    title: 'givPower unlocked',
     htmlTemplate: [
       {
         type: 'p',
-        content: '$amount',
-      },
-      {
-        type: 'p',
-        content: ' unlocked.',
-      },
+        content: 'Some of the GIV that you locked for GIVpower has become unlocked.',
+      }
     ],
-    content: '{amount} unlocked.',
+    content: 'Some of the GIV that you locked for GIVpower has become unlocked.',
   },
   RE_LOCKED_AUTOMATICALLY: {
     name: '{amount} re-locked automatically',
@@ -1425,12 +1385,12 @@ export const GivethNotificationTypes = {
     content: '{amount} re-locked automatically',
   },
   GIVPOWER_ALLOCATIONS_GROUP: {
-    name: 'GIVpower Allocations',
+    name: 'GIV lockups',
     microService: MICRO_SERVICES.givethio,
     showOnSettingPage: true,
     title: 'GIVpower Allocations',
     description:
-      'Shows your locked, unlocked and received amount of GIVpower and the amount automatically relocked.',
+      'Notify me when GIV I locked in GIVpower staking gets unlocked.',
     schemaValidator: null,
     emailNotifierService: null,
     emailNotificationId: null, // doesn't sent
