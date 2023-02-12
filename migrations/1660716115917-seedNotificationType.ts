@@ -229,6 +229,8 @@ export const GivethNotificationTypes = {
     category: NOTIFICATION_CATEGORY.SUPPORTED_PROJECTS,
     icon: 'Iconlisted',
     schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_LISTED,
+    categoryGroup:
+      NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_STATUS_CHANGE_GROUP,
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
@@ -277,11 +279,12 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:' and has been hidden from the projects page. You can still share your project directly via the project URL'
+        content:
+          ' and has been hidden from the projects page. You can still share your project directly via the project URL',
       },
     ],
     content:
-        '{project name} did not meet our guidelines for listed projects and has been hidden from the projects page. You can still share your project directly via the project URL.',
+      '{project name} did not meet our guidelines for listed projects and has been hidden from the projects page. You can still share your project directly via the project URL.',
   },
   PROJECT_UNLISTED_FOR_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
@@ -294,6 +297,8 @@ export const GivethNotificationTypes = {
     emailNotificationId: null,
     pushNotifierService: null,
     title: 'Project is unlisted',
+    categoryGroup:
+      NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_STATUS_CHANGE_GROUP,
     htmlTemplate: [
       {
         type: 'a',
@@ -464,12 +469,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:
-          ' , which you supported, has been reactivated.',
+        content: ' , which you supported, has been reactivated.',
       },
     ],
-    content:
-      '{project name}, which you supported, has been reactivated',
+    content: '{project name}, which you supported, has been reactivated',
   },
 
   PROJECT_DEACTIVATED: {
@@ -511,6 +514,8 @@ export const GivethNotificationTypes = {
     emailNotifierService: null,
     emailNotificationId: null,
     pushNotifierService: null,
+    categoryGroup:
+      NOTIFICATION_CATEGORY_GROUPS.SUPPORTED_BY_YOU_PROJECT_STATUS_CHANGE_GROUP,
     title: 'Project is deactivated',
     htmlTemplate: [
       {
@@ -520,12 +525,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:
-          ', which you supported, has been deactivated.',
+        content: ', which you supported, has been deactivated.',
       },
     ],
-    content:
-      '{project name}, which you supported, has been deactivated.',
+    content: '{project name}, which you supported, has been deactivated.',
   },
   PROJECT_VERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_OWNER,
@@ -1354,10 +1357,12 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Some of the GIV that you locked for GIVpower has become unlocked.',
-      }
+        content:
+          'Some of the GIV that you locked for GIVpower has become unlocked.',
+      },
     ],
-    content: 'Some of the GIV that you locked for GIVpower has become unlocked.',
+    content:
+      'Some of the GIV that you locked for GIVpower has become unlocked.',
   },
   RE_LOCKED_AUTOMATICALLY: {
     name: '{amount} re-locked automatically',
