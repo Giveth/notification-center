@@ -465,11 +465,11 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ' , which you supported, has been reactivated by the project owner.',
+          ' , which you supported, has been reactivated.',
       },
     ],
     content:
-      '{project name}, which you supported, has been reactivated by the project owner',
+      '{project name}, which you supported, has been reactivated',
   },
 
   PROJECT_DEACTIVATED: {
@@ -521,11 +521,11 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ', which you supported, has been deactivated by the project owner.',
+          ', which you supported, has been deactivated.',
       },
     ],
     content:
-      '{project name}, which you supported, has been deactivated by the project owner.',
+      '{project name}, which you supported, has been deactivated.',
   },
   PROJECT_VERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_OWNER,
