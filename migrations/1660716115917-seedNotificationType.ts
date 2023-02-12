@@ -277,11 +277,11 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:
-          '{project name} did not meet our guidelines for listed projects and has been hidden from the projects page. You can still share your project directly via the project URL.',
+        content:' and has been hidden from the projects page. You can still share your project directly via the project URL'
       },
     ],
-    content: 'Your {project name} project is no longer visible.',
+    content:
+        '{project name} did not meet our guidelines for listed projects and has been hidden from the projects page. You can still share your project directly via the project URL.',
   },
   PROJECT_UNLISTED_FOR_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
