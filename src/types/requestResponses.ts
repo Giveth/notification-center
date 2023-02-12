@@ -88,7 +88,7 @@ export interface CountUnreadNotificationsResponse
   projectsRelated: number;
   givEconomyRelated: number;
   general: number;
-
+  supportedProjects: number;
   // user's last notificationId, then frontend will know should update notificationList or not
   lastNotificationId?: number;
 }
