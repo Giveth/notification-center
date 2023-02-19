@@ -807,7 +807,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'Your Project ',
+        content: 'You edited your project ',
       },
       {
         type: 'a',
@@ -816,10 +816,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' has been edited',
+        content:' and our team is reviewing it, you\'ll get notified when it will be listed again.',
       },
     ],
-    content: 'You project {project name} has been edited',
+    content: 'You edited your project {project name} and our team is reviewing it, you\'ll get notified when it will be listed again.',
   },
   PROJECT_BADGE_REVOKED: {
     name: 'Project badge revoked',
