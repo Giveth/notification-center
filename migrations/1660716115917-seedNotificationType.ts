@@ -280,7 +280,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ' and has been hidden from the projects page. You can still share your project directly via the project URL',
+          ' and has been hidden from the projects page. You can still share your project directly via the project URL.',
       },
     ],
     content:
@@ -909,10 +909,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon',
+        content: ' would lose verification badge soon.',
       },
     ],
-    content: 'You project {project name} would lose verification badge soon',
+    content: 'You project {project name} would lose verification badge soon.',
   },
   PROJECT_BADGE_REVOKE_LAST_WARNING: {
     name: 'Project badge revoke last warning',
@@ -938,7 +938,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon. this is last warning',
+        content: ' would lose verification badge soon. this is last warning.',
       },
     ],
     content:
@@ -968,10 +968,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon',
+        content: ' would lose verification badge soon.',
       },
     ],
-    content: 'You project {project name} would lose verification badge soon',
+    content: 'You project {project name} would lose verification badge soon.',
   },
   PROJECT_UNVERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_OWNER,
@@ -1145,9 +1145,13 @@ export const GivethNotificationTypes = {
         content: 'transaction link',
         href: '$txLink',
       },
+      {
+        type: 'p',
+        content: '.',
+      },
     ],
     content:
-      'Your donation to {project name} was not successful. {reason} \n{tx link}',
+      'Your donation to {project name} was not successful. {reason} \n{tx link}.',
   },
   NEW_PROJECT_UPDATE: {
     name: 'Project update',
@@ -1214,10 +1218,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' got draft by admin',
+        content: ' got draft by admin.',
       },
     ],
-    content: 'Your project {project name} got draft by admin',
+    content: 'Your project {project name} got draft by admin.',
   },
   PROJECT_RECEIVED_LIKE: {
     name: 'project liked',
@@ -1243,10 +1247,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' received a like',
+        content: ' received a like.',
       },
     ],
-    content: 'Nice! Your project {project name} received a like',
+    content: 'Nice! Your project {project name} received a like.',
   },
   NEW_PROJECT_UPDATE_FOR_USERS_WHO_SUPPORTED: {
     name: 'Project update added - Users who supported',
@@ -1362,8 +1366,12 @@ export const GivethNotificationTypes = {
         type: 'p',
         content: '$userName',
       },
+      {
+        type: 'p',
+        content: '.',
+      },
     ],
-    content: 'Your project {project name} has been boosted by {user name}',
+    content: 'Your project {project name} has been boosted by {user name}.',
   },
   YOU_UNLOCKED_GIVPOWER: {
     name: 'givPower unlocked',
