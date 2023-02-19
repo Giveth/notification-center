@@ -345,6 +345,29 @@ export const GivethNotificationTypes = {
     ],
     content: 'Someone boosted your project {projectName}!',
   },
+  PROJECT_BOOSTED_BY_PROJECT_OWNER: {
+    name: NOTIFICATION_TYPE_NAMES.PROJECT_BOOSTED_BY_PROJECT_OWNER,
+    description: 'Project has been boosted',
+    microService: MICRO_SERVICES.givethio,
+    category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
+    icon: '',
+    schemaValidator: SCHEMA_VALIDATORS_NAMES.PROJECT_BOOSTED,
+    emailNotifierService: THIRD_PARTY_EMAIL_SERVICES.SEGMENT,
+    emailNotificationId: null,
+    pushNotifierService: null,
+    htmlTemplate: [
+      {
+        type: 'p',
+        content: 'You boosted your project ',
+      },
+      {
+        type: 'a',
+        content: '$projectTitle',
+        href: '$projectLink',
+      },
+    ],
+    content: 'You boosted your project {projectName}!',
+  },
   PROJECT_CANCELLED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_OWNER,
     description: 'Project has been cancelled',

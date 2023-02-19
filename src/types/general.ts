@@ -27,6 +27,7 @@ export enum NOTIFICATION_TYPE_NAMES {
   WELCOME = 'Welcome',
   ADMIN_MESSAGE = 'Admin message',
   PROJECT_BOOSTED_OWNER = 'Project boosted',
+  PROJECT_BOOSTED_BY_PROJECT_OWNER = 'Project boosted by project owner',
   PROJECT_CANCELLED_OWNER = 'Project cancelled',
   PROJECT_CANCELLED_SUPPORTED = 'Project cancelled - Users who supported',
   PROJECT_ACTIVATED_OWNER = 'Project activated',
