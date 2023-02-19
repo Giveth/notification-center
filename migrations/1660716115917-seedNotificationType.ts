@@ -513,7 +513,7 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'You have deactivated your project ',
+        content: 'The ',
       },
       {
         type: 'a',
@@ -522,10 +522,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: '.',
+        content: ' project is deactive now.',
       },
     ],
-    content: 'You have deactivated your project {project name}.',
+    content: 'The {project name} project is deactive now',
   },
   PROJECT_DEACTIVATED_SUPPORTERS: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_DEACTIVATED_SUPPORTED,
