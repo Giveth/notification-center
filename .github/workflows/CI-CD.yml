@@ -102,3 +102,11 @@ jobs:
         config: ${{ secrets.KUBE_CONFIG }}
         version: v1.24.2 # specify kubectl binary version explicitly
         command: rollout status deployments/notification-center -n backend
+      - name: Production deploy
+        if: github.ref == 'refs/heads/main'
+        uses: garygrossgarten/github-action-ssh@v0.6.4
+        with:
+          command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          privateKey: ${{ secrets.PRODUCTION_PRIVATE_KEY}}
