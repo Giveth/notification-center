@@ -180,7 +180,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
-  projectUnverifiedWhoBoosted: {
+  projectUnverifiedWhoSupported: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
@@ -212,10 +212,6 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: donationTrackerSchema,
   },
-  projectUpdatedDonor: {
-    metadata: projectTitleProjectLinkSchema,
-    segment: projectRelatedTrackerSchema,
-  },
   projectUpdatedOwner: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
@@ -240,7 +236,11 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
-  projectUpdatedWhoLiked: {
+  projectUpdateAddedWhoSupported: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
+  projectUpdateAddedOwner: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
@@ -253,9 +253,6 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     segment: null,
   },
   givFarmClaim: { metadata: null, segment: null },
-  givFarmRewardHarvest: { metadata: null, segment: null },
-  givFarmStake: { metadata: stakeUnStakeSchema, segment: null },
-  givFarmUnStake: { metadata: stakeUnStakeSchema, segment: null },
   givFarmReadyToClaim: { metadata: claimSchema, segment: null },
   adminMessage: { metadata: adminMessageSchema, segment: null },
   rawHtmlBroadcast: { metadata: rawHtmlBroadcastSchema, segment: null },

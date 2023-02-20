@@ -51,7 +51,17 @@ export const sendNotification = async (
 
   logger.debug('notificationController.sendNotification()', {
     notificationSetting,
-    notificationType,
+    notificationTypeId: notificationType.id,
+    notificationTypeName: notificationType.name,
+    walletAddress: body.userWalletAddress,
+    notificationSettingData: {
+      id: notificationSetting?.id,
+      allowEmailNotification: notificationSetting?.allowEmailNotification,
+      allowDappPushNotification: notificationSetting?.allowDappPushNotification,
+      allowNotifications: notificationSetting?.allowNotifications,
+    },
+    trackId: body.trackId,
+    metadata: body.metadata,
   });
 
   const shouldSendEmail =

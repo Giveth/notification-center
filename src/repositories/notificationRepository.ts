@@ -81,6 +81,13 @@ export const countUnreadNotifications = async (
       category: NOTIFICATION_CATEGORY.GIV_ECONOMY,
     })
     .getCount();
+  const supportedProjects = await baseNotificationQuery(user)
+    .andWhere('notification."isRead" = false')
+
+    .andWhere('notificationType.category = :category', {
+      category: NOTIFICATION_CATEGORY.SUPPORTED_PROJECTS,
+    })
+    .getCount();
   const general = await baseNotificationQuery(user)
     .andWhere('notification."isRead" = false')
 
@@ -98,6 +105,7 @@ export const countUnreadNotifications = async (
     general,
     projectsRelated,
     givEconomyRelated,
+    supportedProjects,
   };
 };
 
