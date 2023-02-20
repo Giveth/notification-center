@@ -15,7 +15,10 @@ export const createNotificationSettingsForNewUser = async (
     const payload: Partial<NotificationSetting> = {
       notificationType: notificationType,
       userAddress: user,
-      allowEmailNotification: notificationType.emailDefaultValue,
+      // allowEmailNotification:
+      //   notificationType.emailDefaultValue !== undefined
+      //     ? notificationType.emailDefaultValue
+      //     : true,
     };
 
     return payload;

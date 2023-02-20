@@ -818,10 +818,12 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:' and our team is reviewing it, you\'ll get notified when it will be listed again.',
+        content:
+          " and our team is reviewing it, you'll get notified when it will be listed again.",
       },
     ],
-    content: 'You edited your project {project name} and our team is reviewing it, you\'ll get notified when it will be listed again.',
+    content:
+      "You edited your project {project name} and our team is reviewing it, you'll get notified when it will be listed again.",
   },
   PROJECT_BADGE_REVOKED: {
     name: 'Project badge revoked',
