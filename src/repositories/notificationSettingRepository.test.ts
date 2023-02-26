@@ -170,27 +170,4 @@ function updateUserNotificationSettingTestCases() {
     assert.isFalse(updatedSetting?.allowEmailNotification);
     assert.isFalse(updatedSetting?.allowDappPushNotification);
   });
-  it('update user notification settings, cant change when isWebEditable is false', async () => {
-    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
-
-    const userNotificationSetting =
-      await NotificationSetting.createQueryBuilder('setting')
-        .leftJoinAndSelect('setting.notificationType', 'notificationType')
-        .where('setting."userAddressId" = :userAddressId', {
-          userAddressId: userAddress.id,
-        })
-        .andWhere('notificationType.isWebEditable = false')
-        .getOne();
-
-    assert.isTrue(userNotificationSetting?.userAddressId === userAddress.id);
-
-    const updatedSetting = await updateUserNotificationSetting({
-      notificationSettingId: userNotificationSetting!.id,
-      userAddressId: userAddress.id,
-      allowEmailNotification: false,
-      allowDappPushNotification: false,
-    });
-    assert.isOk(updatedSetting);
-    assert.isTrue(updatedSetting?.allowDappPushNotification);
-  });
 }

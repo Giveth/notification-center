@@ -1572,7 +1572,7 @@ export const GivethNotificationTypes = {
     description: 'Notify me when my project receives a donation.',
     showOnSettingPage: true,
     isEmailEditable: true,
-    webDefaultValue:true,
+    webDefaultValue: true,
     emailDefaultValue: true,
     microService: MICRO_SERVICES.givethio,
     schemaValidator: null,
