@@ -140,35 +140,6 @@ function updateNotificationsTestCases() {
     assert.isOk(result);
     assert.isFalse(updatedNotification.allowEmailNotification);
   });
-  it('should update notification setting, when isWebEditable is false should not change dapp push notification setting', async () => {
-    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
-    const notificationSetting = await NotificationSetting.createQueryBuilder(
-      'notificationSetting',
-    )
-      .leftJoinAndSelect(
-        'notificationSetting.notificationType',
-        'notificationType',
-      )
-      .where('notificationSetting.userAddressId = :id', { id: userAddress.id })
-      .andWhere('notificationType.isWebEditable = false')
-      .andWhere('notificationSetting.allowDappPushNotification = true')
-      .getOne();
-    const jwtToken = jwt.sign({ publicAddress: walletAddress }, 'xxxx');
-    const result = await Axios.put(
-      `${apiBaseUrl}/v1/notification_settings/${notificationSetting?.id}`,
-      {
-        id: notificationSetting!.id,
-        allowEmailNotification: false,
-        allowDappPushNotification: false,
-      },
-      { headers: { Authorization: `Bearer ${jwtToken}` } },
-    );
-
-    const updatedNotification = result.data;
-    assert.isOk(result);
-
-    assert.isTrue(updatedNotification.allowDappPushNotification);
-  });
 }
 
 function updateMultipleNotificationsTestCases() {

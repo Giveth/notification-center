@@ -31,7 +31,6 @@ export const createNotificationSettingsForNewUser = async (
           ? notificationParent?.webDefaultValue
           : true,
     };
-
     notificationTypeSettings.push(payload);
   }
 
