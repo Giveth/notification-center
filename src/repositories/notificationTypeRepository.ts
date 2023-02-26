@@ -6,6 +6,15 @@ export const getNotificationTypeByEventName = async (eventName: string) => {
     .getOne();
 };
 
+export const findNotificationTypeParent = async (categoryGroup: string) => {
+  return NotificationType.createQueryBuilder()
+    .where('"categoryGroup" = :categoryGroup', {
+      categoryGroup,
+    })
+    .andWhere('"isGroupParent" = true')
+    .getOne();
+};
+
 export const getNotificationTypeByEventNameAndMicroservice = async (params: {
   eventName: string;
   microService: string;

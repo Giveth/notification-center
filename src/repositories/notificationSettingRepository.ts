@@ -5,26 +5,37 @@ import { errorMessages } from '../utils/errorMessages';
 import { createQueryBuilder } from 'typeorm';
 import { logger } from '../utils/logger';
 import { StandardError } from '../types/StandardError';
+import { findNotificationTypeParent } from './notificationTypeRepository';
 
 export const createNotificationSettingsForNewUser = async (
   user: UserAddress,
 ) => {
   const notificationTypes = await NotificationType.find();
   // rest of values are set by default
-  const typeSettings = notificationTypes.map(notificationType => {
+  const notificationTypeSettings = [];
+  for (const notificationType of notificationTypes) {
+    const notificationParent = notificationType?.isGroupParent
+      ? notificationType
+      : await findNotificationTypeParent(
+          notificationType.categoryGroup as string,
+        );
     const payload: Partial<NotificationSetting> = {
       notificationType: notificationType,
       userAddress: user,
-      // allowEmailNotification:
-      //   notificationType.emailDefaultValue !== undefined
-      //     ? notificationType.emailDefaultValue
-      //     : true,
+      allowEmailNotification:
+        notificationParent?.emailDefaultValue !== undefined
+          ? notificationParent?.emailDefaultValue
+          : true,
+      allowDappPushNotification:
+        notificationParent?.webDefaultValue !== undefined
+          ? notificationParent?.webDefaultValue
+          : true,
     };
 
-    return payload;
-  });
+    notificationTypeSettings.push(payload);
+  }
 
-  const userSettings = NotificationSetting.create(typeSettings);
+  const userSettings = NotificationSetting.create(notificationTypeSettings);
 
   return await NotificationSetting.save(userSettings);
 };
@@ -150,7 +161,6 @@ export const updateUserNotificationSetting = async (params: {
       allowDappPushNotification: notificationSetting.allowDappPushNotification,
     });
   }
-
   return notificationSetting.save();
 };
 

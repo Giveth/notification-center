@@ -152,8 +152,9 @@ function updateUserNotificationSettingTestCases() {
         .where('setting."userAddressId" = :userAddressId', {
           userAddressId: userAddress.id,
         })
-        .andWhere('notificationType.isGroupParent = false')
+        .andWhere('notificationType.isGroupParent = true')
         .andWhere('notificationType.isEmailEditable = false')
+        .andWhere('setting.allowEmailNotification = false')
         .andWhere('notificationType.isWebEditable = true')
         .getOne();
 
@@ -162,11 +163,11 @@ function updateUserNotificationSettingTestCases() {
     const updatedSetting = await updateUserNotificationSetting({
       notificationSettingId: userNotificationSetting!.id,
       userAddressId: userAddress.id,
-      allowEmailNotification: false,
+      allowEmailNotification: true,
       allowDappPushNotification: false,
     });
     assert.isOk(updatedSetting);
-    assert.isTrue(updatedSetting?.allowEmailNotification);
+    assert.isFalse(updatedSetting?.allowEmailNotification);
     assert.isFalse(updatedSetting?.allowDappPushNotification);
   });
   it('update user notification settings, cant change when isWebEditable is false', async () => {
