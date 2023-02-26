@@ -8,8 +8,8 @@ export const getNotificationTypeByEventName = async (eventName: string) => {
 
 export const findNotificationTypeParent = async (categoryGroup: string) => {
   return NotificationType.createQueryBuilder()
-    .where('category = :category', {
-      category: categoryGroup,
+    .where('"categoryGroup" = :categoryGroup', {
+      categoryGroup,
     })
     .andWhere('"isGroupParent" = true')
     .getOne();

@@ -20,6 +20,8 @@ export const NOTIFICATION_CATEGORY_GROUPS = {
     'supportedByYouProjectsStatusChange',
   SUPPORTED_BY_YOU_PROJECT_HAS_NEW_UPDATE_GROUP:
     'supportedByYouProjectsHasNewUpdate',
+  YOUR_PROJECT_UPDATE: 'yourProjectUpdate',
+  PROJECT_LIKES: 'projectLikes',
   PROJECT_STATUS: 'projectStatus',
   DONATIONS_MADE: 'donationsMade',
   DONATIONS_RECEIVED: 'donationsReceived',
