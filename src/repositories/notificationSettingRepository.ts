@@ -31,12 +31,6 @@ export const createNotificationSettingsForNewUser = async (
           ? notificationParent?.webDefaultValue
           : true,
     };
-    logger.info('createNotificationSettingsForNewUser**', {
-      payload,
-      notificationType,
-      notificationParent
-    })
-
     notificationTypeSettings.push(payload);
   }
 
