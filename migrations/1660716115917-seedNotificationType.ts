@@ -244,11 +244,11 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ', which you supported, is now listed on the Giveth projects page.',
+          ' is now listed on the Giveth projects page.',
       },
     ],
     content:
-      '{project name}, which you supported, is now listed on the Giveth projects page',
+      '{project name} is now listed on the Giveth projects page',
   },
   PROJECT_UNLISTED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
@@ -307,7 +307,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ', which you supported, did not meet our ',
+        content: ' did not meet our ',
       },
       {
         type: 'a',
@@ -426,7 +426,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ', which you supported, has been canceled by an admin because it failed to adhere to our ',
+          ' has been canceled by an admin because it failed to adhere to our ',
       },
       {
         type: 'a',
@@ -492,10 +492,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' , which you supported, has been reactivated.',
+        content: ' has been reactivated.',
       },
     ],
-    content: '{project name}, which you supported, has been reactivated',
+    content: '{project name} has been reactivated',
   },
 
   PROJECT_DEACTIVATED: {
@@ -548,10 +548,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ', which you supported, has been deactivated.',
+        content: ' has been deactivated.',
       },
     ],
-    content: '{project name}, which you supported, has been deactivated.',
+    content: '{project name} has been deactivated.',
   },
   PROJECT_VERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_OWNER,
@@ -625,7 +625,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          'which you supported, is now verified. You can now donate and receive ',
+          ' is now verified. You can now donate and receive ',
       },
       {
         type: 'a',
@@ -886,10 +886,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon',
+        content: 'will lose its verification badge soon',
       },
     ],
-    content: 'You project {project name} would lose verification badge soon',
+    content: 'You project {project name} will lose its verification badge soon',
   },
   PROJECT_BADGE_REVOKE_WARNING: {
     name: 'Project badge revoke warning',
@@ -915,10 +915,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon.',
+        content: 'will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} would lose verification badge soon.',
+    content: 'You project {project name} will lose its verification badge soon.',
   },
   PROJECT_BADGE_REVOKE_LAST_WARNING: {
     name: 'Project badge revoke last warning',
@@ -944,11 +944,11 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon. this is last warning.',
+        content: 'will lose its verification badge soon. this is the last warning.',
       },
     ],
     content:
-      'You project {project name} would lose verification badge soon, this is last warning.',
+      'You project {project name} will lose its verification badge soon, this is the last warning.',
   },
   PROJECT_BADGE_UP_FOR_REVOKING: {
     name: 'Project badge up for revoking',
@@ -974,10 +974,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: ' would lose verification badge soon.',
+        content: 'will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} would lose verification badge soon.',
+    content: 'You project {project name} will lose its verification badge soon.',
   },
   PROJECT_UNVERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_OWNER,
@@ -1035,7 +1035,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          ', which you supported, has lost its verification status. Learn more about our verification requirements',
+          ' has lost its verification status. Learn more about our verification requirements',
       },
       {
         type: 'a',
@@ -1049,7 +1049,7 @@ export const GivethNotificationTypes = {
       },
     ],
     content:
-      '{project name}, which you supported, has lost its verification status. Learn more about our verification requirements here.',
+      '{project name} has lost its verification status. Learn more about our verification requirements here.',
   },
   MADE_DONATION: {
     name: 'Made donation',
@@ -1206,8 +1206,8 @@ export const GivethNotificationTypes = {
   },
 
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
-    name: 'Verification form got draft by admin',
-    description: 'Verification form got drafted by admin',
+    name: 'Verification form was drafted by an admin',
+    description: 'Verification form was drafted by an admin',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
     icon: '',
@@ -1229,10 +1229,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ' got draft by admin.',
+        content: ' was drafted by an admin.',
       },
     ],
-    content: 'Your project {project name} got draft by admin.',
+    content: 'Your project {project name} was drafted by an admin.',
   },
   PROJECT_RECEIVED_LIKE: {
     name: 'project liked',
@@ -1292,10 +1292,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content: ', which you supported, has a new update!',
+        content: ' has a new update!',
       },
     ],
-    content: '{Project name} , which you supported, has a new update!',
+    content: '{Project name}  has a new update!',
   },
   YOU_BOOSTED: {
     name: 'You boosted',
