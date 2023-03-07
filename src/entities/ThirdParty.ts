@@ -19,10 +19,10 @@ export class ThirdParty extends BaseEntity {
   readonly id: number;
 
   @Index()
-  @Column('text')
+  @Column('text', { unique: true })
   microService: string;
 
-  @Index({ unique: true })
+  @Index()
   @Column('text')
   secret: string;
 

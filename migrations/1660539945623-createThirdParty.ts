@@ -17,6 +17,7 @@ export class createThirdParty1660539945623 implements MigrationInterface {
             name: 'microService',
             type: 'text',
             isNullable: false,
+            isUnique:true,
           },
           {
             name: 'secret',
