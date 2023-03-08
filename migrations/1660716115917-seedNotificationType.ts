@@ -698,7 +698,7 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         content:
-          'has not been approved for verification. Learn more about our verification requirements ',
+          ' has not been approved for verification. Learn more about our verification requirements ',
       },
       {
         type: 'a',
@@ -886,10 +886,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: 'will lose its verification badge soon',
+        content: ' will lose its verification badge soon',
       },
     ],
-    content: 'You project {project name} will lose its verification badge soon',
+    content: 'Your project {project name} will lose its verification badge soon',
   },
   PROJECT_BADGE_REVOKE_WARNING: {
     name: 'Project badge revoke warning',
@@ -915,10 +915,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: 'will lose its verification badge soon.',
+        content: ' will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} will lose its verification badge soon.',
+    content: 'Your project {project name} will lose its verification badge soon.',
   },
   PROJECT_BADGE_REVOKE_LAST_WARNING: {
     name: 'Project badge revoke last warning',
@@ -944,11 +944,11 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: 'will lose its verification badge soon. this is the last warning.',
+        content: ' will lose its verification badge soon. this is the last warning.',
       },
     ],
     content:
-      'You project {project name} will lose its verification badge soon, this is the last warning.',
+      'Your project {project name} will lose its verification badge soon, this is the last warning.',
   },
   PROJECT_BADGE_UP_FOR_REVOKING: {
     name: 'Project badge up for revoking',
@@ -974,10 +974,10 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: 'will lose its verification badge soon.',
+        content: ' will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} will lose its verification badge soon.',
+    content: 'Your project {project name} will lose its verification badge soon.',
   },
   PROJECT_UNVERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_OWNER,
