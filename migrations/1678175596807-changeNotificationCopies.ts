@@ -27,6 +27,7 @@ export class changeNotificationCopies1678175596807
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const notificationTableExists = await queryRunner.hasTable('notification_type');
+    console.log('**notificationTableExists**', notificationTableExists)
     if (!notificationTableExists) {
       // tslint:disable-next-line:no-console
       console.log(
