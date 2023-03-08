@@ -13,6 +13,7 @@ export class changeNotificationCopies1678175596807
       description?: string;
     },
   ) {
+
     const notificationType = await getNotificationTypeByEventName(eventName);
     if (!notificationType) {
       return;
@@ -25,6 +26,14 @@ export class changeNotificationCopies1678175596807
   }
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const notificationTableExists = await queryRunner.hasTable('notification_type');
+    if (!notificationTableExists) {
+      // tslint:disable-next-line:no-console
+      console.log(
+        'The notification_type table doesnt exist, so it would crash if proceed',
+      );
+      return;
+    }
     const notificationTypesArray = [
       {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
