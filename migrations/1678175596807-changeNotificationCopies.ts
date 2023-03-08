@@ -1,46 +1,48 @@
-import {MigrationInterface, QueryRunner} from "typeorm"
-import {getNotificationTypeByEventName} from "../src/repositories/notificationTypeRepository";
-import {NOTIFICATION_TYPE_NAMES} from "../src/types/general";
+import { MigrationInterface, QueryRunner } from 'typeorm';
+import { getNotificationTypeByEventName } from '../src/repositories/notificationTypeRepository';
+import { NOTIFICATION_TYPE_NAMES } from '../src/types/general';
 
-export class changeNotificationCopies1678175596807 implements MigrationInterface {
-
-  private async updateNotificationType(eventName: string,
-                                       data: {
-                                         htmlTemplate?: any,
-                                         content?: string,
-                                         description?: string
-                                       }) {
-    const notificationType = await getNotificationTypeByEventName(eventName)
+export class changeNotificationCopies1678175596807
+  implements MigrationInterface
+{
+  private async updateNotificationType(
+    eventName: string,
+    data: {
+      htmlTemplate?: any;
+      content?: string;
+      description?: string;
+    },
+  ) {
+    const notificationType = await getNotificationTypeByEventName(eventName);
     if (!notificationType) {
-      return
+      return;
     }
 
     for (const key of Object.keys(data)) {
-      notificationType[key] = data[key]
+      notificationType[key] = data[key];
     }
-    await notificationType.save()
-
+    await notificationType.save();
   }
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const notificationTypesArray = [{
-      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
-      data: {
-        content: '{project name} is now listed on the Giveth projects page',
-        htmlTemplate: [
-          {
-            type: 'a',
-            content: '$projectTitle',
-            href: '$projectLink',
-          },
-          {
-            type: 'p',
-            content:
-              ' is now listed on the Giveth projects page.',
-          },
-        ]
-      }
-    },
+    const notificationTypesArray = [
+      {
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_SUPPORTED,
+        data: {
+          content: '{project name} is now listed on the Giveth projects page',
+          htmlTemplate: [
+            {
+              type: 'a',
+              content: '$projectTitle',
+              href: '$projectLink',
+            },
+            {
+              type: 'p',
+              content: ' is now listed on the Giveth projects page.',
+            },
+          ],
+        },
+      },
       {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_SUPPORTED,
         data: {
@@ -64,8 +66,9 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: ' and has been hidden from the projects page.',
             },
           ],
-        }
-      }, {
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
         data: {
           htmlTemplate: [
@@ -89,8 +92,9 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: '.',
             },
           ],
-        }
-      }, {
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_ACTIVATED_SUPPORTED,
         data: {
           htmlTemplate: [
@@ -105,8 +109,9 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
           ],
           content: '{project name} has been reactivated',
-        }
-      }, {
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_DEACTIVATED_SUPPORTED,
         data: {
           htmlTemplate: [
@@ -121,9 +126,9 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
           ],
           content: '{project name} has been deactivated.',
-        }
-      }
-      , {
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_VERIFIED_SUPPORTED,
         data: {
           htmlTemplate: [
@@ -138,8 +143,7 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content:
-              ' is now verified. You can now donate and receive '
+              content: ' is now verified. You can now donate and receive ',
             },
             {
               type: 'a',
@@ -160,9 +164,9 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: '.',
             },
           ],
-        }
-      }
-      , {
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_REVOKE_REMINDER,
         data: {
           htmlTemplate: [
@@ -180,9 +184,11 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: 'will lose its verification badge soon',
             },
           ],
-          content: 'You project {project name} will lose its verification badge soon',
-        }
-      }, {
+          content:
+            'You project {project name} will lose its verification badge soon',
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_REVOKE_WARNING,
         data: {
           htmlTemplate: [
@@ -200,9 +206,11 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: 'will lose its verification badge soon.',
             },
           ],
-          content: 'You project {project name} will lose its verification badge soon.',
-        }
-      }, {
+          content:
+            'You project {project name} will lose its verification badge soon.',
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING,
         data: {
           htmlTemplate: [
@@ -217,13 +225,15 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon. this is the last warning.',
+              content:
+                'will lose its verification badge soon. this is the last warning.',
             },
           ],
           content:
             'You project {project name} will lose its verification badge soon, this is the last warning.',
-        }
-      },{
+        },
+      },
+      {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_UP_FOR_REVOKING,
         data: {
           htmlTemplate: [
@@ -241,12 +251,13 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: 'will lose its verification badge soon.',
             },
           ],
-          content: 'Your project {project name} will lose its verification badge soon.',
-        }
+          content:
+            'Your project {project name} will lose its verification badge soon.',
+        },
       },
       {
-        eventName:NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_SUPPORTED ,
-        data:{
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_SUPPORTED,
+        data: {
           htmlTemplate: [
             {
               type: 'a',
@@ -256,7 +267,7 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             {
               type: 'p',
               content:
-              ' has lost its verification status. Learn more about our verification requirements',
+                ' has lost its verification status. Learn more about our verification requirements',
             },
             {
               type: 'a',
@@ -269,12 +280,12 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
           ],
           content:
-          '{project name} has lost its verification status. Learn more about our verification requirements here.',
-        }
+            '{project name} has lost its verification status. Learn more about our verification requirements here.',
+        },
       },
       {
-        eventName:  NOTIFICATION_TYPE_NAMES.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN ,
-        data:{
+        eventName: NOTIFICATION_TYPE_NAMES.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN,
+        data: {
           htmlTemplate: [
             {
               type: 'p',
@@ -292,11 +303,11 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
           ],
           content: 'Your project {project name} was drafted by an admin.',
           description: 'Verification form was drafted by an admin',
-        }
+        },
       },
       {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_UPDATE_ADDED,
-        data:{
+        data: {
           htmlTemplate: [
             {
               type: 'a',
@@ -309,13 +320,15 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
           ],
           content: '{Project name}  has a new update!',
-        }
+        },
       },
-    ]
-    await Promise.all(notificationTypesArray.map(item => this.updateNotificationType(item.eventName, item.data)))
+    ];
+    await Promise.all(
+      notificationTypesArray.map(item =>
+        this.updateNotificationType(item.eventName, item.data),
+      ),
+    );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-  }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }

@@ -243,12 +243,10 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:
-          ' is now listed on the Giveth projects page.',
+        content: ' is now listed on the Giveth projects page.',
       },
     ],
-    content:
-      '{project name} is now listed on the Giveth projects page',
+    content: '{project name} is now listed on the Giveth projects page',
   },
   PROJECT_UNLISTED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNLISTED_OWNER,
@@ -624,8 +622,7 @@ export const GivethNotificationTypes = {
       },
       {
         type: 'p',
-        content:
-          ' is now verified. You can now donate and receive ',
+        content: ' is now verified. You can now donate and receive ',
       },
       {
         type: 'a',
@@ -918,7 +915,8 @@ export const GivethNotificationTypes = {
         content: 'will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} will lose its verification badge soon.',
+    content:
+      'You project {project name} will lose its verification badge soon.',
   },
   PROJECT_BADGE_REVOKE_LAST_WARNING: {
     name: 'Project badge revoke last warning',
@@ -944,7 +942,8 @@ export const GivethNotificationTypes = {
       {
         type: 'p',
         //TODO Carlos please check this copy with existing autopilot emails
-        content: 'will lose its verification badge soon. this is the last warning.',
+        content:
+          'will lose its verification badge soon. this is the last warning.',
       },
     ],
     content:
@@ -977,7 +976,8 @@ export const GivethNotificationTypes = {
         content: 'will lose its verification badge soon.',
       },
     ],
-    content: 'You project {project name} will lose its verification badge soon.',
+    content:
+      'You project {project name} will lose its verification badge soon.',
   },
   PROJECT_UNVERIFIED: {
     name: NOTIFICATION_TYPE_NAMES.PROJECT_UNVERIFIED_OWNER,
