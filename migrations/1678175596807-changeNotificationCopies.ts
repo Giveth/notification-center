@@ -148,7 +148,7 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content: ' and or boost it with ',
+              content: ' and boost it with ',
             },
             {
               type: 'a',
@@ -180,7 +180,7 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
               content: 'will lose its verification badge soon',
             },
           ],
-          content: 'You project {project name} will lose its verification badge soon',
+          content: 'Your project {project name} will lose its verification badge soon',
         }
       }, {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_REVOKE_WARNING,
@@ -197,10 +197,10 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon.',
+              content: ' will lose its verification badge soon.',
             },
           ],
-          content: 'You project {project name} will lose its verification badge soon.',
+          content: 'Your project {project name} will lose its verification badge soon.',
         }
       }, {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING,
@@ -217,11 +217,11 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon. this is the last warning.',
+              content: ' will lose its verification badge soon. this is the last warning.',
             },
           ],
           content:
-            'You project {project name} will lose its verification badge soon, this is the last warning.',
+            'Your project {project name} will lose its verification badge soon, this is the last warning.',
         }
       },{
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_BADGE_UP_FOR_REVOKING,
@@ -238,7 +238,7 @@ export class changeNotificationCopies1678175596807 implements MigrationInterface
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon.',
+              content: ' will lose its verification badge soon.',
             },
           ],
           content: 'Your project {project name} will lose its verification badge soon.',
