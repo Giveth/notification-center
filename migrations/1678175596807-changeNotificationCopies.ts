@@ -330,5 +330,7 @@ export class changeNotificationCopies1678175596807
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    //
+  }
 }
