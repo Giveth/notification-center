@@ -152,7 +152,7 @@ export class changeNotificationCopies1678175596807
             },
             {
               type: 'p',
-              content: ' and or boost it with ',
+              content: ' and boost it with ',
             },
             {
               type: 'a',
@@ -185,7 +185,7 @@ export class changeNotificationCopies1678175596807
             },
           ],
           content:
-            'You project {project name} will lose its verification badge soon',
+            'Your project {project name} will lose its verification badge soon',
         },
       },
       {
@@ -203,11 +203,11 @@ export class changeNotificationCopies1678175596807
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon.',
+              content: ' will lose its verification badge soon.',
             },
           ],
           content:
-            'You project {project name} will lose its verification badge soon.',
+            'Your project {project name} will lose its verification badge soon.',
         },
       },
       {
@@ -226,11 +226,11 @@ export class changeNotificationCopies1678175596807
             {
               type: 'p',
               content:
-                'will lose its verification badge soon. this is the last warning.',
+                ' will lose its verification badge soon. this is the last warning.',
             },
           ],
           content:
-            'You project {project name} will lose its verification badge soon, this is the last warning.',
+            'Your project {project name} will lose its verification badge soon, this is the last warning.',
         },
       },
       {
@@ -248,7 +248,7 @@ export class changeNotificationCopies1678175596807
             },
             {
               type: 'p',
-              content: 'will lose its verification badge soon.',
+              content: ' will lose its verification badge soon.',
             },
           ],
           content:
