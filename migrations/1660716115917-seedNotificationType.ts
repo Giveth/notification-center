@@ -886,7 +886,8 @@ export const GivethNotificationTypes = {
         content: ' will lose its verification badge soon',
       },
     ],
-    content: 'Your project {project name} will lose its verification badge soon',
+    content:
+      'Your project {project name} will lose its verification badge soon',
   },
   PROJECT_BADGE_REVOKE_WARNING: {
     name: 'Project badge revoke warning',
