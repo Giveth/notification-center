@@ -1206,7 +1206,7 @@ export const GivethNotificationTypes = {
   },
 
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN: {
-    name: 'Verification form was drafted by an admin',
+    name: NOTIFICATION_TYPE_NAMES.VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN,
     description: 'Verification form was drafted by an admin',
     microService: MICRO_SERVICES.givethio,
     category: NOTIFICATION_CATEGORY.PROJECT_RELATED,
