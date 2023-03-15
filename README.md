@@ -15,7 +15,7 @@ This is a microservice for managing notifications for both https://giveth.io and
 [References](#References)
 
 ### Used_Technologies
-* Nodejs **v16**
+* Nodejs **v16** (You can use `nvm use` command to load appropriate Node version by `nvm`)
 * Typescript **v4.5.2**
 * DB: postgres **v14.2**
 * DB ORM: TypeORM **v0.3.6**

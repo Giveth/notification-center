@@ -51,11 +51,7 @@ async function runMigrations() {
 }
 
 const seedDb = async () => {
-  await ThirdParty.create({
-    microService: process.env.GIVETH_IO_THIRD_PARTY_MICRO_SERVICE,
-    secret: process.env.GIVETH_IO_THIRD_PARTY_SECRET,
-    isActive: true,
-  }).save();
+  //
 };
 
 before(async () => {

@@ -38,4 +38,11 @@ export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_VERIFIED_SUPPORTED = 'Project verified - Users who supported',
   PROJECT_UNVERIFIED_OWNER = 'Project unverified',
   PROJECT_UNVERIFIED_SUPPORTED = 'Project unverified - Users who supported',
+
+  PROJECT_BADGE_REVOKE_REMINDER = 'Project badge revoke reminder',
+  PROJECT_BADGE_REVOKE_WARNING = 'Project badge revoke warning',
+  PROJECT_BADGE_REVOKE_LAST_WARNING = 'Project badge revoke last warning',
+  PROJECT_BADGE_UP_FOR_REVOKING = 'Project badge up for revoking',
+  VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
+  PROJECT_UPDATE_ADDED = 'Project update added - Users who supported',
 }
