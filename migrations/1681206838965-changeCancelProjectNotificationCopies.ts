@@ -1,8 +1,10 @@
-import {MigrationInterface, QueryRunner} from "typeorm"
-import {getNotificationTypeByEventName} from "../src/repositories/notificationTypeRepository";
-import {NOTIFICATION_TYPE_NAMES} from "../src/types/general";
+import { MigrationInterface, QueryRunner } from 'typeorm';
+import { getNotificationTypeByEventName } from '../src/repositories/notificationTypeRepository';
+import { NOTIFICATION_TYPE_NAMES } from '../src/types/general';
 
-export class changeCancelProjectNotificationCopies1681206838965 implements MigrationInterface {
+export class changeCancelProjectNotificationCopies1681206838965
+  implements MigrationInterface
+{
   private async updateNotificationType(
     eventName: string,
     data: {
@@ -35,8 +37,7 @@ export class changeCancelProjectNotificationCopies1681206838965 implements Migra
         htmlTemplate: [
           {
             type: 'p',
-            content:
-              'Your project ',
+            content: 'Your project ',
           },
           {
             type: 'a',
@@ -60,8 +61,8 @@ export class changeCancelProjectNotificationCopies1681206838965 implements Migra
         ],
         content:
           'Your project {project name} has been canceled by an admin. More information can be found in our {terms of service}.',
-      }
-    )
+      },
+    );
 
     await this.updateNotificationType(
       NOTIFICATION_TYPE_NAMES.PROJECT_CANCELLED_SUPPORTED,
@@ -79,13 +80,11 @@ export class changeCancelProjectNotificationCopies1681206838965 implements Migra
         ],
         content:
           '{project name} which you supported, has been canceled by an admin.',
-      }
-    )
-
-
+      },
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    //
   }
-
 }
