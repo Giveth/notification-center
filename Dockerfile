@@ -1,5 +1,5 @@
 #https://hub.docker.com/_/node?tab=tags&page=1
-FROM node:16.14.2-alpine3.15
+FROM node:18.14.0
 
 WORKDIR /usr/src/app
 
