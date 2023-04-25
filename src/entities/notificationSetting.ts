@@ -22,6 +22,7 @@ export const NOTIFICATION_CATEGORY_GROUPS = {
     'supportedByYouProjectsHasNewUpdate',
   YOUR_PROJECT_UPDATE: 'yourProjectUpdate',
   PROJECT_LIKES: 'projectLikes',
+  PROJECT_NEW_RANK: 'projectNewRank',
   PROJECT_STATUS: 'projectStatus',
   DONATIONS_MADE: 'donationsMade',
   DONATIONS_RECEIVED: 'donationsReceived',

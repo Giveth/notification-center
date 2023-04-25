@@ -275,6 +275,14 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: givBackReadyClaimSchema,
     segment: null,
   },
+  projectHasNewHigherRank: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
+  projectHasNewLowerRank: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
 };
 
 function throwHttpErrorIfJoiValidatorFails(
