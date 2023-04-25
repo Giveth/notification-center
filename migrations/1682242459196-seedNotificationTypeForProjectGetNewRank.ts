@@ -96,9 +96,35 @@ export class seedNotificationTypeForProjectGetNewRank1682242459196
     // Giveth IO Notifications
     await queryRunner.manager.save(NotificationType, GivethNotificationTypes);
 
-    // Trace notifications
+    // Fetch the notificationType id for 'New Rank'
+    const result = await queryRunner.query(
+      `SELECT id FROM "notification_type" WHERE "categoryGroup" = 'projectNewRank';`,
+    );
+    for (const row of result) {
+      await queryRunner.query(`
+        INSERT INTO "notification_setting" (
+        "allowNotifications",
+        "allowEmailNotification",
+        "allowDappPushNotification",
+        "notificationTypeId",
+        "userAddressId",
+        "createdAt",
+        "updatedAt"
+       )
+        SELECT
+            true, -- For these notificationTypes, allowNotifications is true
+            false, -- For these notificationTypes, allowNotifications is true
+            true, -- For these notificationTypes, allowNotifications is true
+            ${row.id}, -- New Rank notificationType id
+            "user_address"."id", -- UserAddress id
+            NOW(), -- Current timestamp for createdAt
+            NOW() -- Current timestamp for updatedAt
+        FROM user_address;
+    `)
 
-    // Other notifications
+    }
+
+
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
