@@ -45,4 +45,6 @@ export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_BADGE_UP_FOR_REVOKING = 'Project badge up for revoking',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
   PROJECT_UPDATE_ADDED = 'Project update added - Users who supported',
+  PROJECT_HAS_NEW_LOWER_RANK = 'Project has new lower rank',
+  PROJECT_HAS_NEW_HIGHER_RANK = 'Project has new higher rank',
 }

@@ -1774,6 +1774,104 @@ function sendNotificationTestCases() {
     }
   });
 
+  it('should create *Project has new lower rank* notification,  success', async () => {
+    const data = {
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_LOWER_RANK,
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Project has new lower rank* notification,  failed invalid metadata', async () => {
+    try {
+      const data = {
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        metadata: {
+          projectLink,
+        },
+      };
+
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"projectTitle" is required');
+    }
+  });
+
+  it('should create *Project has new higher rank* notification,  success', async () => {
+    const data = {
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Project has new higher rank* notification,  failed invalid metadata', async () => {
+    try {
+      const data = {
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+        sendEmail: false,
+        sendSegment: false,
+        userWalletAddress: generateRandomEthereumAddress(),
+        metadata: {
+          projectLink,
+        },
+      };
+
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"projectTitle" is required');
+    }
+  });
+
   it('should create notification successfully with passing trackId', async () => {
     const trackId = generateRandomTxHash();
     const data = {
