@@ -47,10 +47,10 @@ export const sendNotificationValidator = Joi.object({
     analyticsUserId: Joi.string(),
     payload: Joi.object({
       // Common attributes
-      email: Joi.string(),
+      email: Joi.string().allow(null).allow(''),
       title: Joi.string(),
       slug: Joi.string(),
-      firstName: Joi.string(),
+      firstName: Joi.string().allow(null).allow(''),
 
       // Donation related attributes
       projectOwnerId: Joi.string(),
@@ -60,15 +60,15 @@ export const sendNotificationValidator = Joi.object({
       currency: Joi.string(),
       createdAt: Joi.string(),
       toWalletAddress: Joi.string(),
-      fromWalletAddress: Joi.string().allow(null),
+      fromWalletAddress: Joi.string().allow(null).allow(''),
       donationValueUsd: Joi.number(),
       donationValueEth: Joi.number(),
       verified: Joi.boolean(),
-      transakStatus: Joi.string().allow(null),
+      transakStatus: Joi.string().allow(null).allow(''),
 
       //Project related attributes
-      lastName: Joi.string(),
-      OwnerId: Joi.number(),
+      lastName: Joi.string().allow(null).allow(''),
+      OwnerId: Joi.number().allow(null).allow(''),
 
       // Project update
       update: Joi.string(),
