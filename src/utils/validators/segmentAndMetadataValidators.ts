@@ -275,11 +275,15 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: givBackReadyClaimSchema,
     segment: null,
   },
-  projectHasNewHigherRank: {
+  projectHasRisenInTheRank: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
-  projectHasNewLowerRank: {
+  projectHasANewRank: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: null,
+  },
+  yourProjectGotARank: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },

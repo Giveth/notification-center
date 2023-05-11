@@ -1776,7 +1776,7 @@ function sendNotificationTestCases() {
 
   it('should create *Project has new lower rank* notification,  success', async () => {
     const data = {
-      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_LOWER_RANK,
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_A_NEW_RANK,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -1798,7 +1798,7 @@ function sendNotificationTestCases() {
   it('should create *Project has new lower rank* notification,  failed invalid metadata', async () => {
     try {
       const data = {
-        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_RISEN_IN_THE_RANK,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
@@ -1825,7 +1825,7 @@ function sendNotificationTestCases() {
 
   it('should create *Project has new higher rank* notification,  success', async () => {
     const data = {
-      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+      eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_RISEN_IN_THE_RANK,
       sendEmail: false,
       sendSegment: false,
       userWalletAddress: generateRandomEthereumAddress(),
@@ -1847,7 +1847,7 @@ function sendNotificationTestCases() {
   it('should create *Project has new higher rank* notification,  failed invalid metadata', async () => {
     try {
       const data = {
-        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_NEW_HIGHER_RANK,
+        eventName: NOTIFICATION_TYPE_NAMES.PROJECT_HAS_RISEN_IN_THE_RANK,
         sendEmail: false,
         sendSegment: false,
         userWalletAddress: generateRandomEthereumAddress(),
