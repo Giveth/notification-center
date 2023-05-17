@@ -19,7 +19,7 @@ export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
 // Define all joi schemas here
 const projectRelatedTrackerSchema = Joi.object({
   // seems we have to different schemas, not good TODO CHANGE ON IMPACT GRAPH
-  email: Joi.string(),
+  email: Joi.string().allow(null).allow(''),
   title: Joi.string().required(),
   firstName: Joi.string().allow(null, ''),
   lastName: Joi.string().allow(null, ''),
@@ -58,7 +58,7 @@ const givPowerUnLockedSchema = Joi.object({
 });
 
 const donationTrackerSchema = Joi.object({
-  email: Joi.string().allow(null, ''), // if anonymous
+  email: Joi.string().allow(null).allow(''), // if anonymous
   title: Joi.string().required(),
   firstName: Joi.string().allow(null, ''),
   lastName: Joi.string().allow(null, ''),
