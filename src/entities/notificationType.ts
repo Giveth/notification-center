@@ -63,6 +63,9 @@ export const SCHEMA_VALIDATORS_NAMES = {
   USER_GIVPOWER_RELOCKED_AUTOMATICALLY:
     'givPowerUserGivPowerRelockedAutoMatically',
   GIV_BACK_IS_READY_TO_CLAIM: 'givBackReadyToClaim',
+  PROJECT_HAS_A_NEW_RANK: 'projectHasANewRank',
+  PROJECT_HAS_RISEN_IN_THE_RANK: 'projectHasRisenInTheRank',
+  YOUR_PROJECT_GOT_A_RANK: 'yourProjectGotARank',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 

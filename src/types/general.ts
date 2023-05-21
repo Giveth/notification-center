@@ -45,4 +45,9 @@ export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_BADGE_UP_FOR_REVOKING = 'Project badge up for revoking',
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
   PROJECT_UPDATE_ADDED = 'Project update added - Users who supported',
+
+  // https://github.com/Giveth/impact-graph/issues/774#issuecomment-1542337083
+  PROJECT_HAS_A_NEW_RANK = 'Your project has a new rank',
+  PROJECT_HAS_RISEN_IN_THE_RANK = 'Your Project has risen in the rank',
+  YOUR_PROJECT_GOT_A_RANK = 'Your project got a rank',
 }
