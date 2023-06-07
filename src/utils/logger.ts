@@ -23,7 +23,8 @@ function createBunyanLogger() {
 
   if (
     process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test'
+    process.env.NODE_ENV === 'test' ||
+    process.env.LOG_STDOUT === 'true'
   ) {
     // Adding logs to console in local machine and running tests
     bunyanStreams.push({
