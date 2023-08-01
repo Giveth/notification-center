@@ -1,6 +1,9 @@
-name:  CI/CD
+name: main-pipeline
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -46,10 +49,7 @@ jobs:
       - name: Run tests
         run: npm run test
 
-
-
   publish:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -69,21 +69,10 @@ jobs:
           tag_with_sha: true
 
   deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'|| github.ref == 'refs/heads/staging'
     needs: publish
     runs-on: ubuntu-latest
     steps:
-      - name: Staging deploy
-        if: github.ref == 'refs/heads/staging'
-        uses: garygrossgarten/github-action-ssh@v0.6.4
-        with:
-          command: cd notification-center && git checkout staging && git pull &&  docker-compose -f docker-compose-staging.yml pull && docker-compose -f docker-compose-staging.yml down && docker-compose -f docker-compose-staging.yml up -d && docker image prune -a --force;
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USERNAME }}
-          privateKey: ${{ secrets.STAGING_PRIVATE_KEY}}
-
       - name: Production deploy
-        if: github.ref == 'refs/heads/main'
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
           command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
