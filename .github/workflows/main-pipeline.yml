@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
@@ -52,6 +55,7 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -71,6 +75,7 @@ jobs:
   deploy:
     needs: publish
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Production deploy
         uses: garygrossgarten/github-action-ssh@v0.6.4
