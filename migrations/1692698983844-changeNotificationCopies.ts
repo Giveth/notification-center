@@ -22,6 +22,16 @@ export class changeNotificationCopies1692698983844
   }
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    if (
+      process.env.NODE_ENV === 'test' ||
+      process.env.NODE_ENV === 'development'
+    ) {
+      // Running these migrations in test and development environments would make the tests fail
+      // because the notification types are not created in the test database
+      // In future we should use raw SQL queries to update the notification types
+      return;
+    }
+
     const notificationTypesArray = [
       {
         eventName: NOTIFICATION_TYPE_NAMES.PROJECT_LISTED_OWNER,
