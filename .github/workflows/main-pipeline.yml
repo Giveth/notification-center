@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -75,12 +76,17 @@ jobs:
   deploy:
     needs: publish
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
-      - name: Production deploy
-        uses: garygrossgarten/github-action-ssh@v0.6.4
+      - name: SSH and Redeploy
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
-          host: ${{ secrets.PRODUCTION_HOST }}
-          username: ${{ secrets.PRODUCTION_USERNAME }}
-          privateKey: ${{ secrets.PRODUCTION_PRIVATE_KEY}}
+          host: ${{ secrets.PROD_HOST_ALL }}
+          username: ${{ secrets.PROD_USERNAME_ALL }}
+          key: ${{ secrets.PROD_PRIVATE_KEY_ALL }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd giveth-all
+            docker compose stop notification-center
+            docker compose pull notification-center
+            docker compose up -d notification-center
+            docker image prune -a --force
