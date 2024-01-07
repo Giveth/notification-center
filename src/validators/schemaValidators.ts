@@ -62,7 +62,7 @@ export const sendNotificationValidator = Joi.object({
       toWalletAddress: Joi.string(),
       fromWalletAddress: Joi.string().allow(null).allow(''),
       donationValueUsd: Joi.number(),
-      donationValueEth: Joi.number(),
+      donationValueEth: Joi.number().allow(null),
       verified: Joi.boolean(),
       transakStatus: Joi.string().allow(null).allow(''),
 
