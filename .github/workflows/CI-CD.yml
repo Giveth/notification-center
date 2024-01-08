@@ -77,38 +77,26 @@ jobs:
         if: github.ref == 'refs/heads/staging'
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
-          command: cd notification-center && git checkout staging && git pull &&  docker-compose -f docker-compose-staging.yml pull && docker-compose -f docker-compose-staging.yml down && docker-compose -f docker-compose-staging.yml up -d && docker image prune -a --force;
           host: ${{ secrets.STAGING_HOST_ALL }}
           username: ${{ secrets.STAGING_USERNAME_ALL }}
           privateKey: ${{ secrets.STAGING_PRIVATE_KEY_ALL}}
+          script: |
+            cd giveth-all
+            docker compose stop notification-center
+            docker compose pull notification-center
+            docker compose up -d notification-center
+            docker image prune -a --force
 
       - name: Production deploy
         if: github.ref == 'refs/heads/main'
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
-          command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
           host: ${{ secrets.PROD_HOST_ALL }}
           username: ${{ secrets.PROD_USERNAME_ALL }}
           privateKey: ${{ secrets.PROD_PRIVATE_KEY_ALL}}
-
-
-  deploy-k8s:
-    if: github.ref == 'refs/heads/main'|| github.ref == 'refs/heads/staging'
-    needs: publish
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@master
-      - name: Deploy to Staging Cluster
-        if: github.ref == 'refs/heads/staging'
-        uses: steebchen/kubectl@v2.0.0
-        with: # defaults to latest kubectl binary version
-          config: ${{ secrets.KUBE_CONFIG }}
-          command: rollout restart deployments/notification-center -n backend
-      - name: Verify Staging Deployment
-        if: github.ref == 'refs/heads/staging'
-        uses: steebchen/kubectl@v2.0.0
-        with:
-          config: ${{ secrets.KUBE_CONFIG }}
-          version: v1.24.2 # specify kubectl binary version explicitly
-          command: rollout status deployments/notification-center -n backend
+          script: |
+            cd giveth-all
+            docker compose stop notification-center
+            docker compose pull notification-center
+            docker compose up -d notification-center
+            docker image prune -a --force
