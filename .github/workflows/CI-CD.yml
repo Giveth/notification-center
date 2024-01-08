@@ -75,11 +75,12 @@ jobs:
     steps:
       - name: Staging deploy
         if: github.ref == 'refs/heads/staging'
-        uses: garygrossgarten/github-action-ssh@v0.6.4
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.STAGING_HOST_ALL }}
           username: ${{ secrets.STAGING_USERNAME_ALL }}
-          privateKey: ${{ secrets.STAGING_PRIVATE_KEY_ALL}}
+          key: ${{ secrets.STAGING_PRIVATE_KEY_ALL}}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             cd giveth-all
             docker compose stop notification-center
@@ -89,11 +90,12 @@ jobs:
 
       - name: Production deploy
         if: github.ref == 'refs/heads/main'
-        uses: garygrossgarten/github-action-ssh@v0.6.4
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.PROD_HOST_ALL }}
           username: ${{ secrets.PROD_USERNAME_ALL }}
-          privateKey: ${{ secrets.PROD_PRIVATE_KEY_ALL}}
+          key: ${{ secrets.PROD_PRIVATE_KEY_ALL}}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             cd giveth-all
             docker compose stop notification-center
