@@ -3,6 +3,7 @@ import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+const solanaWalletAddressRegex = /^[A-Za-z0-9]{43,44}$/;
 const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
 
 export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
@@ -22,7 +23,10 @@ const throwHttpErrorIfJoiValidatorFails = (
   }
 };
 export const countUnreadValidator = Joi.object({
-  walletAddress: Joi.string().pattern(ethereumWalletAddressRegex).required(),
+  walletAddress: Joi.alternatives().try(
+    Joi.string().required().pattern(ethereumWalletAddressRegex),
+    Joi.string().required().pattern(solanaWalletAddressRegex),
+  ),
 });
 
 export const sendNotificationValidator = Joi.object({
@@ -36,9 +40,10 @@ export const sendNotificationValidator = Joi.object({
   sendSegment: Joi.boolean(),
   email: Joi.string().allow(null).allow(''),
   creationTime: Joi.number(),
-  userWalletAddress: Joi.string()
-    .pattern(ethereumWalletAddressRegex)
-    .required(),
+  userWalletAddress: Joi.alternatives().try(
+    Joi.string().required().pattern(ethereumWalletAddressRegex),
+    Joi.string().required().pattern(solanaWalletAddressRegex),
+  ),
 
   // We have a different validator for each notification type and validate it later in notification controller
   metadata: Joi.object(),

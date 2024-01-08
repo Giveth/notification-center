@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 import {
   generateRandomEthereumAddress,
+  generateRandomSolanaAddress,
   saveNotificationDirectlyToDb,
   sleep,
 } from '../../test/testUtils';
@@ -71,6 +72,30 @@ function createNotificationTestCases() {
 }
 
 function countUnreadNotificationsTestCases() {
+  it('should count unread notification by a solana wallet user', async () => {
+    const walletAddress = generateRandomSolanaAddress();
+    const userAddress = await createNewUserAddressIfNotExists(walletAddress);
+    const notificationType = await NotificationType.createQueryBuilder('type')
+      .where('type.name = :name', { name: eventName })
+      .getOne();
+    const profileNotificationType = await NotificationType.createQueryBuilder(
+      'type',
+    )
+      .where('type.name = :name', { name: profileEventName })
+      .getOne();
+    await saveNotificationDirectlyToDb(
+      userAddress,
+      notificationType!,
+    );
+    await saveNotificationDirectlyToDb(
+      userAddress,
+      profileNotificationType!,
+    );
+    const notificationCount = await countUnreadNotifications(userAddress);
+
+    assert.isOk(notificationCount);
+    assert.equal(notificationCount.total, 2);
+  });
   it('should count unread notifications by category', async () => {
     const walletAddress = generateRandomEthereumAddress();
     const userAddress = await createNewUserAddressIfNotExists(walletAddress);
