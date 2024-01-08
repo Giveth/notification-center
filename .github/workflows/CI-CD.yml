@@ -87,9 +87,9 @@ jobs:
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
           command: cd notification-center && git checkout main && git pull && docker-compose -f docker-compose-production.yml pull && docker-compose -f docker-compose-production.yml down && docker-compose -f docker-compose-production.yml up -d && docker image prune -a --force;
-          host: ${{ secrets.PRODUCTION_HOST }}
-          username: ${{ secrets.PRODUCTION_USERNAME }}
-          privateKey: ${{ secrets.PRODUCTION_PRIVATE_KEY}}
+          host: ${{ secrets.PRO_HOST_ALL }}
+          username: ${{ secrets.PROD_USERNAME_ALL }}
+          privateKey: ${{ secrets.PROD_PRIVATE_KEY_ALL}}
 
 
   deploy-k8s:
