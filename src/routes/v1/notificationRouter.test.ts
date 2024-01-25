@@ -1,5 +1,6 @@
 import {
   generateRandomEthereumAddress,
+  generateRandomSolanaAddress,
   generateRandomTxHash,
   getAccessTokenForMockAuthMicroService,
   getGivEconomyBasicAuth,
@@ -75,6 +76,23 @@ function getNotificationTestCases() {
 }
 
 function sendNotificationTestCases() {
+  it('should create a notification with a solana wallet address user', async () => {
+    const data = {
+      eventName: 'Incomplete profile',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomSolanaAddress(),
+      metadata: {},
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isTrue(result.data.success);
+  });
   it('should create *Incomplete profile* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Incomplete profile',
