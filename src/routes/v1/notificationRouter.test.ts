@@ -1,5 +1,6 @@
 import {
   generateRandomEthereumAddress,
+  generateRandomSolanaAddress,
   generateRandomTxHash,
   getAccessTokenForMockAuthMicroService,
   getGivEconomyBasicAuth,
@@ -75,6 +76,23 @@ function getNotificationTestCases() {
 }
 
 function sendNotificationTestCases() {
+  it('should create a notification with a solana wallet address user', async () => {
+    const data = {
+      eventName: 'Incomplete profile',
+      sendEmail: false,
+      sendSegment: false,
+      userWalletAddress: generateRandomSolanaAddress(),
+      metadata: {},
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isTrue(result.data.success);
+  });
   it('should create *Incomplete profile* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Incomplete profile',
@@ -1399,6 +1417,49 @@ function sendNotificationTestCases() {
     assert.isOk(result.data);
     assert.isTrue(result.data.success);
   });
+  it('should create *Made donation* notification,  success, segment is on, donationValueEth is null', async () => {
+    const data = {
+      eventName: 'Made donation',
+      sendEmail: true,
+      sendSegment: true,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+      segment: {
+        analyticsUserId: 'givethId-255',
+        anonymousId: 'givethId-255',
+        payload: {
+          email: 'test@giveth.com',
+          title: 'How many photos is too many photos?',
+          firstName: 'firstName',
+          projectOwnerId: '68',
+          slug: 'how-many-photos-is-too-many-photos',
+          amount: 0.0001,
+          transactionId: generateRandomTxHash(),
+          transactionNetworkId: 5,
+          currency: 'ETH',
+          createdAt: '2022-11-10T07:36:13.182Z',
+          toWalletAddress: generateRandomEthereumAddress(),
+          donationValueUsd: 0.120492,
+          donationValueEth: null,
+          verified: true,
+          transakStatus: null,
+          fromWalletAddress: generateRandomEthereumAddress(),
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
   it('should create *Made donation* notification,  failed invalid metadata, segment is off', async () => {
     try {
       const data = {
@@ -1427,6 +1488,92 @@ function sendNotificationTestCases() {
     }
   });
 
+  it('should create *Donation received* notification,  success, segment is on', async () => {
+    const data = {
+      eventName: 'Donation received',
+      sendEmail: true,
+      sendSegment: true,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+      segment: {
+        analyticsUserId: 'givethId-255',
+        anonymousId: 'givethId-255',
+        payload: {
+          email: 'test@giveth.com',
+          title: 'How many photos is too many photos?',
+          firstName: 'firstName',
+          projectOwnerId: '68',
+          slug: 'how-many-photos-is-too-many-photos',
+          amount: 0.0001,
+          transactionId: generateRandomTxHash(),
+          transactionNetworkId: 5,
+          currency: 'ETH',
+          createdAt: '2022-11-10T07:36:13.182Z',
+          toWalletAddress: generateRandomEthereumAddress(),
+          donationValueUsd: 0.120492,
+          donationValueEth: 0.0001,
+          verified: true,
+          transakStatus: null,
+          fromWalletAddress: generateRandomEthereumAddress(),
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Donation received* notification,  success, segment is on, donationValueEth is null', async () => {
+    const data = {
+      eventName: 'Donation received',
+      sendEmail: true,
+      sendSegment: true,
+      userWalletAddress: generateRandomEthereumAddress(),
+      metadata: {
+        projectTitle,
+        projectLink,
+      },
+      segment: {
+        analyticsUserId: 'givethId-255',
+        anonymousId: 'givethId-255',
+        payload: {
+          email: 'test@giveth.com',
+          title: 'How many photos is too many photos?',
+          firstName: 'firstName',
+          projectOwnerId: '68',
+          slug: 'how-many-photos-is-too-many-photos',
+          amount: 0.0001,
+          transactionId: generateRandomTxHash(),
+          transactionNetworkId: 5,
+          currency: 'ETH',
+          createdAt: '2022-11-10T07:36:13.182Z',
+          toWalletAddress: generateRandomEthereumAddress(),
+          donationValueUsd: 0.120492,
+          donationValueEth: null,
+          verified: true,
+          transakStatus: null,
+          fromWalletAddress: generateRandomEthereumAddress(),
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
   it('should create *Donation received* notification,  success, segment is off', async () => {
     const data = {
       eventName: 'Donation received',

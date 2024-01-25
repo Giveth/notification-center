@@ -4,6 +4,7 @@ import { UserAddress } from '../src/entities/userAddress';
 import { NotificationType } from '../src/entities/notificationType';
 import { createBasicAuthentication } from '../src/utils/authorizationUtils';
 import { sign } from 'jsonwebtoken';
+import { Keypair } from '@solana/web3.js';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -51,6 +52,10 @@ export const assertNotThrowsAsync = async (fn: any) => {
 // eslint:disable-next-line
 export function generateRandomEthereumAddress(): string {
   return `0x${generateHexNumber(40)}`;
+}
+
+export function generateRandomSolanaAddress(): string {
+  return Keypair.generate().publicKey.toString();
 }
 
 // eslint:disable-next-line

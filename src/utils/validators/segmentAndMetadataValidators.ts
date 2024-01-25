@@ -6,6 +6,8 @@ import { GIVETH_IO_EVENTS, NETWORK_IDS } from '../utils';
 // does not care about calculating values, only validating fields
 const filterDateRegex = new RegExp('^[0-9]{8} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+const solanaTxRegex = /^[A-Za-z0-9]{86,88}$/;
+const solanaWalletAddressRegex = /^[A-Za-z0-9]{43,44}$/;
 const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
 const tokenSymbolRegex = /^[a-zA-Z0-9]{3,10}$/;
 
@@ -65,14 +67,21 @@ const donationTrackerSchema = Joi.object({
   projectOwnerId: Joi.string().allow(null, ''),
   slug: Joi.string().allow(null, ''),
   amount: Joi.number()?.greater(0).required(),
-  transactionId: Joi.string().required().pattern(txHashRegex).messages({
-    'string.pattern.base': errorMessages.INVALID_TRANSACTION_ID,
-  }),
+  transactionId: Joi.alternatives().try(
+    Joi.string().required().pattern(txHashRegex, 'EVM transaction IDs'),
+    Joi.string().required().pattern(solanaTxRegex, 'Solana Transaction ID'),
+  ),
   transactionNetworkId: Joi.number().required(),
   currency: Joi.string().required(),
   createdAt: Joi.string(),
-  toWalletAddress: Joi.string().required().pattern(ethereumWalletAddressRegex),
-  fromWalletAddress: Joi.string().pattern(ethereumWalletAddressRegex),
+  toWalletAddress: Joi.alternatives().try(
+    Joi.string().required().pattern(ethereumWalletAddressRegex),
+    Joi.string().required().pattern(solanaWalletAddressRegex),
+  ),
+  fromWalletAddress: Joi.alternatives().try(
+    Joi.string().required().pattern(ethereumWalletAddressRegex),
+    Joi.string().required().pattern(solanaWalletAddressRegex),
+  ),
   donationValueUsd: Joi.number().greater(0).allow(null), // in case it fails
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
