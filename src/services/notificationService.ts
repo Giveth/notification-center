@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   createNotification,
   findNotificationByTrackId,
@@ -10,9 +11,36 @@ import { logger } from '../utils/logger';
 import { EMAIL_STATUSES, Notification } from '../entities/notification';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAndMetadataValidators';
 import { validateWithJoiSchema } from '../validators/schemaValidators';
-import { SegmentAnalyticsSingleton } from './segment/segmentAnalyticsSingleton';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
+
+enum EmailNotificationId {
+  donationReceived = 'donationReceived',
+}
+
+const activityCreator = (payload: any, emailNotificationId: EmailNotificationId) => {
+  if (emailNotificationId === EmailNotificationId.donationReceived) {
+    return {
+      "activities": [
+        {
+          "activity_id": `act:cm:${emailNotificationId}`,
+          "attributes": {
+            "str:cm:projecttitle": payload.title,
+            "int:cm:donationamount": payload.amount,
+            "str:cm:donationtoken": payload.token,
+            "str:cm:email": payload.email,
+            "str:cm:projectlink": payload.slug,
+            "bol:cm:verified": payload.verified,
+            "str:cm:transactionlink": payload.transactionId
+          },
+          "fields": {
+            "str::email": payload.email
+          }
+        }
+      ]
+    };
+  }
+}
 
 export const sendNotification = async (
   body: SendNotificationRequest,
@@ -80,12 +108,17 @@ export const sendNotification = async (
     // And it's not good, we should find another solution to separate sending segment and email
     const segmentData = body.segment?.payload;
     validateWithJoiSchema(segmentData, segmentValidator);
-    await SegmentAnalyticsSingleton.getInstance().track({
-      eventName: notificationType.emailNotificationId as string,
-      anonymousId: body?.segment?.anonymousId,
-      properties: segmentData,
-      analyticsUserId: body?.segment?.analyticsUserId,
-    });
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://api-us.ortto.app/v1/activities/create',
+      headers: {
+        'X-Api-Key': process.env.ORTTO_API_KEY as string,
+        'Content-Type': 'application/json'
+      },
+      data: activityCreator(segmentData, EmailNotificationId.donationReceived)
+    };
+    await axios.request(config);
     emailStatus = EMAIL_STATUSES.SENT;
   }
 
@@ -99,7 +132,7 @@ export const sendNotification = async (
   }
 
   if (!notificationSetting?.allowDappPushNotification) {
-    //TODO In future we can add a create notification but with  disabledNotification:true
+    //TODO In future we can add a create notification but with disabledNotification:true
     // So we can exclude them in list of notifications
     return {
       success: true,
