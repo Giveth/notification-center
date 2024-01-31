@@ -29,9 +29,9 @@ const activityCreator = (payload: any, emailNotificationId: EmailNotificationId)
             "int:cm:donationamount": payload.amount,
             "str:cm:donationtoken": payload.token,
             "str:cm:email": payload.email,
-            "str:cm:projectlink": payload.slug,
+            "str:cm:projectlink": payload.projectLink,
             "bol:cm:verified": payload.verified,
-            "str:cm:transactionlink": payload.transactionId
+            "str:cm:transactionlink": payload.transactionLink,
           },
           "fields": {
             "str::email": payload.email
