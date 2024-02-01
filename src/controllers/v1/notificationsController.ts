@@ -35,7 +35,6 @@ import {
   markNotificationsAsRead,
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
-import { Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { sendNotification } from '../../services/notificationService';
 import { StandardError } from '../../types/StandardError';
@@ -62,7 +61,7 @@ export class NotificationsController {
       logger.error('sendNotification() error', {
         error: e,
         requestBody: body,
-        segmentPayload: body?.segment?.payload,
+        segmentPayload: body?.emailData?.payload,
       });
       throw e;
     }
