@@ -13,32 +13,33 @@ import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAn
 import { validateWithJoiSchema } from '../validators/schemaValidators';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
+import { NOTIFICATIONS_EVENT_NAMES } from '../types/notifications';
+import { orttoActivityCall } from '../adapters/orttoEmailService/orttoAdapter';
 
-enum EmailNotificationId {
-  donationReceived = 'donationReceived',
-}
-
-const activityCreator = (payload: any, emailNotificationId: EmailNotificationId) => {
-  if (emailNotificationId === EmailNotificationId.donationReceived) {
-    return {
-      "activities": [
-        {
-          "activity_id": `act:cm:${emailNotificationId}`,
-          "attributes": {
-            "str:cm:projecttitle": payload.title,
-            "int:cm:donationamount": payload.amount,
-            "str:cm:donationtoken": payload.token,
-            "str:cm:email": payload.email,
-            "str:cm:projectlink": payload.projectLink,
-            "bol:cm:verified": payload.verified,
-            "str:cm:transactionlink": payload.transactionLink,
-          },
-          "fields": {
-            "str::email": payload.email
+const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) => {
+  switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${orttoEventName}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "int:cm:donationamount": payload.amount,
+              "str:cm:donationtoken": payload.token,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "bol:cm:verified": payload.verified,
+              "str:cm:transactionlink": payload.transactionLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
           }
-        }
-      ]
-    };
+        ]
+      };
+    default:
+      throw new Error('Invalid event name');
   }
 }
 
@@ -106,19 +107,10 @@ export const sendNotification = async (
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
     //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
     // And it's not good, we should find another solution to separate sending segment and email
-    const segmentData = body.segment?.payload;
-    validateWithJoiSchema(segmentData, segmentValidator);
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://api-us.ortto.app/v1/activities/create',
-      headers: {
-        'X-Api-Key': process.env.ORTTO_API_KEY as string,
-        'Content-Type': 'application/json'
-      },
-      data: activityCreator(segmentData, EmailNotificationId.donationReceived)
-    };
-    await axios.request(config);
+    const emailData = body.emailData?.payload;
+    validateWithJoiSchema(emailData, segmentValidator);
+    const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
+    await orttoActivityCall(data);
     emailStatus = EMAIL_STATUSES.SENT;
   }
 
@@ -146,7 +138,7 @@ export const sendNotification = async (
     emailStatus,
     trackId: body?.trackId,
     metadata: body?.metadata,
-    segmentData: body.segment,
+    segmentData: body.emailData,
     projectId,
   };
   if (body.creationTime) {
