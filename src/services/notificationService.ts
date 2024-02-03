@@ -13,7 +13,7 @@ import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAn
 import { validateWithJoiSchema } from '../validators/schemaValidators';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
-import { NOTIFICATIONS_EVENT_NAMES } from '../types/notifications';
+import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
 import { orttoActivityCall } from '../adapters/orttoEmailService/orttoAdapter';
 
 const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) => {
@@ -22,7 +22,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
       return {
         "activities": [
           {
-            "activity_id": `act:cm:${orttoEventName}`,
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
             "attributes": {
               "str:cm:projecttitle": payload.title,
               "int:cm:donationamount": payload.amount,
@@ -31,6 +31,25 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectlink": payload.projectLink,
               "bol:cm:verified": payload.verified,
               "str:cm:transactionlink": payload.transactionLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_CREATED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:firstname": payload.firstName,
+              "str:cm:lastname": payload.lastName,
+              "str:cm:projectsowned": payload.projectsOwned,
+              "str:cm:projectlink": payload.projectLink,
             },
             "fields": {
               "str::email": payload.email
