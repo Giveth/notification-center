@@ -241,7 +241,7 @@ export const sendNotification = async (
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
     //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
     // And it's not good, we should find another solution to separate sending segment and email
-    const emailData = body.emailData?.payload;
+    const emailData = body.segment?.payload;
     validateWithJoiSchema(emailData, segmentValidator);
     const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
     await orttoActivityCall(data);
@@ -272,7 +272,7 @@ export const sendNotification = async (
     emailStatus,
     trackId: body?.trackId,
     metadata: body?.metadata,
-    segmentData: body.emailData,
+    segmentData: body.segment,
     projectId,
   };
   if (body.creationTime) {

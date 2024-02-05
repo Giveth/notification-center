@@ -61,7 +61,7 @@ export class NotificationsController {
       logger.error('sendNotification() error', {
         error: e,
         requestBody: body,
-        segmentPayload: body?.emailData?.payload,
+        segmentPayload: body?.segment?.payload,
       });
       throw e;
     }
