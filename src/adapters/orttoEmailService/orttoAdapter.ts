@@ -13,6 +13,7 @@ export const orttoActivityCall = async (data: any) => {
       },
       data
     };
+    data.activities.map((a: any) => logger.debug('orttoActivityCall', a));
     await axios.request(config);
   } catch (e) {
     logger.error('orttoActivityCall error', {
