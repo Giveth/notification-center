@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   createNotification,
   findNotificationByTrackId,
@@ -31,25 +30,6 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectlink": payload.projectLink,
               "bol:cm:verified": payload.verified,
               "str:cm:transactionlink": payload.transactionLink,
-            },
-            "fields": {
-              "str::email": payload.email
-            }
-          }
-        ]
-      };
-    case NOTIFICATIONS_EVENT_NAMES.PROJECT_CREATED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:firstname": payload.firstName,
-              "str:cm:lastname": payload.lastName,
-              "obj:cm:projectsowned": payload.projectsOwned,
-              "str:cm:projectlink": payload.projectLink,
             },
             "fields": {
               "str::email": payload.email
@@ -138,7 +118,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
           }
         ]
       };
-    case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
       return {
         "activities": [
           {
@@ -155,7 +135,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
           }
         ]
       };
-    case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED:
       return {
         "activities": [
           {
@@ -173,7 +153,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         ]
       };
     default:
-      throw new Error('Invalid event name');
+      throw new Error('activityCreator: Invalid event name');
   }
 }
 
