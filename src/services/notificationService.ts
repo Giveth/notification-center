@@ -69,7 +69,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
           }
         ]
       };
-    case NOTIFICATIONS_EVENT_NAMES.PROJECT_DEACTIVATED:
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED:
       return {
         "activities": [
           {
