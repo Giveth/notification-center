@@ -355,8 +355,6 @@ function sendNotificationTestCases() {
       sendEmail: true,
       sendSegment: true,
       segment: {
-        analyticsUserId: 'givethId-255',
-        anonymousId: 'givethId-255',
         payload: {
           title: 'Test verify and reject form emails',
           lastName: 'Ranjbar',
@@ -1385,8 +1383,6 @@ function sendNotificationTestCases() {
         projectLink,
       },
       segment: {
-        analyticsUserId: 'givethId-255',
-        anonymousId: 'givethId-255',
         payload: {
           email: 'test@giveth.com',
           title: 'How many photos is too many photos?',
@@ -1428,8 +1424,6 @@ function sendNotificationTestCases() {
         projectLink,
       },
       segment: {
-        analyticsUserId: 'givethId-255',
-        anonymousId: 'givethId-255',
         payload: {
           email: 'test@giveth.com',
           title: 'How many photos is too many photos?',
@@ -1499,8 +1493,6 @@ function sendNotificationTestCases() {
         projectLink,
       },
       segment: {
-        analyticsUserId: 'givethId-255',
-        anonymousId: 'givethId-255',
         payload: {
           email: 'test@giveth.com',
           title: 'How many photos is too many photos?',
@@ -1542,8 +1534,6 @@ function sendNotificationTestCases() {
         projectLink,
       },
       segment: {
-        analyticsUserId: 'givethId-255',
-        anonymousId: 'givethId-255',
         payload: {
           email: 'test@giveth.com',
           title: 'How many photos is too many photos?',
