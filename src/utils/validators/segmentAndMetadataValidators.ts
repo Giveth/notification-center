@@ -67,12 +67,15 @@ const donationTrackerSchema = Joi.object({
   lastName: Joi.string().allow(null, ''),
   projectOwnerId: Joi.string().allow(null, ''),
   slug: Joi.string().allow(null, ''),
+  projectLink: Joi.string().allow(null, ''),
   amount: Joi.number()?.greater(0).required(),
+  token: Joi.string().allow(null, ''),
   transactionId: Joi.alternatives().try(
     Joi.string().required().pattern(txHashRegex, 'EVM transaction IDs'),
     Joi.string().required().pattern(solanaTxRegex, 'Solana Transaction ID'),
   ),
   transactionNetworkId: Joi.number().required(),
+  transactionLink: Joi.string().allow(null, ''),
   currency: Joi.string().required(),
   createdAt: Joi.string(),
   toWalletAddress: Joi.alternatives().try(
