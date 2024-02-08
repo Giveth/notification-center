@@ -10,9 +10,171 @@ import { logger } from '../utils/logger';
 import { EMAIL_STATUSES, Notification } from '../entities/notification';
 import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAndMetadataValidators';
 import { validateWithJoiSchema } from '../validators/schemaValidators';
-import { SegmentAnalyticsSingleton } from './segment/segmentAnalyticsSingleton';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
+import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
+import {getEmailAdapter} from "../adapters/adapterFactory";
+
+const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
+  switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "int:cm:donationamount": payload.amount,
+              "str:cm:donationtoken": payload.token,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "bol:cm:verified": payload.verified,
+              "str:cm:transactionlink": payload.transactionLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "str:cm:firstname": payload.firstName,
+              "str:cm:lastname": payload.lastName,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_UPDATE_ADDED_OWNER:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "str:cm:verified-status": 'verified',
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "str:cm:verified-status": 'rejected',
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "str:cm:verified-status": 'revoked',
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
+    default:
+      logger.debug('activityCreator() invalid event name', orttoEventName)
+      return undefined
+  }
+}
 
 export const sendNotification = async (
   body: SendNotificationRequest,
@@ -78,14 +240,10 @@ export const sendNotification = async (
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
     //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
     // And it's not good, we should find another solution to separate sending segment and email
-    const segmentData = body.segment?.payload;
-    validateWithJoiSchema(segmentData, segmentValidator);
-    await SegmentAnalyticsSingleton.getInstance().track({
-      eventName: notificationType.emailNotificationId as string,
-      anonymousId: body?.segment?.anonymousId,
-      properties: segmentData,
-      analyticsUserId: body?.segment?.analyticsUserId,
-    });
+    const emailData = body.segment?.payload;
+    validateWithJoiSchema(emailData, segmentValidator);
+    const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
+    await getEmailAdapter().callOrttoActivity(data);
     emailStatus = EMAIL_STATUSES.SENT;
   }
 
@@ -99,7 +257,7 @@ export const sendNotification = async (
   }
 
   if (!notificationSetting?.allowDappPushNotification) {
-    //TODO In future we can add a create notification but with  disabledNotification:true
+    //TODO In future we can add a create notification but with disabledNotification:true
     // So we can exclude them in list of notifications
     return {
       success: true,
