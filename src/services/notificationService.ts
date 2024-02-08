@@ -15,7 +15,7 @@ import { StandardError } from '../types/StandardError';
 import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
 import {getEmailAdapter} from "../adapters/adapterFactory";
 
-const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) => {
+const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
       return {
@@ -153,7 +153,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         ]
       };
     default:
-      throw new Error('activityCreator: Invalid event name');
+      logger.debug('activityCreator() invalid event name', orttoEventName)
+      return undefined
   }
 }
 

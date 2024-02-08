@@ -6,6 +6,9 @@ import {OrttoAdapterInterface} from "./orttoAdapterInterface";
 export class OrttoAdapter implements OrttoAdapterInterface{
   async callOrttoActivity(data: any): Promise<void> {
     try {
+      if (!data){
+        throw new Error('callOrttoActivity input data is empty')
+      }
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -20,9 +23,9 @@ export class OrttoAdapter implements OrttoAdapterInterface{
       await axios.request(config);
     } catch (e) {
       logger.error('orttoActivityCall error', {
-        e,
+        error: e,
+        data
       });
-      throw e;
     }
   }
 
