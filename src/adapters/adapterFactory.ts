@@ -28,6 +28,6 @@ export const getEmailAdapter = () => {
     case 'mock':
       return emailMockAdapter;
     default:
-      throw new Error(errorMessages.SPECIFY_JWT_AUTHENTICATION_ADAPTER);
+      throw new Error(errorMessages.SPECIFY_Email_ADAPTER);
   }
 };
