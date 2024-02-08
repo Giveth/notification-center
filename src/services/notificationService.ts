@@ -37,6 +37,24 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
           }
         ]
       };
+    case NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED:
+      return {
+        "activities": [
+          {
+            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+            "attributes": {
+              "str:cm:projecttitle": payload.title,
+              "str:cm:email": payload.email,
+              "str:cm:projectlink": payload.projectLink,
+              "str:cm:firstname": payload.firstName,
+              "str:cm:lastname": payload.lastName,
+            },
+            "fields": {
+              "str::email": payload.email
+            }
+          }
+        ]
+      };
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED:
       return {
         "activities": [
