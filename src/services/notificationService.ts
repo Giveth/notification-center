@@ -13,9 +13,9 @@ import { validateWithJoiSchema } from '../validators/schemaValidators';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
 import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
-import { orttoActivityCall } from '../adapters/orttoEmailService/orttoAdapter';
+import {getEmailAdapter} from "../adapters/adapterFactory";
 
-const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) => {
+const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
       return {
@@ -171,7 +171,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         ]
       };
     default:
-      throw new Error('activityCreator: Invalid event name');
+      logger.debug('activityCreator() invalid event name', orttoEventName)
+      return undefined
   }
 }
 
@@ -242,7 +243,7 @@ export const sendNotification = async (
     const emailData = body.segment?.payload;
     validateWithJoiSchema(emailData, segmentValidator);
     const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
-    await orttoActivityCall(data);
+    await getEmailAdapter().callOrttoActivity(data);
     emailStatus = EMAIL_STATUSES.SENT;
   }
 
