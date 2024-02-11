@@ -24,7 +24,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
             "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
             "attributes": {
               "str:cm:projecttitle": payload.title,
-              "int:cm:donationamount": payload.amount,
+              "str:cm:donationamount": payload.amount.toString(),
               "str:cm:donationtoken": payload.token,
               "str:cm:email": payload.email,
               "str:cm:projectlink": payload.projectLink,
