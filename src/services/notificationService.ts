@@ -16,173 +16,98 @@ import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notificat
 import {getEmailAdapter} from "../adapters/adapterFactory";
 
 const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
+  const fields = {
+    "str::email": payload.email,
+  }
+  if (process.env.NODE_ENV === 'production') {
+    fields['str:cm:user-id'] = payload.userId
+  }
+  let attributes;
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:donationamount": payload.amount.toString(),
-              "str:cm:donationtoken": payload.token,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-              "bol:cm:verified": payload.verified,
-              "str:cm:transactionlink": payload.transactionLink,
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:donationamount": payload.amount.toString(),
+        "str:cm:donationtoken": payload.token,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "bol:cm:verified": payload.verified,
+        "str:cm:transactionlink": payload.transactionLink,
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-              "str:cm:firstname": payload.firstName,
-              "str:cm:lastname": payload.lastName,
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "str:cm:firstname": payload.firstName,
+        "str:cm:lastname": payload.lastName,
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UPDATE_ADDED_OWNER:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-              "str:cm:verified-status": 'verified',
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "str:cm:verified-status": 'verified',
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-              "str:cm:verified-status": 'rejected',
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "str:cm:verified-status": 'rejected',
       };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED:
-      return {
-        "activities": [
-          {
-            "activity_id": `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
-            "attributes": {
-              "str:cm:projecttitle": payload.title,
-              "str:cm:email": payload.email,
-              "str:cm:projectlink": payload.projectLink,
-              "str:cm:verified-status": 'revoked',
-            },
-            "fields": {
-              "str::email": payload.email,
-              "str:cm:user-id": payload.userId,
-            }
-          }
-        ]
-      };
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "str:cm:verified-status": 'revoked',
+      }
+      break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
-      return undefined
   }
+  return {
+    activities: [
+      {
+        activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+        attributes,
+        fields,
+      }
+    ]
+  };
 }
 
 export const sendNotification = async (
