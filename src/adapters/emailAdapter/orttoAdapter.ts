@@ -2,7 +2,6 @@ import { logger } from '../../utils/logger';
 import axios from 'axios';
 import {OrttoAdapterInterface} from "./orttoAdapterInterface";
 
-
 export class OrttoAdapter implements OrttoAdapterInterface{
   async callOrttoActivity(data: any): Promise<void> {
     try {
@@ -28,5 +27,4 @@ export class OrttoAdapter implements OrttoAdapterInterface{
       });
     }
   }
-
 }

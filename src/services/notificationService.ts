@@ -32,7 +32,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:transactionlink": payload.transactionLink,
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -50,7 +51,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:lastname": payload.lastName,
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -66,7 +68,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectlink": payload.projectLink,
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -82,7 +85,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectlink": payload.projectLink,
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -98,7 +102,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectlink": payload.projectLink,
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -114,7 +119,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -131,7 +137,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:verified-status": 'verified',
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -148,7 +155,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:verified-status": 'rejected',
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]
@@ -165,7 +173,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
               "str:cm:verified-status": 'revoked',
             },
             "fields": {
-              "str::email": payload.email
+              "str::email": payload.email,
+              "str:cm:user-id": payload.userId,
             }
           }
         ]

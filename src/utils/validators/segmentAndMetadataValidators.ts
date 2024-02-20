@@ -25,6 +25,7 @@ const projectRelatedTrackerSchema = Joi.object({
   title: Joi.string().required(),
   firstName: Joi.string().allow(null, ''),
   lastName: Joi.string().allow(null, ''),
+  userId: Joi.string(),
   OwnerId: Joi.number(),
   slug: Joi.string().required(),
   projectLink: Joi.string().allow(null).allow(''),
