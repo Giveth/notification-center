@@ -56,6 +56,7 @@ export const sendNotificationValidator = Joi.object({
       title: Joi.string(),
       slug: Joi.string(),
       firstName: Joi.string().allow(null).allow(''),
+      userId: Joi.string(),
       projectLink: Joi.string().allow(null).allow(''),
 
       // Donation related attributes
