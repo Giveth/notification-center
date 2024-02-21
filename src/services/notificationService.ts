@@ -20,7 +20,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
     "str::email": payload.email,
   }
   if (process.env.ENVIRONMENT === 'production') {
-    fields['str:cm:user-id'] = payload.userId
+    fields['str:cm:user-id'] = payload.userId?.toString()
   }
   let attributes;
   switch (orttoEventName) {
