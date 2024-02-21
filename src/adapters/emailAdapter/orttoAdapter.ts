@@ -8,7 +8,6 @@ export class OrttoAdapter implements OrttoAdapterInterface{
       if (!data){
         throw new Error('callOrttoActivity input data is empty')
       }
-      if (process.env.NODE_ENV !== 'production') return;
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
