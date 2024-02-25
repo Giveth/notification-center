@@ -22,8 +22,8 @@ export class OrttoAdapter implements OrttoAdapterInterface{
       await axios.request(config);
     } catch (e) {
       logger.error('orttoActivityCall error', {
-        error: e,
-        data
+        error: JSON.stringify(e),
+        data: JSON.stringify(data)
       });
     }
   }
