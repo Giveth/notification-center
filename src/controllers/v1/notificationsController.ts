@@ -35,7 +35,6 @@ import {
   markNotificationsAsRead,
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
-import { Notification } from '../../entities/notification';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 import { sendNotification } from '../../services/notificationService';
 import { StandardError } from '../../types/StandardError';
