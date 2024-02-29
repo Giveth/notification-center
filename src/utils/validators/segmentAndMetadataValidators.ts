@@ -261,7 +261,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   verificationFormRejected: {
     metadata: projectTitleProjectLinkReasonSchema,
-    segment: null,
+    segment: projectRelatedTrackerSchema,
   },
   verificationFormReapplyReminder: {
     metadata: verificationFormReapplyReminderSchema,

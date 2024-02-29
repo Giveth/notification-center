@@ -22,6 +22,7 @@ const throwHttpErrorIfJoiValidatorFails = (
     throw error;
   }
 };
+
 export const countUnreadValidator = Joi.object({
   walletAddress: Joi.alternatives().try(
     Joi.string().required().pattern(ethereumWalletAddressRegex),

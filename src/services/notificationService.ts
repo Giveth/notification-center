@@ -80,6 +80,14 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:verified-status": 'verified',
       };
       break
+    case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectlink": payload.projectLink,
+        "str:cm:verified-status": 'rejected',
+      };
+      break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
       attributes = {
         "str:cm:projecttitle": payload.title,
@@ -114,6 +122,11 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
       break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
+      return;
+  }
+  if (!ORTTO_EVENT_NAMES[orttoEventName]) {
+    logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName)
+    return;
   }
   return {
     activities: [
@@ -174,6 +187,9 @@ export const sendNotification = async (
     },
     trackId: body.trackId,
     metadata: body.metadata,
+    payload: body.segment?.payload,
+    sendEmail: body.sendEmail,
+    sendSegment: body.sendSegment,
   });
 
   const shouldSendEmail =
@@ -188,12 +204,12 @@ export const sendNotification = async (
     ]?.segment;
 
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
-    //TODO Currently sending email and segment event are tightly coupled, we can't send segment event without sending email
-    // And it's not good, we should find another solution to separate sending segment and email
     const emailData = body.segment?.payload;
     validateWithJoiSchema(emailData, segmentValidator);
     const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
-    await getEmailAdapter().callOrttoActivity(data);
+    if (data) {
+      await getEmailAdapter().callOrttoActivity(data);
+    }
     emailStatus = EMAIL_STATUSES.SENT;
   }
 
