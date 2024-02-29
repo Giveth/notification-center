@@ -104,6 +104,22 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:verified-status": 'revoked',
       }
       break
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING:
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+        "str:cm:user-id": payload.userId?.toString(),
+      }
+      break
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING:
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+        "str:cm:user-id": payload.userId?.toString(),
+      }
+      break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
       return;
