@@ -24,6 +24,14 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.USER_SUPER_TOKENS_CRITICAL:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId,
+        "str:cm:criticalDate": payload.criticalDate,
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
       attributes = {
         "str:cm:projecttitle": payload.title,

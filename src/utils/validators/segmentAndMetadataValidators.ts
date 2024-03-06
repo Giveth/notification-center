@@ -141,12 +141,23 @@ const givBackReadyClaimSchema = Joi.object({
   amount: Joi.string().required(),
 });
 
+const superFluidTokenTrackerSchema = Joi.object({
+  tokenSymbol: Joi.string().required(),
+  email: Joi.string().required(),
+  userId: Joi.number().required(),
+  criticalDate: Joi.string().required(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
     metadata: ObjectSchema | null;
   };
 } = {
+  userSuperTokensCritical: {
+    metadata: null,
+    segment: superFluidTokenTrackerSchema,
+  },
   draftedProjectSavedValidator: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
