@@ -92,6 +92,7 @@ const donationTrackerSchema = Joi.object({
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
   transakStatus: Joi.string().allow(null),
+  isRecurringDonation: Joi.boolean().allow(null),
 });
 
 const projectTitleProjectLinkSchema = Joi.object({
@@ -146,6 +147,7 @@ const superFluidTokenTrackerSchema = Joi.object({
   email: Joi.string().required(),
   userId: Joi.number().required(),
   criticalDate: Joi.string().required(),
+  isEnded: Joi.boolean(),
 });
 
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
