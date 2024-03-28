@@ -157,7 +157,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   };
 } = {
   userSuperTokensCritical: {
-    metadata: null,
+    metadata: superFluidTokenTrackerSchema,
     segment: superFluidTokenTrackerSchema,
   },
   draftedProjectSavedValidator: {
