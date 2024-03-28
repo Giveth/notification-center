@@ -13,6 +13,7 @@ import { NotificationType } from './notificationType';
 import { UserAddress } from './userAddress';
 
 export const NOTIFICATION_CATEGORY_GROUPS = {
+  SUPERFLUID: 'superfluid',
   GIVPOWER_ALLOCATIONS: 'givPowerAllocations',
   PROJECT_BOOSTING_STATUS: 'projectBoostStatus',
   SELF_BOOSTING_STATUS: 'yourBoostStatus',
