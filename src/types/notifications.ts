@@ -1,4 +1,5 @@
 export enum NOTIFICATIONS_EVENT_NAMES {
+  USER_SUPER_TOKENS_CRITICAL = 'Supertokens critical',
   DRAFTED_PROJECT_ACTIVATED = 'Draft published',
   PROJECT_LISTED = 'Project listed',
   PROJECT_UNLISTED = 'Project unlisted',
@@ -47,6 +48,7 @@ export enum NOTIFICATIONS_EVENT_NAMES {
 }
 
 export const ORTTO_EVENT_NAMES = {
+  [NOTIFICATIONS_EVENT_NAMES.USER_SUPER_TOKENS_CRITICAL]: 'superfluid-balance-warning',
   [NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED]: 'testing-donation-received',
   [NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED]: 'project-created',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED]: 'project-listed',
