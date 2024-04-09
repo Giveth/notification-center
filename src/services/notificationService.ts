@@ -24,12 +24,29 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   let attributes;
   switch (orttoEventName) {
-    case NOTIFICATIONS_EVENT_NAMES.USER_SUPER_TOKENS_CRITICAL:
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
         "str:cm:tokensymbol": payload.tokenSymbol,
         "str:cm:email": payload.email,
         "str:cm:userId": payload.userId?.toString(),
-        "str:cm:criticalDate": payload.criticalDate,
+        "bol:cm:isended": payload.isEnded,
+      }
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId?.toString(),
+        "str:cm:criticalDate": 'week',
+        "bol:cm:isended": payload.isEnded,
+      }
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId?.toString(),
+        "str:cm:criticalDate": 'month',
         "bol:cm:isended": payload.isEnded,
       }
       break;
@@ -184,6 +201,17 @@ export const sendNotification = async (
       userAddressId: userAddress.id,
     });
 
+  const shouldSendEmail =
+    body.sendEmail && notificationSetting?.allowEmailNotification;
+  let emailStatus = shouldSendEmail
+    ? EMAIL_STATUSES.WAITING_TO_BE_SEND
+    : EMAIL_STATUSES.NO_NEED_TO_SEND;
+
+  const segmentValidator =
+    SEGMENT_METADATA_SCHEMA_VALIDATOR[
+      notificationType?.schemaValidator as string
+    ]?.segment;
+
   logger.debug('notificationController.sendNotification()', {
     notificationSetting,
     notificationTypeId: notificationType.id,
@@ -200,18 +228,9 @@ export const sendNotification = async (
     payload: body.segment?.payload,
     sendEmail: body.sendEmail,
     sendSegment: body.sendSegment,
+    segmentValidator,
+    eventName: body.eventName,
   });
-
-  const shouldSendEmail =
-    body.sendEmail && notificationSetting?.allowEmailNotification;
-  let emailStatus = shouldSendEmail
-    ? EMAIL_STATUSES.WAITING_TO_BE_SEND
-    : EMAIL_STATUSES.NO_NEED_TO_SEND;
-
-  const segmentValidator =
-    SEGMENT_METADATA_SCHEMA_VALIDATOR[
-      notificationType?.schemaValidator as string
-    ]?.segment;
 
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
     const emailData = body.segment?.payload;
