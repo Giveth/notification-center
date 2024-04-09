@@ -142,7 +142,16 @@ const givBackReadyClaimSchema = Joi.object({
   amount: Joi.string().required(),
 });
 
-const superFluidTokenTrackerSchema = Joi.object({
+const superFluidTokenMetadataSchema = Joi.object({
+  tokenSymbol: Joi.string().required(),
+  email: Joi.string().required(),
+  userId: Joi.number().required(),
+  isEnded: Joi.boolean(),
+  projectTitle: Joi.string(),
+  projectLink: Joi.string(),
+});
+
+const superFluidTokenSegmentSchema = Joi.object({
   tokenSymbol: Joi.string().required(),
   email: Joi.string().required(),
   userId: Joi.number().required(),
@@ -156,8 +165,8 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   };
 } = {
   userSuperTokensCritical: {
-    metadata: superFluidTokenTrackerSchema,
-    segment: superFluidTokenTrackerSchema,
+    metadata: superFluidTokenMetadataSchema,
+    segment: superFluidTokenSegmentSchema,
   },
   draftedProjectSavedValidator: {
     metadata: projectTitleProjectLinkSchema,
