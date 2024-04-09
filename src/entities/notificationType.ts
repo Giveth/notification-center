@@ -16,7 +16,7 @@ import { NotificationSetting } from './notificationSetting';
 
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
-  SUPERFLUID: 'superFluidTokenTrackerSchema',
+  SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
   RAW_HTML_BROADCAST: 'rawHtmlBroadcast',
   DRAFTED_PROJECT_SAVED: 'draftedProjectSavedValidator',

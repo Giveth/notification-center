@@ -78,7 +78,6 @@ export const sendNotificationValidator = Joi.object({
       isRecurringDonation: Joi.boolean().allow(null),
 
       //Super token critical attributes
-      criticalDate: Joi.string(),
       isEnded: Joi.boolean(),
       tokenSymbol: Joi.string(),
 
