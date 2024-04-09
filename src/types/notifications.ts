@@ -1,5 +1,4 @@
 export enum NOTIFICATIONS_EVENT_NAMES {
-  USER_SUPER_TOKENS_CRITICAL = 'Supertokens critical',
   DRAFTED_PROJECT_ACTIVATED = 'Draft published',
   PROJECT_LISTED = 'Project listed',
   PROJECT_UNLISTED = 'Project unlisted',
@@ -45,10 +44,15 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   PROJECT_HAS_RISEN_IN_THE_RANK = 'Your Project has risen in the rank',
   PROJECT_HAS_A_NEW_RANK = 'Your project has a new rank',
   YOUR_PROJECT_GOT_A_RANK = 'Your project got a rank',
+  SUPER_TOKENS_BALANCE_WEEK = 'One week left in stream balance',
+  SUPER_TOKENS_BALANCE_MONTH = 'One month left in stream balance',
+  SUPER_TOKENS_BALANCE_DEPLETED = 'Stream balance depleted',
 }
 
 export const ORTTO_EVENT_NAMES = {
-  [NOTIFICATIONS_EVENT_NAMES.USER_SUPER_TOKENS_CRITICAL]: 'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK]: 'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH]: 'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED]: 'superfluid-balance-warning',
   [NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED]: 'testing-donation-received',
   [NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED]: 'project-created',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED]: 'project-listed',
