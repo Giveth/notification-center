@@ -146,7 +146,6 @@ const superFluidTokenTrackerSchema = Joi.object({
   tokenSymbol: Joi.string().required(),
   email: Joi.string().required(),
   userId: Joi.number().required(),
-  criticalDate: Joi.string().required(),
   isEnded: Joi.boolean(),
 });
 
