@@ -35,7 +35,7 @@ export const superFluidNotificationTypes = [
       },
       {
         type: 'p',
-        content: '$network',
+        content: '$networkName',
       },
       {
         type: 'p',
@@ -44,7 +44,7 @@ export const superFluidNotificationTypes = [
       {
         type: 'a',
         content: 'top-up here.',
-        href: '$recurringDonationLink', // Actual link goes here
+        href: '$recurringDonationTab', // Actual link goes here
       },
     ],
     content:
@@ -77,7 +77,7 @@ export const superFluidNotificationTypes = [
       },
       {
         type: 'p',
-        content: '$network',
+        content: '$networkName',
       },
       {
         type: 'p',
@@ -86,7 +86,7 @@ export const superFluidNotificationTypes = [
       {
         type: 'a',
         content: 'top-up here.',
-        href: '$recurringDonationLink', // Actual link goes here
+        href: '$recurringDonationTab', // Actual link goes here
       },
     ],
     content:
@@ -119,7 +119,7 @@ export const superFluidNotificationTypes = [
       },
       {
         type: 'p',
-        content: '$network',
+        content: '$networkName',
       },
       {
         type: 'p',
@@ -129,7 +129,7 @@ export const superFluidNotificationTypes = [
       {
         type: 'a',
         content: 'Manage your Recurring Donations',
-        href: '$recurringDonationLink', // Actual link goes here
+        href: '$recurringDonationTab', // Actual link goes here
       },
     ],
     content:

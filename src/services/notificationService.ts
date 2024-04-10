@@ -173,7 +173,6 @@ export const sendNotification = async (
   success: boolean;
   message?: string;
 }> => {
-  logger.debug('notificationController.sendNotification() init', body);
   const { userWalletAddress, projectId } = body;
   if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
     // We dont throw error in this case but dont create new notification neither
@@ -229,7 +228,7 @@ export const sendNotification = async (
     payload: body.segment?.payload,
     sendEmail: body.sendEmail,
     sendSegment: body.sendSegment,
-    segmentValidator,
+    segmentValidator: !!segmentValidator,
     eventName: body.eventName,
   });
 
