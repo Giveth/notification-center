@@ -149,6 +149,8 @@ const superFluidTokenMetadataSchema = Joi.object({
   isEnded: Joi.boolean(),
   projectTitle: Joi.string(),
   projectLink: Joi.string(),
+  networkName: Joi.string().required(),
+  recurringDonationTab: Joi.string().required(),
 });
 
 const superFluidTokenSegmentSchema = Joi.object({
