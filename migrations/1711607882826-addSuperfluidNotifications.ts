@@ -47,8 +47,6 @@ export const superFluidNotificationTypes = [
         href: '$recurringDonationTab', // Actual link goes here
       },
     ],
-    content:
-      'Your Stream Balance of {token} on {network} will run out in 1 month, top-up here.',
   },
   {
     name: 'One week left in stream balance',
@@ -89,8 +87,6 @@ export const superFluidNotificationTypes = [
         href: '$recurringDonationTab', // Actual link goes here
       },
     ],
-    content:
-      'Your Stream Balance of {token symbol} on {network} will run out in 1 week, top-up here.',
   },
   {
     name: 'Stream balance depleted',
@@ -132,8 +128,6 @@ export const superFluidNotificationTypes = [
         href: '$recurringDonationTab', // Actual link goes here
       },
     ],
-    content:
-      'Your Stream Balance in {tokenSymbol} on {network} has run out of funds, subsequently some of your recurring donations have ended. Manage your Recurring Donations',
   },
 ];
 
