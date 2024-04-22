@@ -24,8 +24,35 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId?.toString(),
+        "bol:cm:isended": payload.isEnded,
+      }
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId?.toString(),
+        "str:cm:criticalDate": 'week',
+        "bol:cm:isended": payload.isEnded,
+      }
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH:
+      attributes = {
+        "str:cm:tokensymbol": payload.tokenSymbol,
+        "str:cm:email": payload.email,
+        "str:cm:userId": payload.userId?.toString(),
+        "str:cm:criticalDate": 'month',
+        "bol:cm:isended": payload.isEnded,
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
       attributes = {
+        "bol:cm:isrecurringdonation": !!payload.isRecurringDonation,
         "str:cm:projecttitle": payload.title,
         "str:cm:donationamount": payload.amount.toString(),
         "str:cm:donationtoken": payload.token,
@@ -104,6 +131,22 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:verified-status": 'revoked',
       }
       break
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING:
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+        "str:cm:user-id": payload.userId?.toString(),
+      }
+      break
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING:
+      attributes = {
+        "str:cm:projecttitle": payload.title,
+        "str:cm:email": payload.email,
+        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+        "str:cm:user-id": payload.userId?.toString(),
+      }
+      break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
       return;
@@ -158,6 +201,17 @@ export const sendNotification = async (
       userAddressId: userAddress.id,
     });
 
+  const shouldSendEmail =
+    body.sendEmail && notificationSetting?.allowEmailNotification;
+  let emailStatus = shouldSendEmail
+    ? EMAIL_STATUSES.WAITING_TO_BE_SEND
+    : EMAIL_STATUSES.NO_NEED_TO_SEND;
+
+  const segmentValidator =
+    SEGMENT_METADATA_SCHEMA_VALIDATOR[
+      notificationType?.schemaValidator as string
+    ]?.segment;
+
   logger.debug('notificationController.sendNotification()', {
     notificationSetting,
     notificationTypeId: notificationType.id,
@@ -174,18 +228,9 @@ export const sendNotification = async (
     payload: body.segment?.payload,
     sendEmail: body.sendEmail,
     sendSegment: body.sendSegment,
+    segmentValidator: !!segmentValidator,
+    eventName: body.eventName,
   });
-
-  const shouldSendEmail =
-    body.sendEmail && notificationSetting?.allowEmailNotification;
-  let emailStatus = shouldSendEmail
-    ? EMAIL_STATUSES.WAITING_TO_BE_SEND
-    : EMAIL_STATUSES.NO_NEED_TO_SEND;
-
-  const segmentValidator =
-    SEGMENT_METADATA_SCHEMA_VALIDATOR[
-      notificationType?.schemaValidator as string
-    ]?.segment;
 
   if (shouldSendEmail && body.sendSegment && segmentValidator) {
     const emailData = body.segment?.payload;

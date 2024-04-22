@@ -75,6 +75,11 @@ export const sendNotificationValidator = Joi.object({
       donationValueEth: Joi.number().allow(null),
       verified: Joi.boolean(),
       transakStatus: Joi.string().allow(null).allow(''),
+      isRecurringDonation: Joi.boolean().allow(null),
+
+      //Super token critical attributes
+      isEnded: Joi.boolean(),
+      tokenSymbol: Joi.string(),
 
       //Project related attributes
       lastName: Joi.string().allow(null).allow(''),

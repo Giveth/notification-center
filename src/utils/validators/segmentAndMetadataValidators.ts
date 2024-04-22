@@ -92,6 +92,7 @@ const donationTrackerSchema = Joi.object({
   donationValueEth: Joi.number().greater(0).allow(null),
   verified: Joi.boolean().allow(null),
   transakStatus: Joi.string().allow(null),
+  isRecurringDonation: Joi.boolean().allow(null),
 });
 
 const projectTitleProjectLinkSchema = Joi.object({
@@ -141,12 +142,34 @@ const givBackReadyClaimSchema = Joi.object({
   amount: Joi.string().required(),
 });
 
+const superFluidTokenMetadataSchema = Joi.object({
+  tokenSymbol: Joi.string().required(),
+  email: Joi.string().required(),
+  userId: Joi.number().required(),
+  isEnded: Joi.boolean(),
+  projectTitle: Joi.string(),
+  projectLink: Joi.string(),
+  networkName: Joi.string().required(),
+  recurringDonationTab: Joi.string().required(),
+});
+
+const superFluidTokenSegmentSchema = Joi.object({
+  tokenSymbol: Joi.string().required(),
+  email: Joi.string().required(),
+  userId: Joi.number().required(),
+  isEnded: Joi.boolean(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
     metadata: ObjectSchema | null;
   };
 } = {
+  userSuperTokensCritical: {
+    metadata: superFluidTokenMetadataSchema,
+    segment: superFluidTokenSegmentSchema,
+  },
   draftedProjectSavedValidator: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
