@@ -44,6 +44,8 @@ export class addGroupParentSuperFluid1713834025817 implements MigrationInterface
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(
+          `DELETE FROM notification_type WHERE "categoryGroup" = 'superfluid' AND "name" = 'Stream Balance Warnings';`,
+        );
     }
-
 }
