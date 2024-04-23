@@ -13,7 +13,7 @@ export const superFluidNotificationTypes = [
         emailDefaultValue: true,
         isEmailEditable: true,
         isWebEditable: true,
-        name: 'Stream Balance Warnings',
+        name: 'Stream balance warnings',
         description: 'Notify me when any of my Stream Balances are running low',
         microService: MICRO_SERVICES.givethio,
         category: NOTIFICATION_CATEGORY.SUPPORTED_PROJECTS,
