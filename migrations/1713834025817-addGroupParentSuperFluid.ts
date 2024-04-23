@@ -22,7 +22,7 @@ export const superFluidNotificationTypes = [
         emailNotificationId: null,
         pushNotifierService: null,
         categoryGroup: NOTIFICATION_CATEGORY_GROUPS.SUPERFLUID,
-        title: 'Stream Balance Warnings',
+        title: 'Stream balance warnings',
     },
 ]
 
