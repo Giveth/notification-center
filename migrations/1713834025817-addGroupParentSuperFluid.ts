@@ -34,7 +34,7 @@ export class addGroupParentSuperFluid1713834025817 implements MigrationInterface
         `)).map((i: any) => i.id);
         await queryRunner.query(
           `UPDATE notification_type 
-             SET showOnSettingPage = false, emailDefaultValue = true, category = ${NOTIFICATION_CATEGORY.SUPPORTED_PROJECTS}
+             SET showOnSettingPage = false, emailDefaultValue = true, category = '${NOTIFICATION_CATEGORY.SUPPORTED_PROJECTS}'
              WHERE id IN (${notificationTypeIds.join(", ")})`
         );
         await queryRunner.manager.save(
