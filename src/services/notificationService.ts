@@ -129,6 +129,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'revoked',
+        "str:cm:userid": payload.userId?.toString(),
       }
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING:
@@ -136,7 +137,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:user-id": payload.userId?.toString(),
+        "str:cm:userid": payload.userId?.toString(),
       }
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING:
@@ -144,7 +145,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:user-id": payload.userId?.toString(),
+        "str:cm:userid": payload.userId?.toString(),
       }
       break
     default:
