@@ -37,7 +37,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:tokensymbol": payload.tokenSymbol,
         "str:cm:email": payload.email,
         "str:cm:userId": payload.userId?.toString(),
-        "str:cm:criticalDate": 'week',
+        "str:cm:criticaldate": 'week',
         "bol:cm:isended": payload.isEnded,
       }
       break;
@@ -46,7 +46,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:tokensymbol": payload.tokenSymbol,
         "str:cm:email": payload.email,
         "str:cm:userId": payload.userId?.toString(),
-        "str:cm:criticalDate": 'month',
+        "str:cm:criticaldate": 'month',
         "bol:cm:isended": payload.isEnded,
       }
       break;
