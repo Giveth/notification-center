@@ -160,12 +160,23 @@ const superFluidTokenSegmentSchema = Joi.object({
   isEnded: Joi.boolean(),
 });
 
+const createOrttoProfileSegmentSchema = Joi.object({
+  email: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  userId: Joi.number().required()
+})
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
     metadata: ObjectSchema | null;
   };
 } = {
+  createOrttoProfile: {
+    segment: createOrttoProfileSegmentSchema,
+    metadata: null
+  },
   userSuperTokensCritical: {
     metadata: superFluidTokenMetadataSchema,
     segment: superFluidTokenSegmentSchema,
