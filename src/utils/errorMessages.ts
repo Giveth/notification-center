@@ -183,4 +183,5 @@ export const errorMessages = {
     'You are not the owner of social profile',
   ERROR_IN_GETTING_ACCESS_TOKEN_BY_AUTHORIZATION_CODE:
     'Error in getting accessToken by authorization code',
+  ORTTO_SPECIFIC: 'Ortto specific notification'
 };
