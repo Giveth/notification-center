@@ -156,6 +156,12 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName)
     return;
   }
+  const merge_by = [];
+  if (process.env.ENVIRONMENT === 'production') {
+    merge_by.push("str:cm:userid")
+  } else {
+    merge_by.push("str::email")
+  }
   return {
     activities: [
       {
@@ -163,7 +169,8 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         attributes,
         fields,
       }
-    ]
+    ],
+    merge_by
   };
 }
 
