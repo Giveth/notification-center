@@ -67,7 +67,6 @@ const donationTrackerSchema = Joi.object({
   firstName: Joi.string().allow(null, ''),
   lastName: Joi.string().allow(null, ''),
   userId: Joi.number(),
-  projectOwnerId: Joi.string().allow(null, ''),
   slug: Joi.string().allow(null, ''),
   projectLink: Joi.string().allow(null, ''),
   amount: Joi.number()?.greater(0).required(),
