@@ -21,7 +21,6 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   if (process.env.ENVIRONMENT === 'production') {
     fields['str:cm:user-id'] = payload.userId?.toString()
-    fields['str:cm:userid'] = payload.userId?.toString()
   }
   let attributes;
   switch (orttoEventName) {
@@ -168,7 +167,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   const merge_by = [];
   if (process.env.ENVIRONMENT === 'production') {
-    merge_by.push("str:cm:userid")
+    merge_by.push("str:cm:user-id")
   } else {
     merge_by.push("str::email")
   }
