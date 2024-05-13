@@ -66,6 +66,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projectlink": payload.projectLink,
         "bol:cm:verified": payload.verified,
         "str:cm:transactionlink": payload.transactionLink,
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED:
@@ -75,6 +76,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projectlink": payload.projectLink,
         "str:cm:firstname": payload.firstName,
         "str:cm:lastname": payload.lastName,
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED:
@@ -82,6 +84,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED:
@@ -89,6 +92,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED:
@@ -96,6 +100,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UPDATE_ADDED_OWNER:
@@ -103,6 +108,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:projecttitle": payload.title,
         "str:cm:email": payload.email,
         "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED:
@@ -111,6 +117,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'verified',
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
@@ -119,6 +126,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'rejected',
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
@@ -127,6 +135,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'rejected',
+        "str:cm:userid": payload.userId?.toString(),
       };
       break
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED:
@@ -164,7 +173,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   const merge_by = [];
   if (process.env.ENVIRONMENT === 'production') {
-    merge_by.push("str:cm:userid")
+    merge_by.push("str:cm:user-id")
   } else {
     merge_by.push("str::email")
   }
