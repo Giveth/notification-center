@@ -1,7 +1,4 @@
-import {
-  createNotification,
-  findNotificationByTrackId,
-} from '../repositories/notificationRepository';
+import { createNotification, findNotificationByTrackId } from '../repositories/notificationRepository';
 import { errorMessages } from '../utils/errorMessages';
 import { createNewUserAddressIfNotExists } from '../repositories/userAddressRepository';
 import { getNotificationTypeByEventNameAndMicroservice } from '../repositories/notificationTypeRepository';
@@ -13,7 +10,8 @@ import { validateWithJoiSchema } from '../validators/schemaValidators';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
 import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
-import {getEmailAdapter} from "../adapters/adapterFactory";
+import { getEmailAdapter } from '../adapters/adapterFactory';
+import { NOTIFICATION_CATEGORY } from '../types/general';
 
 const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   const fields = {
@@ -24,6 +22,14 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
   }
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
+      attributes = {
+        "str:cm:email": payload.email,
+        "str:cm:firstname": payload.firstName,
+        "str:cm:lastname": payload.lastName,
+        "str:cm:userid": payload.userId?.toString(),
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
         "str:cm:tokensymbol": payload.tokenSymbol,
@@ -212,7 +218,10 @@ export const sendNotification = async (
       httpStatusCode: 400,
     });
   }
-  const notificationSetting =
+
+  const isOrttoSpecific = notificationType.category === NOTIFICATION_CATEGORY.ORTTO
+
+  const notificationSetting = isOrttoSpecific ? null :
     await findNotificationSettingByNotificationTypeAndUserAddress({
       notificationTypeId: notificationType.id,
       userAddressId: userAddress.id,
@@ -249,7 +258,7 @@ export const sendNotification = async (
     eventName: body.eventName,
   });
 
-  if (shouldSendEmail && body.sendSegment && segmentValidator) {
+  if (((shouldSendEmail && body.sendSegment) || isOrttoSpecific) && segmentValidator) {
     const emailData = body.segment?.payload;
     validateWithJoiSchema(emailData, segmentValidator);
     const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
@@ -257,6 +266,13 @@ export const sendNotification = async (
       await getEmailAdapter().callOrttoActivity(data);
     }
     emailStatus = EMAIL_STATUSES.SENT;
+  }
+
+  if (isOrttoSpecific) {
+    return {
+      success: true,
+      message: errorMessages.ORTTO_SPECIFIC,
+    }
   }
 
   const metadataValidator =
