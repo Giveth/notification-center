@@ -11,7 +11,7 @@ export enum NOTIFICATION_CATEGORY {
   GIV_ECONOMY = 'givEconomy',
   SUPPORTED_PROJECTS = 'supportedProjects',
   GIV_POWER = 'givPower',
-  ORTTO = 'ortto'
+  ORTTO = 'ortto',
 }
 
 export enum NOTIFICATION_TYPE_NAMES {

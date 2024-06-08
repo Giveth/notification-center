@@ -1,12 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import {
-  decodeBasicAuthentication,
-  decodeMicroServiceToken,
-} from '../utils/authorizationUtils';
+import { decodeBasicAuthentication } from '../utils/authorizationUtils';
 import { StandardError } from '../types/StandardError';
 import { errorMessages, errorMessagesEnum } from '../utils/errorMessages';
-import { MICRO_SERVICES } from '../utils/utils';
-import axios from 'axios';
 import { createNewUserAddressIfNotExists } from '../repositories/userAddressRepository';
 import { logger } from '../utils/logger';
 import { findThirdPartyBySecret } from '../repositories/thirdPartyRepository';
