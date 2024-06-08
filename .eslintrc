@@ -1,0 +1,52 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "plugins": ["import", "unused-imports"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "unused-imports/no-unused-imports": "error",
+    "no-prototype-builtins":"warn",
+    "@typescript-eslint/no-unused-vars": [
+      "error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/consistent-type-definitions":"off",
+    "@typescript-eslint/no-var-requires":"warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "arrowParens": "avoid",
+        "singleQuote": true,
+        "semi": true,
+        "tabWidth": 2,
+        "useTabs": false,
+        "trailingComma": "all",
+        "jsdoc-format": false,
+        "endOfLine": "auto"
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          ["internal", "parent", "sibling"],
+          "index",
+          "object",
+          "type"
+        ]
+      }
+    ]
+  }
+}
