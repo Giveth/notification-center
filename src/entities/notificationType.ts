@@ -4,14 +4,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  JoinTable,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { NOTIFICATION_CATEGORY } from '../types/general';
 import { NotificationSetting } from './notificationSetting';
 
 // Export Object with Schemas to N1 lookup
@@ -156,7 +152,7 @@ export class NotificationType extends BaseEntity {
   content?: string;
 
   @OneToMany(
-    type => NotificationSetting,
+    _type => NotificationSetting,
     notificationSetting => notificationSetting.notificationType,
   )
   notificationSettings?: NotificationSetting[];

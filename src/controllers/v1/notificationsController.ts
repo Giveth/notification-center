@@ -127,7 +127,6 @@ export class NotificationsController {
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
     @Query('isRead') isRead?: string,
-    @Query('startTime') startTime?: number,
   ): Promise<GetNotificationsResponse> {
     const { user } = params;
     const take = limit ? Number(limit) : 10;
@@ -141,7 +140,6 @@ export class NotificationsController {
         limit: take,
         skip,
         isRead,
-        startTime,
       });
       return {
         count,

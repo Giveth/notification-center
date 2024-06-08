@@ -18,6 +18,7 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   // https://github.com/Giveth/impact-graph/issues/624#issuecomment-1240364389
   PROJECT_REJECTED = 'Project unverified',
   PROJECT_NOT_REVIEWED = 'Project not reviewed',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   PROJECT_UNVERIFIED = 'Project unverified',
   VERIFICATION_FORM_REJECTED = 'Form rejected',
   PROJECT_UNVERIFIED_USERS_WHO_SUPPORT = 'Project unverified - Users who supported',
@@ -51,9 +52,12 @@ export enum NOTIFICATIONS_EVENT_NAMES {
 }
 
 export const ORTTO_EVENT_NAMES = {
-  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK]: 'superfluid-balance-warning',
-  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH]: 'superfluid-balance-warning',
-  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED]: 'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK]:
+    'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH]:
+    'superfluid-balance-warning',
+  [NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED]:
+    'superfluid-balance-warning',
   [NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED]: 'testing-donation-received',
   [NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED]: 'project-created',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED]: 'project-listed',
@@ -63,8 +67,11 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED]: 'project-verification',
-  [NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED]: 'project-verification',
-  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING]: 'first-update-warning',
-  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]: 'second-update-warning',
-  [NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE]: 'created-profile'
-}
+  [NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED]:
+    'project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING]:
+    'first-update-warning',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]:
+    'second-update-warning',
+  [NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE]: 'created-profile',
+};

@@ -1,4 +1,7 @@
-import { createNotification, findNotificationByTrackId } from '../repositories/notificationRepository';
+import {
+  createNotification,
+  findNotificationByTrackId,
+} from '../repositories/notificationRepository';
 import { errorMessages } from '../utils/errorMessages';
 import { createNewUserAddressIfNotExists } from '../repositories/userAddressRepository';
 import { getNotificationTypeByEventNameAndMicroservice } from '../repositories/notificationTypeRepository';
@@ -9,173 +12,179 @@ import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAn
 import { validateWithJoiSchema } from '../validators/schemaValidators';
 import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
-import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notifications';
+import {
+  NOTIFICATIONS_EVENT_NAMES,
+  ORTTO_EVENT_NAMES,
+} from '../types/notifications';
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
-const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
+const activityCreator = (
+  payload: any,
+  orttoEventName: NOTIFICATIONS_EVENT_NAMES,
+): any => {
   const fields = {
-    "str::email": payload.email,
-  }
+    'str::email': payload.email,
+  };
   if (process.env.ENVIRONMENT === 'production') {
-    fields['str:cm:user-id'] = payload.userId?.toString()
+    fields['str:cm:user-id'] = payload.userId?.toString();
   }
   let attributes;
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
       attributes = {
-        "str:cm:email": payload.email,
-        "str:cm:firstname": payload.firstName,
-        "str:cm:lastname": payload.lastName,
-        "str:cm:userid": payload.userId?.toString(),
-      }
+        'str:cm:email': payload.email,
+        'str:cm:firstname': payload.firstName,
+        'str:cm:lastname': payload.lastName,
+        'str:cm:userid': payload.userId?.toString(),
+      };
       break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
-        "str:cm:tokensymbol": payload.tokenSymbol,
-        "str:cm:email": payload.email,
-        "str:cm:userid": payload.userId?.toString(),
-        "bol:cm:isended": payload.isEnded,
-      }
+        'str:cm:tokensymbol': payload.tokenSymbol,
+        'str:cm:email': payload.email,
+        'str:cm:userid': payload.userId?.toString(),
+        'bol:cm:isended': payload.isEnded,
+      };
       break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_WEEK:
       attributes = {
-        "str:cm:tokensymbol": payload.tokenSymbol,
-        "str:cm:email": payload.email,
-        "str:cm:userid": payload.userId?.toString(),
-        "str:cm:criticaldate": 'week',
-        "bol:cm:isended": payload.isEnded,
-      }
+        'str:cm:tokensymbol': payload.tokenSymbol,
+        'str:cm:email': payload.email,
+        'str:cm:userid': payload.userId?.toString(),
+        'str:cm:criticaldate': 'week',
+        'bol:cm:isended': payload.isEnded,
+      };
       break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_MONTH:
       attributes = {
-        "str:cm:tokensymbol": payload.tokenSymbol,
-        "str:cm:email": payload.email,
-        "str:cm:userid": payload.userId?.toString(),
-        "str:cm:criticaldate": 'month',
-        "bol:cm:isended": payload.isEnded,
-      }
+        'str:cm:tokensymbol': payload.tokenSymbol,
+        'str:cm:email': payload.email,
+        'str:cm:userid': payload.userId?.toString(),
+        'str:cm:criticaldate': 'month',
+        'bol:cm:isended': payload.isEnded,
+      };
       break;
     case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED:
       attributes = {
-        "bol:cm:isrecurringdonation": !!payload.isRecurringDonation,
-        "str:cm:projecttitle": payload.title,
-        "str:cm:donationamount": payload.amount.toString(),
-        "str:cm:donationtoken": payload.token,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "bol:cm:verified": payload.verified,
-        "str:cm:transactionlink": payload.transactionLink,
-        "str:cm:userid": payload.userId?.toString(),
+        'bol:cm:isrecurringdonation': !!payload.isRecurringDonation,
+        'str:cm:projecttitle': payload.title,
+        'str:cm:donationamount': payload.amount.toString(),
+        'str:cm:donationtoken': payload.token,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'bol:cm:verified': payload.verified,
+        'str:cm:transactionlink': payload.transactionLink,
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:firstname": payload.firstName,
-        "str:cm:lastname": payload.lastName,
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:firstname': payload.firstName,
+        'str:cm:lastname': payload.lastName,
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UPDATE_ADDED_OWNER:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectupdatelink': payload.projectLink + '?tab=updates',
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:verified-status": 'verified',
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'verified',
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:verified-status": 'rejected',
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'rejected',
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:verified-status": 'rejected',
-        "str:cm:userid": payload.userId?.toString(),
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'rejected',
+        'str:cm:userid': payload.userId?.toString(),
       };
-      break
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectlink": payload.projectLink,
-        "str:cm:verified-status": 'revoked',
-        "str:cm:userid": payload.userId?.toString(),
-      }
-      break
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'revoked',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:userid": payload.userId?.toString(),
-      }
-      break
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectupdatelink': payload.projectLink + '?tab=updates',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:userid": payload.userId?.toString(),
-      }
-      break
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectupdatelink': payload.projectLink + '?tab=updates',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     default:
-      logger.debug('activityCreator() invalid event name', orttoEventName)
+      logger.debug('activityCreator() invalid event name', orttoEventName);
       return;
   }
   if (!ORTTO_EVENT_NAMES[orttoEventName]) {
-    logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName)
+    logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName);
     return;
   }
   const merge_by = [];
   if (process.env.ENVIRONMENT === 'production') {
-    merge_by.push("str:cm:user-id")
+    merge_by.push('str:cm:user-id');
   } else {
-    merge_by.push("str::email")
+    merge_by.push('str::email');
   }
   return {
     activities: [
@@ -183,11 +192,11 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
         attributes,
         fields,
-      }
+      },
     ],
-    merge_by
+    merge_by,
   };
-}
+};
 
 export const sendNotification = async (
   body: SendNotificationRequest,
@@ -219,13 +228,15 @@ export const sendNotification = async (
     });
   }
 
-  const isOrttoSpecific = notificationType.category === NOTIFICATION_CATEGORY.ORTTO
+  const isOrttoSpecific =
+    notificationType.category === NOTIFICATION_CATEGORY.ORTTO;
 
-  const notificationSetting = isOrttoSpecific ? null :
-    await findNotificationSettingByNotificationTypeAndUserAddress({
-      notificationTypeId: notificationType.id,
-      userAddressId: userAddress.id,
-    });
+  const notificationSetting = isOrttoSpecific
+    ? null
+    : await findNotificationSettingByNotificationTypeAndUserAddress({
+        notificationTypeId: notificationType.id,
+        userAddressId: userAddress.id,
+      });
 
   const shouldSendEmail =
     body.sendEmail && notificationSetting?.allowEmailNotification;
@@ -258,10 +269,16 @@ export const sendNotification = async (
     eventName: body.eventName,
   });
 
-  if (((shouldSendEmail && body.sendSegment) || isOrttoSpecific) && segmentValidator) {
+  if (
+    ((shouldSendEmail && body.sendSegment) || isOrttoSpecific) &&
+    segmentValidator
+  ) {
     const emailData = body.segment?.payload;
     validateWithJoiSchema(emailData, segmentValidator);
-    const data = activityCreator(emailData, body.eventName as NOTIFICATIONS_EVENT_NAMES);
+    const data = activityCreator(
+      emailData,
+      body.eventName as NOTIFICATIONS_EVENT_NAMES,
+    );
     if (data) {
       await getEmailAdapter().callOrttoActivity(data);
     }
@@ -272,7 +289,7 @@ export const sendNotification = async (
     return {
       success: true,
       message: errorMessages.ORTTO_SPECIFIC,
-    }
+    };
   }
 
   const metadataValidator =
