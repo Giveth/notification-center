@@ -12,8 +12,8 @@
     "test": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/**/*.test.ts  ./src/**/**/*.test.ts",
     "test:notificationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/notificationRepository.test.ts ",
     "test:notificationSettingRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/notificationSettingRepository.test.ts ",
-    "eslint": "eslint {src,test,migrations}/**/*.ts",
-    "eslint:fix": "eslint --fix {src,test,migrations}/**/*.ts",
+    "lint": "eslint {src,test,migrations}/**/*.ts",
+    "lint:fix": "eslint --fix {src,test,migrations}/**/*.ts",
     "db:migrate:run:local": "NODE_ENV=development npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts ",
     "db:migrate:run:staging": "NODE_ENV=staging npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
     "db:migrate:revert:local": "NODE_ENV=development npx typeorm-ts-node-esm migration:revert -d ./src/dataSource.ts ",
@@ -28,7 +28,7 @@
   "license": "ISC",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run eslint"
+      "pre-commit": "npm run lint"
     }
   },
   "dependencies": {
@@ -47,7 +47,7 @@
     "express": "4.17.3",
     "express-formidable": "1.2.0",
     "express-session": "1.17.2",
-    "ioredis": "^4.28.5",
+    "ioredis": "^5.4.1",
     "joi": "17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",

@@ -17,11 +17,8 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "unused-imports/no-unused-imports": "error",
-    "no-prototype-builtins":"warn",
     "@typescript-eslint/no-unused-vars": [
       "error", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/consistent-type-definitions":"off",
-    "@typescript-eslint/no-var-requires":"warn",
     "prettier/prettier": [
       "error",
       {
