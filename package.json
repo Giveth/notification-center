@@ -50,7 +50,7 @@
     "express": "4.17.3",
     "express-formidable": "1.2.0",
     "express-session": "1.17.2",
-    "ioredis": "^4.28.5",
+    "ioredis": "^5.4.1",
     "joi": "17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
@@ -60,7 +60,7 @@
     "@solana/web3.js": "^1.87.6",
     "swagger-ui-express": "4.3.0",
     "tsoa": "3.14.1",
-    "typeorm": "0.3.6"
+    "typeorm": "0.3.20"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
