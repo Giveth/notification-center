@@ -42,8 +42,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.14.0
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Install dependencies
-        run: yarn ci
+        run: yarn install
+
       - name: Run linter
         run: yarn lint
       - name: Run migrations
@@ -58,6 +62,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
       - name: Build image and push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
