@@ -163,6 +163,19 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:userid": payload.userId?.toString(),
       }
       break
+    case NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT:
+      attributes = {
+        "int:cm:round": payload.round,
+        "str:cm:date": payload.date,
+        "str:cm:amount": payload.amount,
+        "str:cm:contractaddress": payload.contractAddress,
+        "str:cm:farm": payload.farm,
+        "str:cm:message": payload.message,
+        "str:cm:network": payload.network,
+        "str:cm:script": payload.script,
+        "str:cm:transactionhash": payload.transactionHash,
+      }
+      break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
       return;
