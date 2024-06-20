@@ -11,7 +11,8 @@ export enum NOTIFICATION_CATEGORY {
   GIV_ECONOMY = 'givEconomy',
   SUPPORTED_PROJECTS = 'supportedProjects',
   GIV_POWER = 'givPower',
-  ORTTO = 'ortto'
+  ORTTO = 'ortto',
+  NOTIFY_REWARD_AMOUNT = 'notifyRewardAmount',
 }
 
 export enum NOTIFICATION_TYPE_NAMES {
@@ -52,4 +53,6 @@ export enum NOTIFICATION_TYPE_NAMES {
   PROJECT_HAS_RISEN_IN_THE_RANK = 'Your Project has risen in the rank',
   YOUR_PROJECT_GOT_A_RANK = 'Your project got a rank',
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
+
+  NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
 }
