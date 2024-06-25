@@ -126,6 +126,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'rejected',
+        "txt:cm:reason": payload.verificationRejectedReason,
         "str:cm:userid": payload.userId?.toString(),
       };
       break
