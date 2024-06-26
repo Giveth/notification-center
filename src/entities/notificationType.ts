@@ -17,6 +17,7 @@ import { NotificationSetting } from './notificationSetting';
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
+  SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
   RAW_HTML_BROADCAST: 'rawHtmlBroadcast',
