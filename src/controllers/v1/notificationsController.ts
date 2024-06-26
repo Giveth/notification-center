@@ -92,6 +92,7 @@ export class NotificationsController {
       await Promise.all(
         body.notifications.map(item => sendNotification(item, microService)),
       );
+
       return { success: true };
     } catch (e) {
       logger.error('sendBulkNotification() error', {
