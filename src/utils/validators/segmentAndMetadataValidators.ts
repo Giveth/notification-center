@@ -166,12 +166,21 @@ const createOrttoProfileSegmentSchema = Joi.object({
   userId: Joi.number().required()
 })
 
+const sendEmailConfirmationSchema = Joi.object({
+  email: Joi.string().required(),
+  verificationLink: Joi.string().required(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
     metadata: ObjectSchema | null;
   };
 } = {
+  sendEmailConfirmation: {
+    metadata: null,
+    segment: sendEmailConfirmationSchema,
+  },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
     metadata: null
@@ -247,10 +256,6 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   projectBoosted: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
-  },
-  sendEmailConfirmation: {
-    metadata: null,
-    segment: projectRelatedTrackerSchema,
   },
   madeDonation: {
     metadata: projectTitleProjectLinkSchema,

@@ -60,6 +60,9 @@ export const sendNotificationValidator = Joi.object({
       userId: Joi.number(),
       projectLink: Joi.string().allow(null).allow(''),
 
+      // Email confirmation
+      verificationLink: Joi.string().allow(null).allow(''),
+
       // Donation related attributes
       amount: Joi.number(),
       token: Joi.string().allow(null, ''),
