@@ -166,6 +166,18 @@ const createOrttoProfileSegmentSchema = Joi.object({
   userId: Joi.number().required()
 })
 
+const notifyRewardAmountSegmentSchema = Joi.object({
+  round: Joi.number().required(),
+  date: Joi.string().required(),
+  amount: Joi.string().required(),
+  contractAddress: Joi.string().required(),
+  farm: Joi.string().required(),
+  message: Joi.string().required(),
+  network: Joi.string().required(),
+  script: Joi.string().required(),
+  transactionHash: Joi.string().required(),
+})
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
@@ -334,6 +346,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   yourProjectGotARank: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
+  },
+  notifyRewardAmount: {
+    metadata: null,
+    segment: notifyRewardAmountSegmentSchema,
   },
 };
 
