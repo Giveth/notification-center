@@ -14,6 +14,7 @@ import { NotificationSetting } from './notificationSetting';
 export const SCHEMA_VALIDATORS_NAMES = {
   SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation',
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
+  SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
   RAW_HTML_BROADCAST: 'rawHtmlBroadcast',
