@@ -30,6 +30,7 @@ const projectRelatedTrackerSchema = Joi.object({
   slug: Joi.string().required(),
   projectLink: Joi.string().allow(null).allow(''),
 
+  verificationRejectedReason: Joi.string().allow(null, ''),
   // it's for project updates
   update: Joi.string().allow(null, ''),
 });
