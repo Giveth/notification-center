@@ -14,14 +14,14 @@ import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
 const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
-  const fields = {
-    "str::email": payload.email,
-  }
-  if (process.env.ENVIRONMENT === 'production') {
-    fields['str:cm:user-id'] = payload.userId?.toString()
-  }
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION:
+      attributes = {
+        "str:cm:email": payload.email,
+        "str:cm:verificationlink": payload.verificationLink,
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
       attributes = {
         "str:cm:email": payload.email,
@@ -172,8 +172,12 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName)
     return;
   }
+  const fields = {
+    "str::email": payload.email,
+  }
   const merge_by = [];
-  if (process.env.ENVIRONMENT === 'production') {
+  if (process.env.ENVIRONMENT === 'production' && orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION) {
+    fields['str:cm:user-id'] = payload.userId?.toString()
     merge_by.push("str:cm:user-id")
   } else {
     merge_by.push("str::email")
@@ -205,9 +209,7 @@ export const sendNotification = async (
       message: errorMessages.DUPLICATED_TRACK_ID,
     };
   }
-  const userAddress = await createNewUserAddressIfNotExists(
-    userWalletAddress as string,
-  );
+
   const notificationType = await getNotificationTypeByEventNameAndMicroservice({
     eventName: body.eventName,
     microService,
@@ -222,10 +224,14 @@ export const sendNotification = async (
 
   const isOrttoSpecific = notificationType.category === NOTIFICATION_CATEGORY.ORTTO
 
+  const userAddress = isOrttoSpecific ? undefined : await createNewUserAddressIfNotExists(
+    userWalletAddress as string,
+  );
+
   const notificationSetting = isOrttoSpecific ? null :
     await findNotificationSettingByNotificationTypeAndUserAddress({
       notificationTypeId: notificationType.id,
-      userAddressId: userAddress.id,
+      userAddressId: userAddress?.id as number
     });
 
   const shouldSendEmail =
