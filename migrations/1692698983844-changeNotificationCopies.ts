@@ -21,7 +21,7 @@ export class changeNotificationCopies1692698983844
     await notificationType.save();
   }
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(_queryRunner: QueryRunner): Promise<void> {
     if (
       process.env.NODE_ENV === 'test' ||
       process.env.NODE_ENV === 'development'
@@ -85,7 +85,7 @@ export class changeNotificationCopies1692698983844
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(_queryRunner: QueryRunner): Promise<void> {
     //
   }
 }

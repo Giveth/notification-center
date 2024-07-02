@@ -3,13 +3,12 @@ import {
   NotificationType,
   SCHEMA_VALIDATORS_NAMES,
 } from '../src/entities/notificationType';
-import { MICRO_SERVICES, THIRD_PARTY_EMAIL_SERVICES } from '../src/utils/utils';
+import { MICRO_SERVICES } from '../src/utils/utils';
 import {
   NOTIFICATION_CATEGORY,
   NOTIFICATION_TYPE_NAMES,
 } from '../src/types/general';
 import { NOTIFICATION_CATEGORY_GROUPS } from '../src/entities/notificationSetting';
-import { SegmentEvents } from '../src/services/segment/segmentAnalyticsSingleton';
 
 // https://github.com/Giveth/notification-center/issues/6 , https://gist.github.com/MohammadPCh/24434d50bc9ccd9b74905c271ee05482
 // icons https://gist.github.com/MohammadPCh/31e2b750dd9aa54edb21dcc6e7332efb

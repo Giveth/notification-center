@@ -2,7 +2,6 @@ import { UserAddress } from '../entities/userAddress';
 import { NotificationType } from '../entities/notificationType';
 import { NotificationSetting } from '../entities/notificationSetting';
 import { errorMessages } from '../utils/errorMessages';
-import { createQueryBuilder } from 'typeorm';
 import { logger } from '../utils/logger';
 import { StandardError } from '../types/StandardError';
 import { findNotificationTypeParent } from './notificationTypeRepository';

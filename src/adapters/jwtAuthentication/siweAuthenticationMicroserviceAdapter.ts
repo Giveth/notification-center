@@ -1,5 +1,5 @@
-import { JwtAuthenticationInterface } from './JwtAuthenticationInterface';
 import axios from 'axios';
+import { JwtAuthenticationInterface } from './JwtAuthenticationInterface';
 import { logger } from '../../utils/logger';
 const authorizationRoute = process.env
   .AUTH_MICROSERVICE_AUTHORIZATION_URL as string;

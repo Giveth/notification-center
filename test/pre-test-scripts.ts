@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
 import * as path from 'path';
+import dotenv from 'dotenv';
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });
 
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
-import { ThirdParty } from '../src/entities/ThirdParty';
-import { Notification } from '../src/entities/notification';
 import { sleep } from './testUtils';
 
 /* eslint-disable @typescript-eslint/no-var-requires */

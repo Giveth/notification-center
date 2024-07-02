@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { assert } from 'chai';
 import {
   generateRandomEthereumAddress,
   generateRandomSolanaAddress,
@@ -8,8 +10,6 @@ import {
   serverUrl,
   sleep,
 } from '../../../test/testUtils';
-import axios from 'axios';
-import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 import { generateRandomString } from '../../utils/utils';

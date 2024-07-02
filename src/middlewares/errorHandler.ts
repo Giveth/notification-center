@@ -1,14 +1,9 @@
-import { ErrorRequestHandler, NextFunction, Request } from 'express';
+import { ErrorRequestHandler } from 'express';
 import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 import { logger } from '../utils/logger';
 
-export const errorHandler: ErrorRequestHandler = async (
-  error,
-  req,
-  res,
-  next,
-) => {
+export const errorHandler: ErrorRequestHandler = async (error, req, res) => {
   logger.error('errorHandler ', {
     error,
   });
