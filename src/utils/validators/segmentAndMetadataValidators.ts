@@ -147,7 +147,7 @@ const superFluidTokenSegmentSchema = Joi.object({
 
 const subscribeOnboardingSchema = Joi.object({
   email: Joi.string().required(),
-})
+});
 
 const createOrttoProfileSegmentSchema = Joi.object({
   email: Joi.string().required(),
@@ -177,7 +177,7 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   subscribeOnboarding: {
     segment: subscribeOnboardingSchema,
-    metadata: null
+    metadata: null,
   },
   userSuperTokensCritical: {
     metadata: superFluidTokenMetadataSchema,
