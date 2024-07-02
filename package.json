@@ -47,7 +47,7 @@
     "express": "4.17.3",
     "express-formidable": "1.2.0",
     "express-session": "1.17.2",
-    "ioredis": "5.4.1",
+    "ioredis": "^4.28.5",
     "joi": "17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
