@@ -167,25 +167,25 @@ const activityCreator = (
       break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING:
       attributes = {
-        "str:cm:projecttitle": payload.title,
-        "str:cm:email": payload.email,
-        "str:cm:projectupdatelink": payload.projectLink + '?tab=updates',
-        "str:cm:userid": payload.userId?.toString(),
-      }
-      break
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectupdatelink': payload.projectLink + '?tab=updates',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT:
       attributes = {
-        "int:cm:round": payload.round,
-        "str:cm:date": payload.date,
-        "str:cm:amount": payload.amount,
-        "str:cm:contractaddress": payload.contractAddress,
-        "str:cm:farm": payload.farm,
-        "str:cm:message": payload.message,
-        "str:cm:network": payload.network,
-        "str:cm:script": payload.script,
-        "str:cm:transactionhash": payload.transactionHash,
-      }
-      break
+        'int:cm:round': payload.round,
+        'str:cm:date': payload.date,
+        'str:cm:amount': payload.amount,
+        'str:cm:contractaddress': payload.contractAddress,
+        'str:cm:farm': payload.farm,
+        'str:cm:message': payload.message,
+        'str:cm:network': payload.network,
+        'str:cm:script': payload.script,
+        'str:cm:transactionhash': payload.transactionHash,
+      };
+      break;
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;

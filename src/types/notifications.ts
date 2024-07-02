@@ -77,6 +77,7 @@ export const ORTTO_EVENT_NAMES: any = {
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]:
     'second-update-warning',
   [NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE]: 'created-profile',
-  [NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION]: 'verification-form-email-verification',
-  [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward-amount'
-}
+  [NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION]:
+    'verification-form-email-verification',
+  [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward-amount',
+};
