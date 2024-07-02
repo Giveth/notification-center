@@ -1,12 +1,12 @@
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import { v1Router } from './routes/v1';
-import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import { v1Router } from './routes/v1';
+import { AppDataSource } from './dataSource';
 import { errorHandler } from './middlewares/errorHandler';
 import { logger } from './utils/logger';
-const cors = require('cors');
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
@@ -29,7 +29,7 @@ export const initServer = async () => {
   ).split(',');
 
   const corsOptions = {
-    origin(origin: string, callback: (a: Error | null, b?: any) => void) {
+    origin(origin: any, callback: any) {
       if (!origin) {
         // allow requests with no origin (like mobile apps, Curl, ...)
         return callback(null, true);

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { serverUrl } from '../../../test/testUtils';
 import { assert } from 'chai';
+import { serverUrl } from '../../../test/testUtils';
 import { MESSAGES } from '../../utils/messages';
 
 describe('/health test cases', healthTestCases);

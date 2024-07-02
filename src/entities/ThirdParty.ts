@@ -4,13 +4,9 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { NotificationSetting } from './notificationSetting';
 
 // Schema designed based on https://github.com/Giveth/giveth-dapps-v2/issues/475
 @Entity()

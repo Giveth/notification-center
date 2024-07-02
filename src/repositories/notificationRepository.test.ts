@@ -3,9 +3,7 @@ import {
   generateRandomEthereumAddress,
   generateRandomSolanaAddress,
   saveNotificationDirectlyToDb,
-  sleep,
 } from '../../test/testUtils';
-import { NotificationSetting } from '../entities/notificationSetting';
 import { NotificationType } from '../entities/notificationType';
 import { EMAIL_STATUSES, Notification } from '../entities/notification';
 import {
@@ -15,10 +13,7 @@ import {
   markNotificationGroupAsRead,
   markNotificationsAsRead,
 } from './notificationRepository';
-import {
-  getUserNotificationSettings,
-  updateUserNotificationSetting,
-} from './notificationSettingRepository';
+
 import { createNewUserAddressIfNotExists } from './userAddressRepository';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
@@ -83,14 +78,8 @@ function countUnreadNotificationsTestCases() {
     )
       .where('type.name = :name', { name: profileEventName })
       .getOne();
-    await saveNotificationDirectlyToDb(
-      userAddress,
-      notificationType!,
-    );
-    await saveNotificationDirectlyToDb(
-      userAddress,
-      profileNotificationType!,
-    );
+    await saveNotificationDirectlyToDb(userAddress, notificationType!);
+    await saveNotificationDirectlyToDb(userAddress, profileNotificationType!);
     const notificationCount = await countUnreadNotifications(userAddress);
 
     assert.isOk(notificationCount);
@@ -107,14 +96,8 @@ function countUnreadNotificationsTestCases() {
     )
       .where('type.name = :name', { name: profileEventName })
       .getOne();
-    const notification = await saveNotificationDirectlyToDb(
-      userAddress,
-      notificationType!,
-    );
-    const notification2 = await saveNotificationDirectlyToDb(
-      userAddress,
-      profileNotificationType!,
-    );
+    await saveNotificationDirectlyToDb(userAddress, notificationType!);
+    await saveNotificationDirectlyToDb(userAddress, profileNotificationType!);
 
     const notificationCount = await countUnreadNotifications(userAddress);
 
@@ -132,10 +115,7 @@ function getNotificationsTestCases() {
     const notificationType = await NotificationType.createQueryBuilder('type')
       .where('type.name = :name', { name: eventName })
       .getOne();
-    const notification = await saveNotificationDirectlyToDb(
-      userAddress,
-      notificationType!,
-    );
+    await saveNotificationDirectlyToDb(userAddress, notificationType!);
     const take = 2;
     const skip = 0;
 
@@ -174,7 +154,7 @@ function markNotificationGroupAsReadTestCases() {
       profileNotificationType!,
     );
 
-    const result = await markNotificationGroupAsRead(
+    await markNotificationGroupAsRead(
       userAddress,
       NOTIFICATION_CATEGORY.GENERAL,
     );

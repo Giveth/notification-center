@@ -1,5 +1,5 @@
 {
-  "name": "notification-venter",
+  "name": "notification-center",
   "version": "2.2.0",
   "description": "",
   "main": "index.js",
@@ -12,8 +12,8 @@
     "test": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/**/*.test.ts  ./src/**/**/*.test.ts",
     "test:notificationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/notificationRepository.test.ts ",
     "test:notificationSettingRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/notificationSettingRepository.test.ts ",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "prettify": "prettier  --write '**/*.ts*'",
     "db:migrate:run:local": "NODE_ENV=development npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts ",
     "db:migrate:run:staging": "NODE_ENV=staging npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
@@ -29,16 +29,13 @@
   "license": "ISC",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettify && npm run lint"
+      "pre-commit": "npm run lint"
     }
   },
   "dependencies": {
     "@adminjs/express": "4.1.0",
     "@adminjs/typeorm": "3.0.0",
     "@solana/web3.js": "^1.87.6",
-    "@types/analytics-node": "^3.1.9",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cors": "^2.8.10",
     "adminjs": "5.10.0",
     "axios": "0.27.2",
     "body-parser": "^1.20.0",
@@ -63,10 +60,17 @@
     "typeorm": "0.3.6"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.1.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.6.0",
+    "@eslint/migrate-config": "^1.1.1",
+    "@types/analytics-node": "^3.1.9",
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/bunyan": "^1.8.8",
     "@types/chai": "^4.3.1",
+    "@types/cors": "^2.8.10",
     "@types/express": "4.17.13",
     "@types/express-session": "^1.17.4",
     "@types/ioredis": "^4.28.10",
