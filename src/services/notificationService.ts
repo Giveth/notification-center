@@ -215,7 +215,7 @@ export const sendNotification = async (
 }> => {
   const { userWalletAddress, projectId } = body;
   if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
-    // We dont throw error in this case but dont create new notification neither
+    // We don't throw error in this and we don`t create new notification either
     return {
       success: true,
       message: errorMessages.DUPLICATED_TRACK_ID,
