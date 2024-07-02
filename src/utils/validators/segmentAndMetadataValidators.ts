@@ -21,6 +21,7 @@ const projectRelatedTrackerSchema = Joi.object({
   slug: Joi.string().required(),
   projectLink: Joi.string().allow(null).allow(''),
 
+  verificationRejectedReason: Joi.string().allow(null, ''),
   // it's for project updates
   update: Joi.string().allow(null, ''),
 });
@@ -144,11 +145,20 @@ const superFluidTokenSegmentSchema = Joi.object({
   isEnded: Joi.boolean(),
 });
 
+const subscribeOnboardingSchema = Joi.object({
+  email: Joi.string().required(),
+})
+
 const createOrttoProfileSegmentSchema = Joi.object({
   email: Joi.string().required(),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
   userId: Joi.number().required(),
+});
+
+const sendEmailConfirmationSchema = Joi.object({
+  email: Joi.string().required(),
+  verificationLink: Joi.string().required(),
 });
 
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
@@ -157,9 +167,17 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: ObjectSchema | null;
   };
 } = {
+  sendEmailConfirmation: {
+    metadata: null,
+    segment: sendEmailConfirmationSchema,
+  },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
     metadata: null,
+  },
+  subscribeOnboarding: {
+    segment: subscribeOnboardingSchema,
+    metadata: null
   },
   userSuperTokensCritical: {
     metadata: superFluidTokenMetadataSchema,
@@ -232,10 +250,6 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   projectBoosted: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
-  },
-  sendEmailConfirmation: {
-    metadata: null,
-    segment: projectRelatedTrackerSchema,
   },
   madeDonation: {
     metadata: projectTitleProjectLinkSchema,

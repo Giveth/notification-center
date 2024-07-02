@@ -5,6 +5,7 @@ import {
 } from '../../middlewares/authentication';
 import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
+import { logger } from '../../utils/logger';
 
 export const notificationRouter = express.Router();
 
@@ -20,6 +21,7 @@ notificationRouter.post(
       });
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/thirdParty/notifications error', e);
       next(e);
     }
   },
@@ -39,6 +41,7 @@ notificationRouter.post(
       );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/thirdParty/notificationsBulk error', e);
       next(e);
     }
   },
@@ -62,6 +65,7 @@ notificationRouter.get(
       );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/notifications error', e);
       next(e);
     }
   },
@@ -82,6 +86,7 @@ notificationRouter.put(
       );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/notifications/read/:notificationId error', e);
       next(e);
     }
   },
@@ -96,6 +101,7 @@ notificationRouter.get(
         await notificationsController.countUnreadNotifications(walletAddress);
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/notifications/countUnread/:walletAddress error', e);
       next(e);
     }
   },
@@ -116,6 +122,7 @@ notificationRouter.put(
       );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/notifications/readAll error', e);
       next(e);
     }
   },
