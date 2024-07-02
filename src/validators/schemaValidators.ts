@@ -60,6 +60,12 @@ export const sendNotificationValidator = Joi.object({
       userId: Joi.number(),
       projectLink: Joi.string().allow(null).allow(''),
 
+      // Email confirmation
+      verificationLink: Joi.string().allow(null).allow(''),
+
+      // Verification form
+      verificationRejectedReason: Joi.string().allow(null, ''),
+
       // Donation related attributes
       amount: Joi.number(),
       token: Joi.string().allow(null, ''),
@@ -86,6 +92,10 @@ export const sendNotificationValidator = Joi.object({
 
       // Project update
       update: Joi.string(),
+
+      // Notify reward attributes
+      contractAddress: Joi.string(),
+      farm: Joi.string(),
     }),
   }),
 });

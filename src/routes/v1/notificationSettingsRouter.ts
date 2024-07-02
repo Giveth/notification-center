@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { validateAuthMicroserviceJwt } from '../../middlewares/authentication';
 import { NotificationSettingsController } from '../../controllers/v1/notificationSettingsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
+import { logger } from '../../utils/logger';
 
 export const notificationSettingsRouter = express.Router();
 
@@ -25,6 +26,7 @@ notificationSettingsRouter.get(
         );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('get /notification_settings error', e);
       next(e);
     }
   },
@@ -47,6 +49,7 @@ notificationSettingsRouter.put(
         );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('/notification_settings/:id error', e);
       next(e);
     }
   },
@@ -68,6 +71,7 @@ notificationSettingsRouter.put(
         );
       return sendStandardResponse({ res, result });
     } catch (e) {
+      logger.error('put /notification_settings error', e);
       next(e);
     }
   },

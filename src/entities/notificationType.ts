@@ -4,19 +4,17 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  JoinTable,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { NOTIFICATION_CATEGORY } from '../types/general';
 import { NotificationSetting } from './notificationSetting';
 
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
+  SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation',
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
+  SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
   RAW_HTML_BROADCAST: 'rawHtmlBroadcast',
@@ -68,6 +66,8 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_HAS_A_NEW_RANK: 'projectHasANewRank',
   PROJECT_HAS_RISEN_IN_THE_RANK: 'projectHasRisenInTheRank',
   YOUR_PROJECT_GOT_A_RANK: 'yourProjectGotARank',
+
+  NOTIFY_REWARD_AMOUNT: 'notifyRewardAmount',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
