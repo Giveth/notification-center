@@ -91,6 +91,10 @@ export const sendNotificationValidator = Joi.object({
 
       // Project update
       update: Joi.string(),
+
+      // Notify reward attributes
+      contractAddress: Joi.string(),
+      farm: Joi.string(),
     }),
   }),
 });
