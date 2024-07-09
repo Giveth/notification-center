@@ -13,7 +13,7 @@ import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notificat
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
-const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
+export const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   let attributes;
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING:
