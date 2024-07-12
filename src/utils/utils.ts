@@ -19,6 +19,7 @@ export const MICRO_SERVICES = {
   givethio: 'givethio',
   givEconomyNotificationMicroService: 'giveconomy-notification-service',
   trace: 'trace',
+  notifyReward: 'notifyreward',
 };
 
 // Need to define trace, blockchain and miscellaneos events
