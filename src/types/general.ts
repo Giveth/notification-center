@@ -12,7 +12,6 @@ export enum NOTIFICATION_CATEGORY {
   SUPPORTED_PROJECTS = 'supportedProjects',
   GIV_POWER = 'givPower',
   ORTTO = 'ortto',
-  NOTIFY_REWARD_AMOUNT = 'notifyRewardAmount',
 }
 
 export enum NOTIFICATION_TYPE_NAMES {
