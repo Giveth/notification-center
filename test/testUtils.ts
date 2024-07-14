@@ -112,6 +112,13 @@ export const getGivEconomyBasicAuth = () => {
   });
 };
 
+export const getNotifyRewardBasicAuth = () => {
+  return createBasicAuthentication({
+    secret: process.env.NOTIFY_REWARD_THIRD_PARTY_SECRET as string,
+    username: process.env.NOTIFY_REWARD_THIRD_PARTY_MICRO_SERVICE as string,
+  });
+};
+
 export const getAccessTokenForMockAuthMicroService = (
   walletAddress: string,
 ) => {
