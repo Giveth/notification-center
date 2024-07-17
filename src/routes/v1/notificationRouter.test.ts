@@ -7,6 +7,7 @@ import {
   getAccessTokenForMockAuthMicroService,
   getGivEconomyBasicAuth,
   getGivethIoBasicAuth,
+  getNotifyRewardBasicAuth,
   serverUrl,
   sleep,
 } from '../../../test/testUtils';
@@ -2091,6 +2092,77 @@ function sendNotificationTestCases() {
     assert.isTrue(result.data.success);
     const createdNotification = await findNotificationByTrackId(trackId);
     assert.equal(createdNotification?.createdAt.getTime(), creationTime);
+  });
+
+  it('should create *Notify reward amount* notification,  success', async () => {
+    const data = {
+      eventName: "Notify reward amount",
+      sendEmail: true,
+      sendSegment: true,
+      creationTime: 1667992708000,
+      email: "aliebrahimi2079@gmail.com",
+      segment: {
+        payload: {
+          round: 10,
+          date: "1667992708000",
+          amount: "12134",
+          contractAddress: "0xsfglsjfdflk",
+          farm: "test farm",
+          message: "test message",
+          network: "ethereum",
+          script: "test script",
+          transactionHash: "test txhash"
+        }
+      }
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getNotifyRewardBasicAuth(),
+      },
+    });
+
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Notify reward amount* notification, failed invalid payload', async () => {
+    try {
+      const data = {
+        eventName: "Notify reward amount",
+        sendEmail: true,
+        sendSegment: true,
+        creationTime: 1667992708000,
+        email: "aliebrahimi2079@gmail.com",
+        segment: {
+          payload: {
+            round: 10,
+            date: "1667992708000",
+            amount: "12134",
+            contractAddress: "0xsfglsjfdflk",
+            farm: "test farm",
+            message: "test message",
+            network: "ethereum",
+            script: "test script",
+            transactionHash: "test txhash",
+            invalidField: "invalid data"
+          }
+        }
+      };
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getNotifyRewardBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(e.response.data.description, '"segment.payload.invalidField" is not allowed');
+    }
   });
 }
 

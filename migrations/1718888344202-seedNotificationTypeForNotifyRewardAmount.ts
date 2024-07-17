@@ -14,7 +14,7 @@ const NotifyRewardAmountNotificationType = [
     name: NOTIFICATION_TYPE_NAMES.NOTIFY_REWARD_AMOUNT,
     description: NOTIFICATION_TYPE_NAMES.NOTIFY_REWARD_AMOUNT,
     microService: MICRO_SERVICES.givethio,
-    category: NOTIFICATION_CATEGORY.NOTIFY_REWARD_AMOUNT,
+    category: NOTIFICATION_CATEGORY.GENERAL,
     schemaValidator: SCHEMA_VALIDATORS_NAMES.NOTIFY_REWARD_AMOUNT,
     title: 'Notify reward report',
   },

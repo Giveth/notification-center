@@ -19,12 +19,14 @@ import {
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
-const activityCreator = (
-  payload: any,
-  orttoEventName: NOTIFICATIONS_EVENT_NAMES,
-): any => {
+export const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING:
+      attributes = {
+        "str:cm:email": payload.email,
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION:
       attributes = {
         'str:cm:email': payload.email,

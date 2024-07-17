@@ -93,8 +93,14 @@ export const sendNotificationValidator = Joi.object({
       update: Joi.string(),
 
       // Notify reward attributes
+      round: Joi.number(),
+      date: Joi.string(),
       contractAddress: Joi.string(),
       farm: Joi.string(),
+      message: Joi.string(),
+      network: Joi.string(),
+      script: Joi.string(),
+      transactionHash: Joi.string(),
     }),
   }),
 });
