@@ -27,9 +27,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "packageManager": "yarn@1.22.22",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint:fix"
     }
   },
   "dependencies": {
