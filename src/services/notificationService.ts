@@ -13,15 +13,20 @@ import { NOTIFICATIONS_EVENT_NAMES, ORTTO_EVENT_NAMES } from '../types/notificat
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 
-const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
-  const fields = {
-    "str::email": payload.email,
-  }
-  if (process.env.ENVIRONMENT === 'production') {
-    fields['str:cm:user-id'] = payload.userId?.toString()
-  }
+export const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   let attributes;
   switch (orttoEventName) {
+    case NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING:
+      attributes = {
+        "str:cm:email": payload.email,
+      }
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION:
+      attributes = {
+        "str:cm:email": payload.email,
+        "str:cm:verificationlink": payload.verificationLink,
+      }
+      break;
     case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
       attributes = {
         "str:cm:email": payload.email,
@@ -126,6 +131,7 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:email": payload.email,
         "str:cm:projectlink": payload.projectLink,
         "str:cm:verified-status": 'rejected',
+        "txt:cm:reason": payload.verificationRejectedReason,
         "str:cm:userid": payload.userId?.toString(),
       };
       break
@@ -163,6 +169,19 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
         "str:cm:userid": payload.userId?.toString(),
       }
       break
+    case NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT:
+      attributes = {
+        "int:cm:round": payload.round,
+        "str:cm:date": payload.date,
+        "str:cm:amount": payload.amount,
+        "str:cm:contractaddress": payload.contractAddress,
+        "str:cm:farm": payload.farm,
+        "str:cm:message": payload.message,
+        "str:cm:network": payload.network,
+        "str:cm:script": payload.script,
+        "str:cm:transactionhash": payload.transactionHash,
+      }
+      break
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName)
       return;
@@ -171,8 +190,12 @@ const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName)
     return;
   }
+  const fields = {
+    "str::email": payload.email,
+  }
   const merge_by = [];
-  if (process.env.ENVIRONMENT === 'production') {
+  if (process.env.ENVIRONMENT === 'production' && orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION) {
+    fields['str:cm:user-id'] = payload.userId?.toString()
     merge_by.push("str:cm:user-id")
   } else {
     merge_by.push("str::email")
@@ -204,9 +227,7 @@ export const sendNotification = async (
       message: errorMessages.DUPLICATED_TRACK_ID,
     };
   }
-  const userAddress = await createNewUserAddressIfNotExists(
-    userWalletAddress as string,
-  );
+
   const notificationType = await getNotificationTypeByEventNameAndMicroservice({
     eventName: body.eventName,
     microService,
@@ -221,10 +242,14 @@ export const sendNotification = async (
 
   const isOrttoSpecific = notificationType.category === NOTIFICATION_CATEGORY.ORTTO
 
+  const userAddress = isOrttoSpecific ? undefined : await createNewUserAddressIfNotExists(
+    userWalletAddress as string,
+  );
+
   const notificationSetting = isOrttoSpecific ? null :
     await findNotificationSettingByNotificationTypeAndUserAddress({
       notificationTypeId: notificationType.id,
-      userAddressId: userAddress.id,
+      userAddressId: userAddress?.id as number
     });
 
   const shouldSendEmail =
