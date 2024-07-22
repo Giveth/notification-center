@@ -6,7 +6,6 @@ import {
 import { NotificationsController } from '../../controllers/v1/notificationsController';
 import { sendStandardResponse } from '../../utils/responseUtils';
 import { logger } from '../../utils/logger';
-import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
 
 export const notificationRouter = express.Router();
 
@@ -15,7 +14,7 @@ notificationRouter.post(
   '/thirdParty/notifications',
   authenticateThirdPartyServiceToken,
   async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
+    const { microService } = res.locals;
 
     try {
       const result = await notificationsController.sendNotification(req.body, {
@@ -53,7 +52,7 @@ notificationRouter.get(
   '/notifications',
   validateAuthMicroserviceJwt,
   async (req: Request, res: Response, next) => {
-    const { microService, user } = res.locals;
+    const { user } = res.locals;
 
     try {
       const result = await notificationsController.getNotifications(
@@ -100,9 +99,8 @@ notificationRouter.get(
   async (req: Request, res: Response, next) => {
     const walletAddress = req.params.walletAddress as string;
     try {
-      const result = await notificationsController.countUnreadNotifications(
-        walletAddress,
-      );
+      const result =
+        await notificationsController.countUnreadNotifications(walletAddress);
       return sendStandardResponse({ res, result });
     } catch (e) {
       logger.error('/notifications/countUnread/:walletAddress error', e);

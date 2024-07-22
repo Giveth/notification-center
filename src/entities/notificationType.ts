@@ -156,7 +156,7 @@ export class NotificationType extends BaseEntity {
   content?: string;
 
   @OneToMany(
-    type => NotificationSetting,
+    _type => NotificationSetting,
     notificationSetting => notificationSetting.notificationType,
   )
   notificationSettings?: NotificationSetting[];

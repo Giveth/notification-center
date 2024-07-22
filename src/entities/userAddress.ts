@@ -4,10 +4,8 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 import { NotificationSetting } from './notificationSetting';
@@ -23,11 +21,11 @@ export class UserAddress extends BaseEntity {
   @Column('text', { nullable: false })
   walletAddress: string;
 
-  @OneToMany(type => Notification, notification => notification.userAddress)
+  @OneToMany(_type => Notification, notification => notification.userAddress)
   notifications?: Notification[];
 
   @OneToMany(
-    type => NotificationSetting,
+    _type => NotificationSetting,
     notificationSetting => notificationSetting.userAddress,
   )
   settings?: NotificationSetting[];

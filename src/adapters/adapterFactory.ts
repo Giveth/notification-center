@@ -1,8 +1,8 @@
 import { SiweAuthenticationMicroserviceAdapter } from './jwtAuthentication/siweAuthenticationMicroserviceAdapter';
 import { MockJwtAdapter } from './jwtAuthentication/mockJwtAdapter';
 import { errorMessages } from '../utils/errorMessages';
-import {OrttoAdapter} from "./emailAdapter/orttoAdapter";
-import {OrttoMockAdapter} from "./emailAdapter/orttoMockAdapter";
+import { OrttoAdapter } from './emailAdapter/orttoAdapter';
+import { OrttoMockAdapter } from './emailAdapter/orttoMockAdapter';
 
 const siweAuthenricationAdapter = new SiweAuthenticationMicroserviceAdapter();
 const jwtMockAdapter = new MockJwtAdapter();
@@ -18,9 +18,8 @@ export const getJwtAuthenticationAdapter = () => {
   }
 };
 
-
-const orttoEmailAdapter = new OrttoAdapter()
-const emailMockAdapter = new OrttoMockAdapter()
+const orttoEmailAdapter = new OrttoAdapter();
+const emailMockAdapter = new OrttoMockAdapter();
 export const getEmailAdapter = () => {
   switch (process.env.EMAIL_ADAPTER) {
     case 'ortto':

@@ -1,10 +1,10 @@
 import { assert } from 'chai';
+import { sign } from 'jsonwebtoken';
+import { Keypair } from '@solana/web3.js';
 import { Notification } from '../src/entities/notification';
 import { UserAddress } from '../src/entities/userAddress';
 import { NotificationType } from '../src/entities/notificationType';
 import { createBasicAuthentication } from '../src/utils/authorizationUtils';
-import { sign } from 'jsonwebtoken';
-import { Keypair } from '@solana/web3.js';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -66,7 +66,7 @@ export function generateRandomTxHash(): string {
 function generateHexNumber(len: number) {
   const hex = '0123456789abcdef';
   let output = '';
-  /* eslint-disable no-plusplus */
+
   for (let i = 0; i < len; i++) {
     output += hex.charAt(Math.floor(Math.random() * hex.length));
   }
