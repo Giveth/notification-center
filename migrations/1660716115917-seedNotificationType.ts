@@ -782,8 +782,7 @@ export const GivethNotificationTypes = {
         content: ' waiting to be claimed!',
       },
     ],
-    content:
-      'You have GIVbacks waiting to be claimed!',
+    content: 'You have GIVbacks waiting to be claimed!',
   },
   PROJECT_EDITED: {
     name: 'Project edited',
