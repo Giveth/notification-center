@@ -27,10 +27,10 @@ describe('activityCreator', () => {
             activity_id: 'act:cm:notify-reward',
             attributes: {
               'dtz:cm:date': {
-                year:2024,
-                month:7,
-                day:22,
-                timezone:'UTC',
+                year: 2024,
+                month: 7,
+                day: 22,
+                timezone: 'UTC',
               },
               'int:cm:round': payload.round,
               'str:cm:amount': payload.amount,
