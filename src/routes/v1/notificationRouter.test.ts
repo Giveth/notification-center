@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { assert } from 'chai';
 import {
   generateRandomEthereumAddress,
   generateRandomSolanaAddress,
@@ -9,8 +11,6 @@ import {
   serverUrl,
   sleep,
 } from '../../../test/testUtils';
-import axios from 'axios';
-import { assert } from 'chai';
 import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 import { generateRandomString } from '../../utils/utils';
@@ -2096,24 +2096,24 @@ function sendNotificationTestCases() {
 
   it('should create *Notify reward amount* notification,  success', async () => {
     const data = {
-      eventName: "Notify reward amount",
+      eventName: 'Notify reward amount',
       sendEmail: true,
       sendSegment: true,
       creationTime: 1667992708000,
-      email: "aliebrahimi2079@gmail.com",
+      email: 'aliebrahimi2079@gmail.com',
       segment: {
         payload: {
           round: 10,
-          date: "1667992708000",
-          amount: "12134",
-          contractAddress: "0xsfglsjfdflk",
-          farm: "test farm",
-          message: "test message",
-          network: "ethereum",
-          script: "test script",
-          transactionHash: "test txhash"
-        }
-      }
+          date: '1667992708000',
+          amount: '12134',
+          contractAddress: '0xsfglsjfdflk',
+          farm: 'test farm',
+          message: 'test message',
+          network: 'ethereum',
+          script: 'test script',
+          transactionHash: 'test txhash',
+        },
+      },
     };
 
     const result = await axios.post(sendNotificationUrl, data, {
@@ -2129,25 +2129,25 @@ function sendNotificationTestCases() {
   it('should create *Notify reward amount* notification, failed invalid payload', async () => {
     try {
       const data = {
-        eventName: "Notify reward amount",
+        eventName: 'Notify reward amount',
         sendEmail: true,
         sendSegment: true,
         creationTime: 1667992708000,
-        email: "aliebrahimi2079@gmail.com",
+        email: 'aliebrahimi2079@gmail.com',
         segment: {
           payload: {
             round: 10,
-            date: "1667992708000",
-            amount: "12134",
-            contractAddress: "0xsfglsjfdflk",
-            farm: "test farm",
-            message: "test message",
-            network: "ethereum",
-            script: "test script",
-            transactionHash: "test txhash",
-            invalidField: "invalid data"
-          }
-        }
+            date: '1667992708000',
+            amount: '12134',
+            contractAddress: '0xsfglsjfdflk',
+            farm: 'test farm',
+            message: 'test message',
+            network: 'ethereum',
+            script: 'test script',
+            transactionHash: 'test txhash',
+            invalidField: 'invalid data',
+          },
+        },
       };
       await axios.post(sendNotificationUrl, data, {
         headers: {
@@ -2161,7 +2161,10 @@ function sendNotificationTestCases() {
         e.response.data.message,
         errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
       );
-      assert.equal(e.response.data.description, '"segment.payload.invalidField" is not allowed');
+      assert.equal(
+        e.response.data.description,
+        '"segment.payload.invalidField" is not allowed',
+      );
     }
   });
 }

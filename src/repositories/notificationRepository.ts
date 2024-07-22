@@ -1,12 +1,7 @@
 import { UserAddress } from '../entities/userAddress';
-import { NotificationType } from '../entities/notificationType';
-import { NotificationSetting } from '../entities/notificationSetting';
 import { Notification } from '../entities/notification';
-import { errorMessages } from '../utils/errorMessages';
-import { query } from 'express';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { CountUnreadNotificationsResponse } from '../types/requestResponses';
-import { getNotificationTypeByEventName } from './notificationTypeRepository';
 import { logger } from '../utils/logger';
 
 export const markNotificationGroupAsRead = async (
@@ -136,8 +131,7 @@ export const getNotifications = async (params: {
   skip?: number;
   isRead?: string;
 }) => {
-  const { userAddressId, category, startTime, projectId, limit, skip, isRead } =
-    params;
+  const { userAddressId, category, projectId, limit, skip, isRead } = params;
   let query = Notification.createQueryBuilder('notification')
     .innerJoinAndSelect('notification.notificationType', 'notificationType')
     .where('notification."userAddressId" = :userAddressId', {

@@ -1,10 +1,9 @@
-import Joi, { number, ObjectSchema, ValidationResult } from 'joi';
+import Joi, { ObjectSchema, ValidationResult } from 'joi';
 import { StandardError } from '../types/StandardError';
 import { errorMessagesEnum } from '../utils/errorMessages';
 
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
 const solanaWalletAddressRegex = /^[A-Za-z0-9]{43,44}$/;
-const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
 
 export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
   const validationResult = schema.validate(data);

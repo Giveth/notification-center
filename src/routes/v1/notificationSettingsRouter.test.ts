@@ -1,17 +1,13 @@
 import { assert } from 'chai';
+import Axios from 'axios';
+import jwt from 'jsonwebtoken';
 import {
   generateRandomEthereumAddress,
   serverUrl,
 } from '../../../test/testUtils';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
-import Axios from 'axios';
-import jwt from 'jsonwebtoken';
-import {
-  NotificationSetting,
-  NOTIFICATION_CATEGORY_GROUPS,
-} from '../../entities/notificationSetting';
+import { NotificationSetting } from '../../entities/notificationSetting';
 import { NOTIFICATION_CATEGORY } from '../../types/general';
-import { not } from 'joi';
 
 const apiBaseUrl = serverUrl;
 
