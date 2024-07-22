@@ -20,7 +20,7 @@ describe('activityCreator', () => {
     expect(JSON.stringify(result)).equal(JSON.stringify({
       activities: [
         {
-          activity_id: "act:cm:notify-reward-amount",
+          activity_id: "act:cm:notify-reward",
           attributes: {
             'int:cm:round': payload.round,
             'str:cm:date': payload.date,

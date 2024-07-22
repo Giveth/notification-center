@@ -15,6 +15,7 @@ import { NOTIFICATION_CATEGORY } from '../types/general';
 
 export const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVENT_NAMES) : any=> {
   let attributes;
+  let date;
   switch (orttoEventName) {
     case NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING:
       attributes = {
@@ -170,9 +171,15 @@ export const activityCreator = (payload: any, orttoEventName: NOTIFICATIONS_EVEN
       }
       break
     case NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT:
+      date = new Date(Number(payload.date));
       attributes = {
+        "dtz:cm:date": {
+          "year": date.getUTCFullYear(),
+          "month": date.getUTCMonth() + 1, // JavaScript's months are zero-indexed
+          "day": date.getUTCDate(),
+          "timezone": "UTC"
+        },
         "int:cm:round": payload.round,
-        "str:cm:date": payload.date,
         "str:cm:amount": payload.amount,
         "str:cm:contractaddress": payload.contractAddress,
         "str:cm:farm": payload.farm,
