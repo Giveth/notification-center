@@ -6,7 +6,7 @@ describe('activityCreator', () => {
   it('should create attributes for NOTIFY_REWARD_AMOUNT', () => {
     const payload = {
       round: 1,
-      date: '2024-06-01',
+      date: '1721668910580',
       amount: '1000',
       contractAddress: '0x123',
       farm: 'Test Farm',
@@ -24,10 +24,15 @@ describe('activityCreator', () => {
       JSON.stringify({
         activities: [
           {
-            activity_id: 'act:cm:notify-reward-amount',
+            activity_id: 'act:cm:notify-reward',
             attributes: {
+              'dtz:cm:date': {
+                year: 2024,
+                month: 7,
+                day: 22,
+                timezone: 'UTC',
+              },
               'int:cm:round': payload.round,
-              'str:cm:date': payload.date,
               'str:cm:amount': payload.amount,
               'str:cm:contractaddress': payload.contractAddress,
               'str:cm:farm': payload.farm,
