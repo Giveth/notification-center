@@ -183,10 +183,10 @@ export const activityCreator = (
       date = new Date(Number(payload.date));
       attributes = {
         'dtz:cm:date': {
-          'year': date.getUTCFullYear(),
-          'month': date.getUTCMonth() + 1, // JavaScript's months are zero-indexed
-          'day': date.getUTCDate(),
-          'timezone': "UTC",
+          year: date.getUTCFullYear(),
+          month: date.getUTCMonth() + 1, // JavaScript's months are zero-indexed
+          day: date.getUTCDate(),
+          timezone: 'UTC',
         },
         'int:cm:round': payload.round,
         'str:cm:amount': payload.amount,

@@ -16,18 +16,21 @@ describe('activityCreator', () => {
       transactionHash: '0xabc',
       email: 'test@example.com',
     };
-    const result = activityCreator(payload, NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT);
+    const result = activityCreator(
+      payload,
+      NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT,
+    );
     expect(JSON.stringify(result)).equal(
       JSON.stringify({
         activities: [
           {
-            activity_id: "act:cm:notify-reward",
+            activity_id: 'act:cm:notify-reward',
             attributes: {
               'dtz:cm:date': {
-                'year':2024,
-                'month':7,
-                'day':22,
-                'timezone':"UTC",
+                year:2024,
+                month:7,
+                day:22,
+                timezone:'UTC',
               },
               'int:cm:round': payload.round,
               'str:cm:amount': payload.amount,
