@@ -10,8 +10,7 @@ COPY src ./src
 COPY migrations ./migrations
 COPY test ./test
 
-RUN npm ci
 RUN npm i -g pm2
-RUN npm i -g yarn
+RUN yarn install --frozen-lockfile
 RUN yarn build #It will run prebuild script for generating swagger spec by tsoa as well
 RUN cp -rv public ./dist
