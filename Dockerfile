@@ -1,5 +1,5 @@
 #https://hub.docker.com/_/node?tab=tags&page=1
-FROM node:18.14.0
+FROM node:20.14.0
 
 WORKDIR /usr/src/app
 
@@ -12,5 +12,6 @@ COPY test ./test
 
 RUN npm ci
 RUN npm i -g pm2
-RUN npm run build #It will run prebuild script for generating swagger spec by tsoa as well
+RUN npm i -g yarn
+RUN yarn build #It will run prebuild script for generating swagger spec by tsoa as well
 RUN cp -rv public ./dist
