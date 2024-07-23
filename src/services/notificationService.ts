@@ -212,7 +212,8 @@ export const activityCreator = (
   const merge_by = [];
   if (
     process.env.ENVIRONMENT === 'production' &&
-    orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION
+    orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION &&
+    orttoEventName !== NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT
   ) {
     fields['str:cm:user-id'] = payload.userId?.toString();
     merge_by.push('str:cm:user-id');
