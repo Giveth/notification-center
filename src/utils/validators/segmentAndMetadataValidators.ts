@@ -172,6 +172,7 @@ const notifyRewardAmountSegmentSchema = Joi.object({
   network: Joi.string().required(),
   script: Joi.string().required(),
   transactionHash: Joi.string().required(),
+  email: Joi.string().required(),
 });
 
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
