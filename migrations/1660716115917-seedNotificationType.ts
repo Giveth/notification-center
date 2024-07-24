@@ -770,19 +770,29 @@ export const GivethNotificationTypes = {
     htmlTemplate: [
       {
         type: 'p',
-        content: 'You have ',
+        content: 'Your GIVback ',
       },
       {
+        type: 'b',
+        content: '$amount',
+      },
+      {
+        type: 'p',
+        content: ' GIV is ready to claim! ',
+      },
+      { type: 'br' },
+      {
         type: 'a',
-        content: 'GIVbacks',
+        content: 'Click here',
         href: '/givbacks',
       },
       {
         type: 'p',
-        content: ' waiting to be claimed!',
+        content: ' to take a shortcut.',
       },
     ],
-    content: 'You have GIVbacks waiting to be claimed!',
+    content:
+      'Your GIVback {amount} GIV is ready to claim! \n[Click here] to take a shortcut.',
   },
   PROJECT_EDITED: {
     name: 'Project edited',
