@@ -2100,7 +2100,6 @@ function sendNotificationTestCases() {
       sendEmail: true,
       sendSegment: true,
       creationTime: 1667992708000,
-      email: 'aliebrahimi2079@gmail.com',
       segment: {
         payload: {
           round: 10,
@@ -2112,6 +2111,7 @@ function sendNotificationTestCases() {
           network: 'ethereum',
           script: 'test script',
           transactionHash: 'test txhash',
+          email: 'aliebrahimi2079@gmail.com',
         },
       },
     };
@@ -2133,7 +2133,6 @@ function sendNotificationTestCases() {
         sendEmail: true,
         sendSegment: true,
         creationTime: 1667992708000,
-        email: 'aliebrahimi2079@gmail.com',
         segment: {
           payload: {
             round: 10,
@@ -2145,6 +2144,7 @@ function sendNotificationTestCases() {
             network: 'ethereum',
             script: 'test script',
             transactionHash: 'test txhash',
+            email: 'aliebrahimi2079@gmail.com',
             invalidField: 'invalid data',
           },
         },
