@@ -20,3 +20,9 @@ export const AppDataSource = new DataSource({
   migrations: ['./migrations/*.ts'],
   subscribers: [],
 });
+
+export async function initializeDataSource() {
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize();
+  }
+}
