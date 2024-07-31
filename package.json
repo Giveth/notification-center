@@ -58,7 +58,7 @@
     "segment-analytics-node": "^1.0.24",
     "swagger-ui-express": "4.3.0",
     "tsoa": "3.14.1",
-    "typeorm": "0.3.6"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.0",
