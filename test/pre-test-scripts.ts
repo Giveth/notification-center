@@ -40,12 +40,14 @@ async function dropDatabaseAndCreateFreshOne() {
 }
 
 async function runMigrations() {
-  await (
-    await AppDataSource.initialize()
-  ).runMigrations({
-    transaction: 'all',
-  });
-  console.log('Migrations has been executed successfully');
+  try {
+    const dataSource = await AppDataSource.initialize();
+    await dataSource.runMigrations({ transaction: 'all' });
+    console.log('Migrations have been executed successfully');
+  } catch (error) {
+    console.error('Error running migrations:', error);
+    process.exit(1);
+  }
 }
 
 const seedDb = async () => {
