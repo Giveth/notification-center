@@ -54,7 +54,7 @@ const seedDb = async () => {
   //
 };
 
-before(async () => {
+(async () => {
   try {
     await dropDatabaseAndCreateFreshOne();
     await runMigrations();
@@ -64,4 +64,4 @@ before(async () => {
   } catch (e: any) {
     throw new Error(`Could not setup tests requirements \n${e.message}`);
   }
-});
+})();
