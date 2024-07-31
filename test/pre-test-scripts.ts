@@ -40,21 +40,19 @@ async function dropDatabaseAndCreateFreshOne() {
 }
 
 async function runMigrations() {
-  try {
-    const dataSource = await AppDataSource.initialize();
-    await dataSource.runMigrations({ transaction: 'all' });
-    console.log('Migrations have been executed successfully');
-  } catch (error) {
-    console.error('Error running migrations:', error);
-    process.exit(1);
-  }
+  await (
+    await AppDataSource.initialize()
+  ).runMigrations({
+    transaction: 'all',
+  });
+  console.log('Migrations has been executed successfully');
 }
 
 const seedDb = async () => {
   //
 };
 
-(async () => {
+before(async () => {
   try {
     await dropDatabaseAndCreateFreshOne();
     await runMigrations();
@@ -64,4 +62,4 @@ const seedDb = async () => {
   } catch (e: any) {
     throw new Error(`Could not setup tests requirements \n${e.message}`);
   }
-})();
+});
