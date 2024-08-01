@@ -48,6 +48,9 @@ jobs:
         run: yarn install
       - name: Run linter
         run: yarn lint
+      - name: Create test database
+        run: |
+          psql -U postgres -c "CREATE DATABASE \"notification-center\";"
       - name: Run migrations
         run: yarn db:migrate:run:test
       - name: Run tests
