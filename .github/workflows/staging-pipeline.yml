@@ -28,7 +28,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: givethio
+          POSTGRES_DB: notification-center
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -48,15 +48,6 @@ jobs:
         run: yarn install
       - name: Run linter
         run: yarn lint
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h localhost -p 5446; do
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 1
-          done
-      - name: Check and Create Database if it doesn't exist
-        run: |
-          psql -h localhost -p 5446 -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'notification-center'" | grep -q 1 || psql -h localhost -p 5446 -U postgres -c "CREATE DATABASE \"notification-center\";"
       - name: Run migrations
         run: yarn db:migrate:run:test
       - name: Run tests
