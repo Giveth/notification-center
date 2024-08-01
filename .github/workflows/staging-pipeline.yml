@@ -48,9 +48,15 @@ jobs:
         run: yarn install
       - name: Run linter
         run: yarn lint
-      - name: Create test database
+      - name: Wait for PostgreSQL to be ready
         run: |
-          psql -U postgres -c "CREATE DATABASE \"notification-center\";"
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
+      - name: Check and Create Database if it doesn't exist
+        run: |
+          psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'notification-center'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE \"notification-center\";"
       - name: Run migrations
         run: yarn db:migrate:run:test
       - name: Run tests
