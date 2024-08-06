@@ -177,6 +177,7 @@ const notifyRewardAmountSegmentSchema = Joi.object({
 
 const projectOwnershipChangedSegmentSchema = Joi.object({
   email: Joi.string().required(),
+  userId: Joi.number().required(),
   ownerName: Joi.string().required(),
   projectName: Joi.string().required(),
 });

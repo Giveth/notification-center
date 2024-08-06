@@ -2177,6 +2177,7 @@ function sendNotificationTestCases() {
       segment: {
         payload: {
           email: 'aliebrahimi2079@gmail.com',
+          userId: 1234,
           ownerName: 'Ali',
           projectName: 'Test Project',
         },
@@ -2203,6 +2204,7 @@ function sendNotificationTestCases() {
         segment: {
           payload: {
             email: 'aliebrahimi2079@gmail.com',
+            userId: 1234,
             ownerName: 'Ali',
             projectName: 'Test Project',
             invalidField: 'invalid data',
@@ -2237,6 +2239,7 @@ function sendNotificationTestCases() {
       segment: {
         payload: {
           email: 'aliebrahimi2079@gmail.com',
+          userId: 1234,
           ownerName: 'Ali',
           projectName: 'Test Project',
         },
@@ -2264,6 +2267,7 @@ function sendNotificationTestCases() {
           payload: {
             email: 'aliebrahimi2079@gmail.com',
             ownerName: 'Ali',
+            userId: 1234,
             projectName: 'Test Project',
             invalidField: 'invalid data',
           },
