@@ -2167,6 +2167,126 @@ function sendNotificationTestCases() {
       );
     }
   });
+
+  it('should create *Project Ownership Changed To* notification,  success', async () => {
+    const data = {
+      eventName: 'Project ownership changed to',
+      sendEmail: true,
+      sendSegment: true,
+      creationTime: 1667992708000,
+      segment: {
+        payload: {
+          email: 'aliebrahimi2079@gmail.com',
+          ownerName: 'Ali',
+          projectName: 'Test Project',
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Project Ownership Changed To* notification, failed invalid payload', async () => {
+    try {
+      const data = {
+        eventName: 'Project ownership changed to',
+        sendEmail: true,
+        sendSegment: true,
+        creationTime: 1667992708000,
+        segment: {
+          payload: {
+            email: 'aliebrahimi2079@gmail.com',
+            ownerName: 'Ali',
+            projectName: 'Test Project',
+            invalidField: 'invalid data',
+          },
+        },
+      };
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(
+        e.response.data.description,
+        '"segment.payload.invalidField" is not allowed',
+      );
+    }
+  });
+
+  it('should create *Project Ownership Changed From* notification,  success', async () => {
+    const data = {
+      eventName: 'Project ownership changed from',
+      sendEmail: true,
+      sendSegment: true,
+      creationTime: 1667992708000,
+      segment: {
+        payload: {
+          email: 'aliebrahimi2079@gmail.com',
+          ownerName: 'Ali',
+          projectName: 'Test Project',
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getGivethIoBasicAuth(),
+      },
+    });
+
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Project Ownership Changed From* notification, failed invalid payload', async () => {
+    try {
+      const data = {
+        eventName: 'Project ownership changed from',
+        sendEmail: true,
+        sendSegment: true,
+        creationTime: 1667992708000,
+        segment: {
+          payload: {
+            email: 'aliebrahimi2079@gmail.com',
+            ownerName: 'Ali',
+            projectName: 'Test Project',
+            invalidField: 'invalid data',
+          },
+        },
+      };
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getGivethIoBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(
+        e.response.data.description,
+        '"segment.payload.invalidField" is not allowed',
+      );
+    }
+  });
 }
 
 function sendBulkNotificationsTestCases() {
