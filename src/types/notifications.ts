@@ -52,6 +52,8 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   SEND_EMAIL_CONFIRMATION = 'Send email confirmation',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
+  PROJECT_OWNERSHIP_CHANGED_TO = 'Project ownership changed to',
+  PROJECT_OWNERSHIP_CHANGED_FROM = 'Project ownership changed from',
 }
 
 export const ORTTO_EVENT_NAMES = {
@@ -81,4 +83,8 @@ export const ORTTO_EVENT_NAMES = {
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',
   [NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING]: 'onboarding-form',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_TO]:
+    'ownership-changed-to',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_FROM]:
+    'ownership-changed-from',
 };

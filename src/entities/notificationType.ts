@@ -68,6 +68,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   YOUR_PROJECT_GOT_A_RANK: 'yourProjectGotARank',
 
   NOTIFY_REWARD_AMOUNT: 'notifyRewardAmount',
+  PROJECT_OWNERSHIP_CHANGED: 'ProjectOwnershipChanged',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
