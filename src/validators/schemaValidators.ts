@@ -101,6 +101,10 @@ export const sendNotificationValidator = Joi.object({
       network: Joi.string(),
       script: Joi.string(),
       transactionHash: Joi.string(),
+
+      // Project ownership change attributes
+      ownerName: Joi.string(),
+      projectName: Joi.string(),
     }),
   }),
 });

@@ -175,6 +175,12 @@ const notifyRewardAmountSegmentSchema = Joi.object({
   email: Joi.string().required(),
 });
 
+const projectOwnershipChangedSegmentSchema = Joi.object({
+  email: Joi.string().required(),
+  ownerName: Joi.string().required(),
+  projectName: Joi.string().required(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
@@ -351,5 +357,9 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   notifyRewardAmount: {
     metadata: null,
     segment: notifyRewardAmountSegmentSchema,
+  },
+  ProjectOwnershipChanged: {
+    metadata: null,
+    segment: projectOwnershipChangedSegmentSchema,
   },
 };
