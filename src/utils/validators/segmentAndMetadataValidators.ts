@@ -162,6 +162,12 @@ const sendEmailConfirmationSchema = Joi.object({
   verificationLink: Joi.string().required(),
 });
 
+const sendEmailConfirmationCodeFlowSchema = Joi.object({
+  email: Joi.string().required(),
+  verificationCode: Joi.number().required(),
+  userId: Joi.number().required(),
+});
+
 const notifyRewardAmountSegmentSchema = Joi.object({
   round: Joi.number().required(),
   date: Joi.string().required(),
@@ -184,6 +190,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   sendEmailConfirmation: {
     metadata: null,
     segment: sendEmailConfirmationSchema,
+  },
+  sendEmailConfirmationCodeFlow: {
+    metadata: null,
+    segment: sendEmailConfirmationCodeFlowSchema,
   },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
