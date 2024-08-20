@@ -18,10 +18,12 @@ import {
 } from '../types/notifications';
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
+import { MICRO_SERVICES } from '../utils/utils';
 
 export const activityCreator = (
   payload: any,
   orttoEventName: NOTIFICATIONS_EVENT_NAMES,
+  microService: string,
 ): any => {
   let attributes;
   let date;
@@ -213,7 +215,8 @@ export const activityCreator = (
   if (
     process.env.ENVIRONMENT === 'production' &&
     orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION &&
-    orttoEventName !== NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT
+    orttoEventName !== NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT &&
+    microService !== MICRO_SERVICES.qacc
   ) {
     fields['str:cm:user-id'] = payload.userId?.toString();
     merge_by.push('str:cm:user-id');
@@ -314,9 +317,10 @@ export const sendNotification = async (
     const data = activityCreator(
       emailData,
       body.eventName as NOTIFICATIONS_EVENT_NAMES,
+      microService,
     );
     if (data) {
-      await getEmailAdapter().callOrttoActivity(data);
+      await getEmailAdapter().callOrttoActivity(data, microService);
     }
     emailStatus = EMAIL_STATUSES.SENT;
   }

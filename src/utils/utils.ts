@@ -20,6 +20,7 @@ export const MICRO_SERVICES = {
   givEconomyNotificationMicroService: 'giveconomy-notification-service',
   trace: 'trace',
   notifyReward: 'notifyreward',
+  qacc: 'qacc',
 };
 
 // Need to define trace, blockchain and miscellaneos events

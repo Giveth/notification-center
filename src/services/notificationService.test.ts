@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { activityCreator } from './notificationService';
 import { NOTIFICATIONS_EVENT_NAMES } from '../types/notifications';
+import { MICRO_SERVICES } from '../utils/utils';
 
 describe('activityCreator', () => {
   it('should create attributes for NOTIFY_REWARD_AMOUNT', () => {
@@ -19,6 +20,7 @@ describe('activityCreator', () => {
     const result = activityCreator(
       payload,
       NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT,
+      MICRO_SERVICES.givethio,
     );
     expect(JSON.stringify(result)).equal(
       JSON.stringify({
