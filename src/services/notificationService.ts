@@ -198,6 +198,15 @@ export const activityCreator = (
         'str:cm:transactionhash': payload.transactionHash,
       };
       break;
+    case NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED_FOR_QACC:
+      attributes = {
+        'str:cm:donationamount': payload.donationAmount,
+        'str:cm:donationtoken': payload.donationToken,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:projecttitle': payload.projectTitle,
+        'str:cm:transactionlink': payload.transactionLink,
+      };
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;

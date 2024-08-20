@@ -175,6 +175,15 @@ const notifyRewardAmountSegmentSchema = Joi.object({
   email: Joi.string().required(),
 });
 
+const donationReceivedForQaccSegmentSchema = Joi.object({
+  email: Joi.string().required(),
+  donationAmount: Joi.string().required(),
+  donationToken: Joi.string().required(),
+  projectLink: Joi.string().required(),
+  projectTitle: Joi.string().required(),
+  transactionLink: Joi.string().required(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
@@ -351,5 +360,9 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   notifyRewardAmount: {
     metadata: null,
     segment: notifyRewardAmountSegmentSchema,
+  },
+  donationReceivedForQacc: {
+    metadata: null,
+    segment: donationReceivedForQaccSegmentSchema,
   },
 };

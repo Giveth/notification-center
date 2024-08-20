@@ -68,7 +68,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   YOUR_PROJECT_GOT_A_RANK: 'yourProjectGotARank',
 
   NOTIFY_REWARD_AMOUNT: 'notifyRewardAmount',
-  DONATION_RECEIVED_FOR_QACC: 'DonationReceivedForQacc',
+  DONATION_RECEIVED_FOR_QACC: 'donationReceivedForQacc',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
@@ -111,7 +111,7 @@ export class NotificationType extends BaseEntity {
   categoryGroup?: string;
 
   @Index()
-  @Column('text', { nullable: false })
+  @Column('text', { nullable: false, unique: true })
   name: string;
 
   @Column('text', { nullable: false })

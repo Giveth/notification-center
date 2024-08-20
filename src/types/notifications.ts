@@ -52,6 +52,7 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   SEND_EMAIL_CONFIRMATION = 'Send email confirmation',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
+  DONATION_RECEIVED_FOR_QACC = 'Donation received for qacc',
 }
 
 export const ORTTO_EVENT_NAMES = {
@@ -81,4 +82,6 @@ export const ORTTO_EVENT_NAMES = {
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',
   [NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING]: 'onboarding-form',
+  [NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED_FOR_QACC]:
+    'qacc-donation-received',
 };

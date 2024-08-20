@@ -101,6 +101,11 @@ export const sendNotificationValidator = Joi.object({
       network: Joi.string(),
       script: Joi.string(),
       transactionHash: Joi.string(),
+
+      // Qacc donation received
+      donationAmount: Joi.string(),
+      donationToken: Joi.string(),
+      projectTitle: Joi.string(),
     }),
   }),
 });
