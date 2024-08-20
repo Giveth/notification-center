@@ -207,6 +207,7 @@ export const activityCreator = (
         'str:cm:projecttitle': payload.projectTitle,
         'str:cm:transactionlink': payload.transactionLink,
       };
+      break;
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;
