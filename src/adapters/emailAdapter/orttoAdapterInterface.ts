@@ -1,3 +1,3 @@
 export interface OrttoAdapterInterface {
-  callOrttoActivity(data: any): Promise<void>;
+  callOrttoActivity(data: any, microService: string): Promise<void>;
 }
