@@ -55,4 +55,5 @@ export enum NOTIFICATION_TYPE_NAMES {
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
 
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
+  DONATION_RECEIVED_FOR_QACC = 'Donation received for qacc',
 }

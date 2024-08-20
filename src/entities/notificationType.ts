@@ -68,6 +68,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   YOUR_PROJECT_GOT_A_RANK: 'yourProjectGotARank',
 
   NOTIFY_REWARD_AMOUNT: 'notifyRewardAmount',
+  DONATION_RECEIVED_FOR_QACC: 'DonationReceivedForQacc',
 };
 export type HtmlTemplate = { type: string; content: string; href?: string }[];
 
