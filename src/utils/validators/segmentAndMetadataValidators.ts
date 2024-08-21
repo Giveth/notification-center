@@ -164,7 +164,7 @@ const sendEmailConfirmationSchema = Joi.object({
 
 const sendEmailConfirmationCodeFlowSchema = Joi.object({
   email: Joi.string().required(),
-  verificationCode: Joi.number().required(),
+  verificationCode: Joi.string().required(),
   userId: Joi.number().required(),
 });
 

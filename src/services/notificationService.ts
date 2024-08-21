@@ -41,7 +41,7 @@ export const activityCreator = (
     case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION_CODE_FLOW:
       attributes = {
         'str:cm:email': payload.email,
-        'int:cm:code': payload.verificationCode,
+        'int:cm:code': Number(payload.verificationCode),
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
