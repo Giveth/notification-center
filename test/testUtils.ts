@@ -119,6 +119,13 @@ export const getNotifyRewardBasicAuth = () => {
   });
 };
 
+export const getQaccBasicAuth = () => {
+  return createBasicAuthentication({
+    secret: process.env.QACC_THIRD_PARTY_SECRET as string,
+    username: process.env.QACC_THIRD_PARTY_MICRO_SERVICE as string,
+  });
+};
+
 export const getAccessTokenForMockAuthMicroService = (
   walletAddress: string,
 ) => {
