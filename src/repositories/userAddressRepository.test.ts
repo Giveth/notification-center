@@ -2,10 +2,8 @@ import { assert } from 'chai';
 import {
   generateRandomEthereumAddress,
   saveUserAddressDirectlyToDb,
-  sleep,
 } from '../../test/testUtils';
 import { NotificationSetting } from '../entities/notificationSetting';
-import { MICRO_SERVICES } from '../utils/utils';
 import {
   createNewUserAddress,
   createNewUserAddressIfNotExists,

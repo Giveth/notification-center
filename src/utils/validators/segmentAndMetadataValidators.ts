@@ -1,20 +1,11 @@
 import Joi, { ObjectSchema } from 'joi';
-import { errorMessages } from '../errorMessages';
-import { GIVETH_IO_EVENTS, NETWORK_IDS } from '../utils';
 
 // Microservice should send the requested json, the notification service
 // does not care about calculating values, only validating fields
-const filterDateRegex = new RegExp('^[0-9]{8} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
 const solanaTxRegex = /^[A-Za-z0-9]{86,88}$/;
 const solanaWalletAddressRegex = /^[A-Za-z0-9]{43,44}$/;
 const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
-const tokenSymbolRegex = /^[a-zA-Z0-9]{3,10}$/;
-
-export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
-  const validationResult = schema.validate(data);
-  throwHttpErrorIfJoiValidatorFails(validationResult);
-};
 
 // Using Analytics structure for all notifications
 
@@ -115,12 +106,7 @@ const getDonationPriceFailedMetadataSchema = Joi.object({
   reason: Joi.string().required(),
   txLink: Joi.string().required(),
 });
-const stakeUnStakeSchema = Joi.object({
-  contractName: Joi.string().required(),
-  transactionHash: Joi.string().required(),
-  network: Joi.number().required(),
-  amount: Joi.string().required(),
-});
+
 const claimSchema = Joi.object({
   round: Joi.number().required(),
 });
@@ -162,14 +148,14 @@ const superFluidTokenSegmentSchema = Joi.object({
 
 const subscribeOnboardingSchema = Joi.object({
   email: Joi.string().required(),
-})
+});
 
 const createOrttoProfileSegmentSchema = Joi.object({
   email: Joi.string().required(),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  userId: Joi.number().required()
-})
+  userId: Joi.number().required(),
+});
 
 const sendEmailConfirmationSchema = Joi.object({
   email: Joi.string().required(),
@@ -186,7 +172,8 @@ const notifyRewardAmountSegmentSchema = Joi.object({
   network: Joi.string().required(),
   script: Joi.string().required(),
   transactionHash: Joi.string().required(),
-})
+  email: Joi.string().required(),
+});
 
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
@@ -200,11 +187,11 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
-    metadata: null
+    metadata: null,
   },
   subscribeOnboarding: {
     segment: subscribeOnboardingSchema,
-    metadata: null
+    metadata: null,
   },
   userSuperTokensCritical: {
     metadata: superFluidTokenMetadataSchema,
@@ -366,9 +353,3 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     segment: notifyRewardAmountSegmentSchema,
   },
 };
-
-function throwHttpErrorIfJoiValidatorFails(
-  validationResult: Joi.ValidationResult<any>,
-) {
-  throw new Error('Function not implemented.');
-}

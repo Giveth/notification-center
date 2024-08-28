@@ -1,6 +1,6 @@
 import { RedisOptions } from 'ioredis';
-// tslint:disable-next-line:no-var-requires
-const Redis = require('ioredis');
+import Redis from 'ioredis';
+
 export const redisConfig: RedisOptions = {
   port: Number(process.env.REDIS_PORT) || 6379,
   host: process.env.REDIS_HOST || 'localhost',

@@ -28,7 +28,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: givethio
+          POSTGRES_DB: notification-center
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -41,15 +41,17 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18.14.0
+          node-version: 20.14.0
+      - name: Install Yarn
+        run: npm install -g yarn
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
       - name: Run linter
-        run: npm run lint
+        run: yarn lint
       - name: Run migrations
-        run: npm run db:migrate:run:test
+        run: yarn db:migrate:run:test
       - name: Run tests
-        run: npm run test
+        run: yarn test
 
   publish:
     needs: test
@@ -58,6 +60,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
       - name: Build image and push to GitHub Packages
         uses: docker/build-push-action@v1
         with:

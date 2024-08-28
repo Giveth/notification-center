@@ -1,5 +1,5 @@
-import { JwtAuthenticationInterface } from './JwtAuthenticationInterface';
 import { decode, JwtPayload } from 'jsonwebtoken';
+import { JwtAuthenticationInterface } from './JwtAuthenticationInterface';
 import { errorMessages } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { StandardError } from '../../types/StandardError';

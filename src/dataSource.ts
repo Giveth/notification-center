@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import dotenv from 'dotenv';
 import * as path from 'path';
+import dotenv from 'dotenv';
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });
@@ -20,3 +20,9 @@ export const AppDataSource = new DataSource({
   migrations: ['./migrations/*.ts'],
   subscribers: [],
 });
+
+export async function initializeDataSource() {
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize();
+  }
+}

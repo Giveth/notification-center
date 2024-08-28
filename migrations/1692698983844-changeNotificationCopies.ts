@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface } from 'typeorm';
 import { getNotificationTypeByEventName } from '../src/repositories/notificationTypeRepository';
 import { NOTIFICATION_TYPE_NAMES } from '../src/types/general';
 
@@ -21,7 +21,7 @@ export class changeNotificationCopies1692698983844
     await notificationType.save();
   }
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(): Promise<void> {
     if (
       process.env.NODE_ENV === 'test' ||
       process.env.NODE_ENV === 'development'
@@ -85,7 +85,7 @@ export class changeNotificationCopies1692698983844
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     //
   }
 }
