@@ -101,6 +101,9 @@ export const sendNotificationValidator = Joi.object({
       network: Joi.string(),
       script: Joi.string(),
       transactionHash: Joi.string(),
+
+      // Qacc email verification
+      verificationCode: Joi.number(),
     }),
   }),
 });

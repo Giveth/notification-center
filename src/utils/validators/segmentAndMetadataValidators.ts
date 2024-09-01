@@ -175,6 +175,11 @@ const notifyRewardAmountSegmentSchema = Joi.object({
   email: Joi.string().required(),
 });
 
+const sendEmailVerificationCodeForQaccSegmentSchema = Joi.object({
+  verificationCode: Joi.number().required(),
+  email: Joi.string().required(),
+});
+
 export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   [key: string]: {
     segment: ObjectSchema | null;
@@ -351,5 +356,9 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   notifyRewardAmount: {
     metadata: null,
     segment: notifyRewardAmountSegmentSchema,
+  },
+  sendEmailVerificationCodeForQacc: {
+    metadata: null,
+    segment: sendEmailVerificationCodeForQaccSegmentSchema,
   },
 };

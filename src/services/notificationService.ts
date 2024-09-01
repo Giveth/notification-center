@@ -200,6 +200,12 @@ export const activityCreator = (
         'str:cm:transactionhash': payload.transactionHash,
       };
       break;
+    case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_VERIFICATION_CODE_FOR_QACC:
+      attributes = {
+        'int:cm:verificationcode': payload.verificationCode,
+        'str:cm:email': payload.email,
+      };
+      break;
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;

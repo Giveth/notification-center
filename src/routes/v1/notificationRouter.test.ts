@@ -8,6 +8,7 @@ import {
   getGivEconomyBasicAuth,
   getGivethIoBasicAuth,
   getNotifyRewardBasicAuth,
+  getQaccBasicAuth,
   serverUrl,
   sleep,
 } from '../../../test/testUtils';
@@ -2152,6 +2153,58 @@ function sendNotificationTestCases() {
       await axios.post(sendNotificationUrl, data, {
         headers: {
           authorization: getNotifyRewardBasicAuth(),
+        },
+      });
+      // If request doesn't fail, it means this test failed
+      assert.isTrue(false);
+    } catch (e: any) {
+      assert.equal(
+        e.response.data.message,
+        errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR.message,
+      );
+      assert.equal(
+        e.response.data.description,
+        '"segment.payload.invalidField" is not allowed',
+      );
+    }
+  });
+
+  it('should create *Send email verification code for Qacc* notification,  success', async () => {
+    const data = {
+      eventName: 'Send email verification code for Qacc',
+      segment: {
+        payload: {
+          verificationCode: 654321,
+          email: 'aliebrahimi2079@gmail.com',
+        },
+      },
+    };
+
+    const result = await axios.post(sendNotificationUrl, data, {
+      headers: {
+        authorization: getQaccBasicAuth(),
+      },
+    });
+
+    assert.equal(result.status, 200);
+    assert.isOk(result.data);
+    assert.isTrue(result.data.success);
+  });
+  it('should create *Send email verification code for Qacc* notification, failed invalid payload', async () => {
+    try {
+      const data = {
+        eventName: 'Send email verification code for Qacc',
+        segment: {
+          payload: {
+            verificationCode: 654321,
+            email: 'aliebrahimi2079@gmail.com',
+            invalidField: 'invalid data',
+          },
+        },
+      };
+      await axios.post(sendNotificationUrl, data, {
+        headers: {
+          authorization: getQaccBasicAuth(),
         },
       });
       // If request doesn't fail, it means this test failed

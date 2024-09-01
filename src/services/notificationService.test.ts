@@ -52,4 +52,33 @@ describe('activityCreator', () => {
       }),
     );
   });
+
+  it('should create attributes for SEND_EMAIL_VERIFICATION_CODE_FOR_QACC', () => {
+    const payload = {
+      verificationCode: 123456,
+      email: 'ali@generalmagic.io',
+    };
+    const result = activityCreator(
+      payload,
+      NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_VERIFICATION_CODE_FOR_QACC,
+      MICRO_SERVICES.qacc,
+    );
+    expect(JSON.stringify(result)).equal(
+      JSON.stringify({
+        activities: [
+          {
+            activity_id: 'act:cm:qacc-email-verification',
+            attributes: {
+              'int:cm:verificationcode': 123456,
+              'str:cm:email': 'ali@generalmagic.io',
+            },
+            fields: {
+              'str::email': payload.email,
+            },
+          },
+        ],
+        merge_by: ['str::email'],
+      }),
+    );
+  });
 });
