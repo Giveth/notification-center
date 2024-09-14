@@ -39,6 +39,14 @@ export const activityCreator = (
         'str:cm:verificationlink': payload.verificationLink,
       };
       break;
+
+    case NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION_CODE_FLOW:
+      attributes = {
+        'str:cm:email': payload.email,
+        'int:cm:code': Number(payload.verificationCode),
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
       attributes = {
         'str:cm:email': payload.email,
@@ -204,11 +212,11 @@ export const activityCreator = (
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;
   }
-  if (!ORTTO_EVENT_NAMES[orttoEventName]) {
+  if (!ORTTO_EVENT_NAMES[orttoEventName as keyof typeof ORTTO_EVENT_NAMES]) {
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName);
     return;
   }
-  const fields = {
+  const fields: Record<string, any> = {
     'str::email': payload.email,
   };
   const merge_by = [];
@@ -226,7 +234,7 @@ export const activityCreator = (
   return {
     activities: [
       {
-        activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+        activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName as keyof typeof ORTTO_EVENT_NAMES]}`,
         attributes,
         fields,
       },
