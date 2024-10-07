@@ -52,4 +52,62 @@ describe('activityCreator', () => {
       }),
     );
   });
+
+  it('should create attributes for PROJECT_OWNER_CHANGED_TO', () => {
+    const payload = {
+      email: 'test@example.com',
+      ownerName: 'Test Owner',
+      projectName: 'Test Project',
+    };
+    const result = activityCreator(
+      payload,
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_TO,
+    );
+    expect(JSON.stringify(result)).equal(
+      JSON.stringify({
+        activities: [
+          {
+            activity_id: 'act:cm:ownership-changed-to',
+            attributes: {
+              'str:cm:ownername': payload.ownerName,
+              'str:cm:projectname': payload.projectName,
+            },
+            fields: {
+              'str::email': payload.email,
+            },
+          },
+        ],
+        merge_by: ['str::email'],
+      }),
+    );
+  });
+
+  it('should create attributes for PROJECT_OWNER_CHANGED_FROM', () => {
+    const payload = {
+      email: 'test@example.com',
+      ownerName: 'Test Owner',
+      projectName: 'Test Project',
+    };
+    const result = activityCreator(
+      payload,
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_FROM,
+    );
+    expect(JSON.stringify(result)).equal(
+      JSON.stringify({
+        activities: [
+          {
+            activity_id: 'act:cm:ownership-changed-from',
+            attributes: {
+              'str:cm:ownername': payload.ownerName,
+              'str:cm:projectname': payload.projectName,
+            },
+            fields: {
+              'str::email': payload.email,
+            },
+          },
+        ],
+        merge_by: ['str::email'],
+      }),
+    );
+  });
 });

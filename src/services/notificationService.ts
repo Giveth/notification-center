@@ -200,6 +200,18 @@ export const activityCreator = (
         'str:cm:transactionhash': payload.transactionHash,
       };
       break;
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_TO:
+      attributes = {
+        'str:cm:ownername': payload.ownerName,
+        'str:cm:projectname': payload.projectName,
+      };
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_OWNERSHIP_CHANGED_FROM:
+      attributes = {
+        'str:cm:ownername': payload.ownerName,
+        'str:cm:projectname': payload.projectName,
+      };
+      break;
     default:
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;

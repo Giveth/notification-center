@@ -55,4 +55,6 @@ export enum NOTIFICATION_TYPE_NAMES {
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
 
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
+  PROJECT_OWNERSHIP_CHANGED_TO = 'Project ownership changed to',
+  PROJECT_OWNERSHIP_CHANGED_FROM = 'Project ownership changed from',
 }
