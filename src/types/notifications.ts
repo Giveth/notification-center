@@ -50,6 +50,7 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   SUPER_TOKENS_BALANCE_DEPLETED = 'Stream balance depleted',
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
   SEND_EMAIL_CONFIRMATION = 'Send email confirmation',
+  SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW = 'Send email confirmation code flow',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
 }
@@ -81,4 +82,6 @@ export const ORTTO_EVENT_NAMES = {
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',
   [NOTIFICATIONS_EVENT_NAMES.SUBSCRIBE_ONBOARDING]: 'onboarding-form',
+  [NOTIFICATIONS_EVENT_NAMES.SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW]:
+    'email-verification-code',
 };
