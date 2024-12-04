@@ -39,13 +39,6 @@ export const activityCreator = (
         'str:cm:verificationlink': payload.verificationLink,
       };
       break;
-    case NOTIFICATIONS_EVENT_NAMES.SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW:
-      attributes = {
-        'str:cm:email': payload.email,
-        'int:cm:code': Number(payload.verificationCode),
-        'str:cm:userid': payload.userId?.toString(),
-      };
-      break;
     case NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE:
       attributes = {
         'str:cm:email': payload.email,
