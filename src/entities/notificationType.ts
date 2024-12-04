@@ -13,7 +13,6 @@ import { NotificationSetting } from './notificationSetting';
 // Export Object with Schemas to N1 lookup
 export const SCHEMA_VALIDATORS_NAMES = {
   SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation',
-  SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW: 'sendUserEmailConfirmationCodeFlow',
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
   SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',

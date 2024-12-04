@@ -55,7 +55,6 @@ export const sendNotificationValidator = Joi.object({
       email: Joi.string().allow(null).allow(''),
       title: Joi.string(),
       slug: Joi.string(),
-      verificationCode: Joi.string().allow(null).allow(''),
       firstName: Joi.string().allow(null).allow(''),
       userId: Joi.number(),
       projectLink: Joi.string().allow(null).allow(''),
