@@ -11,11 +11,10 @@ The Notification Center is a microservice designed to manage notifications for G
 - RESTful API interface
 - Real-time notification delivery
 - Customizable notification settings
-- Integration with various blockchain platforms
 
 ### Live Links
-- Production: [https://notification-center.giveth.io](https://notification-center.giveth.io)
-- Staging: [https://notification-center-staging.giveth.io](https://notification-center-staging.giveth.io)
+- Production: [https://notification.giveth.io/](https://notification.giveth.io/)
+- Staging: [https://notification.serve.giveth.io/](https://notification.serve.giveth.io/)
 
 ## 2. Architecture Overview
 
@@ -26,9 +25,7 @@ graph TD
     B --> C[PostgreSQL Database]
     B --> D[Redis Cache]
     B --> E[External Services]
-    E --> F[Blockchain Networks]
-    E --> G[Email Services]
-    E --> H[Push Notification Services]
+    E --> G[Ortto Email Services]
 ```
 
 ### Tech Stack
@@ -48,7 +45,7 @@ graph TD
 2. Requests are validated and processed through middleware
 3. Notifications are stored in PostgreSQL
 4. Real-time notifications are cached in Redis
-5. Notifications are delivered to appropriate channels (email, push, etc.)
+5. Notifications are delivered to appropriate users through Ortto API to send emails and manage tags
 
 ## 3. Getting Started
 
@@ -67,7 +64,7 @@ graph TD
 
 2. Install dependencies:
    ```bash
-   npm ci
+   yarn i
    ```
 
 3. Set up the development environment:
@@ -81,12 +78,12 @@ graph TD
 
 5. Run database migrations:
    ```bash
-   npm run db:migrate:run:local
+   yarn run db:migrate:run:local
    ```
 
 6. Start the development server:
    ```bash
-   npm start
+   yarn start
    ```
 
 7. Access the API documentation at [http://localhost:3040/docs](http://localhost:3040/docs)
@@ -94,18 +91,18 @@ graph TD
 ## 4. Usage Instructions
 
 ### Running the Application
-- Development: `npm start`
-- Staging: `npm run start:server:staging`
-- Production: `npm run start:server:production`
+- Development: `yarn start`
+- Staging: `yarn run start:server:staging`
+- Production: `yarn run start:server:production`
 
 ### Testing
 ```bash
 # Run all tests
-npm run test
+yarn run test
 
 # Run specific test files
-npm run test:notificationRepository
-npm run test:notificationSettingRepository
+yarn run test:notificationRepository
+yarn run test:notificationSettingRepository
 ```
 
 ### Database Management
@@ -115,11 +112,11 @@ npm run test:notificationSettingRepository
   ```
 - Run migrations:
   ```bash
-  npm run db:migrate:run:local
+  yarn run db:migrate:run:local
   ```
 - Revert last migration:
   ```bash
-  npm run db:migrate:revert:local
+  yarn run db:migrate:revert:local
   ```
 
 ## 5. Deployment Process
@@ -132,21 +129,21 @@ npm run test:notificationSettingRepository
 ### Deployment Steps
 1. Build the application:
    ```bash
-   npm run build
+   yarn run build
    ```
 
 2. Run database migrations:
    ```bash
-   npm run db:migrate:run:production
+   yarn run db:migrate:run:production
    ```
 
 3. Start the server:
    ```bash
-   npm run start:server:production
+   yarn run start:server:production
    ```
 
 ### CI/CD Integration
-The project uses GitHub Actions for continuous integration and deployment. The workflow is defined in `.github/workflows/CI-CD.yml`.
+The project uses GitHub Actions for continuous integration and deployment. The workflow is defined in `.github/workflows/{main-staging}-pipeline.yml`.
 
 ## 6. Troubleshooting
 
@@ -164,7 +161,7 @@ The project uses GitHub Actions for continuous integration and deployment. The w
 ### Logs and Debugging
 - Install bunyan for better log visualization:
   ```bash
-  npm i -g bunyan
+  yarn i -g bunyan
   ```
 - View logs:
   ```bash
