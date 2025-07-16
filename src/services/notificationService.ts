@@ -168,7 +168,7 @@ export const activityCreator = (
         'str:cm:projecttitle': payload.title,
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
-        'str:cm:verified-status': 'rejected',
+        'str:cm:verified-status': 'unverified',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
