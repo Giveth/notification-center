@@ -144,6 +144,15 @@ export const activityCreator = (
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_GIVBACKS_ELIGIBLE:
+      attributes = {
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'givbacksEligible',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
       attributes = {
         'str:cm:projecttitle': payload.title,
@@ -159,7 +168,7 @@ export const activityCreator = (
         'str:cm:projecttitle': payload.title,
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
-        'str:cm:verified-status': 'rejected',
+        'str:cm:verified-status': 'unverified',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
