@@ -247,6 +247,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
+  projectGivbacksEligible: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
   projectVerified: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
