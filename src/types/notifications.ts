@@ -49,6 +49,11 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   SUPER_TOKENS_BALANCE_MONTH = 'One month left in stream balance',
   SUPER_TOKENS_BALANCE_DEPLETED = 'Stream balance depleted',
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
+  // v6 → Ortto contact sync (giveth-v6-core#426). Distinct from
+  // CREATE_ORTTO_PROFILE: it always merges on the stable v6 user id (so a
+  // canonical-email change re-points the same person instead of duplicating)
+  // and stamps a durable "sourced from v6" marker.
+  SYNC_ORTTO_CONTACT = 'Sync Ortto contact',
   SEND_EMAIL_CONFIRMATION = 'Send email confirmation',
   SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW = 'Send email confirmation code flow',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
@@ -78,6 +83,11 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]:
     'second-update-warning',
   [NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE]: 'created-profile',
+  // Reuse the existing "created-profile" Ortto activity so no new custom
+  // activity has to be defined in the Ortto workspace; the v6 contact sync is
+  // still distinguished on the person by the `bol:cm:sourced-from-v6` marker
+  // and the `str:cm:v6-user-id` field it merges on (see activityCreator).
+  [NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT]: 'created-profile',
   [NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION]:
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',

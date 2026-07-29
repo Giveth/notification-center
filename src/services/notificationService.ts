@@ -54,6 +54,14 @@ export const activityCreator = (
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
+    case NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT:
+      attributes = {
+        'str:cm:email': payload.email,
+        'str:cm:firstname': payload.firstName,
+        'str:cm:lastname': payload.lastName,
+        'str:cm:v6-user-id': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
         'str:cm:tokensymbol': payload.tokenSymbol,
@@ -214,6 +222,27 @@ export const activityCreator = (
   if (!ORTTO_EVENT_NAMES[orttoEventName]) {
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName);
     return;
+  }
+  // giveth-v6-core#426: the v6 contact sync ALWAYS merges on the stable v6 user
+  // id (unlike the generic block below, which only does so in production), so a
+  // canonical-email change re-points the SAME Ortto person instead of creating
+  // a duplicate. It also stamps the durable `bol:cm:sourced-from-v6` marker so
+  // v6-managed contacts stay distinguishable from legacy v5-sourced ones.
+  if (orttoEventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT) {
+    return {
+      activities: [
+        {
+          activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+          attributes,
+          fields: {
+            'str::email': payload.email,
+            'str:cm:v6-user-id': payload.userId?.toString(),
+            'bol:cm:sourced-from-v6': true,
+          },
+        },
+      ],
+      merge_by: ['str:cm:v6-user-id'],
+    };
   }
   const fields = {
     'str::email': payload.email,

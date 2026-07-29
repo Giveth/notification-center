@@ -157,6 +157,17 @@ const createOrttoProfileSegmentSchema = Joi.object({
   userId: Joi.number().required(),
 });
 
+// giveth-v6-core#426 contact sync. Names are optional (and may be blank):
+// wallet-only / Turnkey profiles frequently have no first/last name, and they
+// must still sync. `email` + `userId` are the only required keys — `userId` is
+// the stable merge key the Ortto person is deduped on.
+const syncOrttoContactSegmentSchema = Joi.object({
+  email: Joi.string().required(),
+  userId: Joi.number().required(),
+  firstName: Joi.string().allow('', null).optional(),
+  lastName: Joi.string().allow('', null).optional(),
+});
+
 const sendEmailConfirmationSchema = Joi.object({
   email: Joi.string().required(),
   verificationLink: Joi.string().required(),
@@ -197,6 +208,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
+    metadata: null,
+  },
+  syncOrttoContact: {
+    segment: syncOrttoContactSegmentSchema,
     metadata: null,
   },
   subscribeOnboarding: {
