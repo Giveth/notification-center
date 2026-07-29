@@ -356,7 +356,25 @@ export const sendNotification = async (
       microService,
     );
     if (data) {
-      await getEmailAdapter().callOrttoActivity(data, microService);
+      const orttoSucceeded = await getEmailAdapter().callOrttoActivity(
+        data,
+        microService,
+      );
+      // giveth-v6-core#426: the contact-sync event needs a CONFIRMED upsert —
+      // v6-core advances its per-user sync marker only on a 2xx, and relies on
+      // its reconcile cron to retry otherwise. Surface an Ortto-side failure as
+      // a 502 for this event so the caller does not record a false success and
+      // silently stop retrying. Other Ortto events keep their fire-and-forget
+      // behavior (the boolean is ignored).
+      if (
+        !orttoSucceeded &&
+        body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT
+      ) {
+        throw new StandardError({
+          message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+          httpStatusCode: 502,
+        });
+      }
     }
     emailStatus = EMAIL_STATUSES.SENT;
   }

@@ -83,11 +83,13 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]:
     'second-update-warning',
   [NOTIFICATIONS_EVENT_NAMES.CREATE_ORTTO_PROFILE]: 'created-profile',
-  // Reuse the existing "created-profile" Ortto activity so no new custom
-  // activity has to be defined in the Ortto workspace; the v6 contact sync is
-  // still distinguished on the person by the `bol:cm:sourced-from-v6` marker
-  // and the `str:cm:v6-user-id` field it merges on (see activityCreator).
-  [NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT]: 'created-profile',
+  // DEDICATED, inert activity (giveth-v6-core#426). We intentionally do NOT
+  // reuse 'created-profile': the contact sync must be side-effect-free (it
+  // creates/updates a contact but sends no email), and it fires again on every
+  // canonical-email re-point, so it must not be bound to any Ortto journey that
+  // could send a (duplicate) welcome email. This activity must exist in the
+  // Ortto workspace with NO automation bound to it.
+  [NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT]: 'sync-ortto-contact',
   [NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION]:
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',
