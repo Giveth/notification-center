@@ -105,7 +105,13 @@ describe('activityCreator', () => {
         'bol:cm:sourced-from-v6': true,
       });
     } finally {
-      process.env.ENVIRONMENT = original;
+      // Restore exactly: if ENVIRONMENT was unset, delete it rather than
+      // assigning `undefined` (which would leave the string "undefined").
+      if (original === undefined) {
+        delete process.env.ENVIRONMENT;
+      } else {
+        process.env.ENVIRONMENT = original;
+      }
     }
   });
 
@@ -125,6 +131,16 @@ describe('activityCreator', () => {
       'str:cm:v6-user-id': '99',
       'bol:cm:sourced-from-v6': true,
     });
-    expect(result.activities[0].attributes['str:cm:v6-user-id']).to.equal('99');
+    // Absent names are omitted entirely — no `undefined` attributes are sent.
+    expect(result.activities[0].attributes).to.deep.equal({
+      'str:cm:email': 'contact@example.com',
+      'str:cm:v6-user-id': '99',
+    });
+    expect(result.activities[0].attributes).to.not.have.property(
+      'str:cm:firstname',
+    );
+    expect(result.activities[0].attributes).to.not.have.property(
+      'str:cm:lastname',
+    );
   });
 });

@@ -57,10 +57,17 @@ export const activityCreator = (
     case NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT:
       attributes = {
         'str:cm:email': payload.email,
-        'str:cm:firstname': payload.firstName,
-        'str:cm:lastname': payload.lastName,
         'str:cm:v6-user-id': payload.userId?.toString(),
       };
+      // Names are optional (wallet-only / Turnkey profiles frequently have
+      // none); include them only when supplied so we never send `undefined`
+      // attributes to Ortto.
+      if (payload.firstName) {
+        attributes['str:cm:firstname'] = payload.firstName;
+      }
+      if (payload.lastName) {
+        attributes['str:cm:lastname'] = payload.lastName;
+      }
       break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
