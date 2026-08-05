@@ -20,6 +20,18 @@ import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { MICRO_SERVICES } from '../utils/utils';
 
+// Finite timeout applied ONLY to the giveth-v6-core#426 contact sync, so a
+// stalled Ortto connection fails promptly into its 502 retry path instead of
+// leaving the request pending. Sourced from ORTTO_REQUEST_TIMEOUT_MS with a
+// validated fallback so a missing/garbage value never disables it.
+const DEFAULT_ORTTO_SYNC_TIMEOUT_MS = 10_000;
+const resolveOrttoSyncTimeoutMs = (): number => {
+  const parsed = Number(process.env.ORTTO_REQUEST_TIMEOUT_MS);
+  return Number.isFinite(parsed) && parsed > 0
+    ? parsed
+    : DEFAULT_ORTTO_SYNC_TIMEOUT_MS;
+};
+
 export const activityCreator = (
   payload: any,
   orttoEventName: NOTIFICATIONS_EVENT_NAMES,
@@ -351,39 +363,71 @@ export const sendNotification = async (
     eventName: body.eventName,
   });
 
+  // giveth-v6-core#426: the contact sync must upsert or fail LOUDLY — it may
+  // never return a false success, or v6-core marks the user synced and stops
+  // retrying a contact that was never created.
+  const isSyncOrttoContact =
+    body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT;
+
   if (
     ((shouldSendEmail && body.sendSegment) || isOrttoSpecific) &&
     segmentValidator
   ) {
     const emailData = body.segment?.payload;
-    validateWithJoiSchema(emailData, segmentValidator);
+    // Joi treats an absent object as valid, so a missing segment slips past the
+    // per-type validator. For the sync that is a bad request (400), not a
+    // silent success and not something to retry.
+    if (isSyncOrttoContact && !emailData) {
+      throw new StandardError({
+        message: errorMessages.ORTTO_CONTACT_SYNC_INVALID_PAYLOAD,
+        httpStatusCode: 400,
+      });
+    }
+    const validatedPayload = validateWithJoiSchema(emailData, segmentValidator);
+    // Only the sync forwards Joi's COERCED payload (normalised email + integer
+    // userId → a single stable merge key); other events keep their exact prior
+    // input to avoid any behavioural drift.
     const data = activityCreator(
-      emailData,
+      isSyncOrttoContact ? validatedPayload : emailData,
       body.eventName as NOTIFICATIONS_EVENT_NAMES,
       microService,
     );
     if (data) {
-      const orttoSucceeded = await getEmailAdapter().callOrttoActivity(
+      const orttoResult = await getEmailAdapter().callOrttoActivity(
         data,
         microService,
+        isSyncOrttoContact
+          ? { timeoutMs: resolveOrttoSyncTimeoutMs() }
+          : undefined,
       );
-      // giveth-v6-core#426: the contact-sync event needs a CONFIRMED upsert —
-      // v6-core advances its per-user sync marker only on a 2xx, and relies on
-      // its reconcile cron to retry otherwise. Surface an Ortto-side failure as
-      // a 502 for this event so the caller does not record a false success and
-      // silently stop retrying. Other Ortto events keep their fire-and-forget
-      // behavior (the boolean is ignored).
-      if (
-        !orttoSucceeded &&
-        body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT
-      ) {
+      // The sync needs a CONFIRMED upsert (v6-core advances its per-user marker
+      // only on a 2xx). Surface a transient Ortto failure (5xx / timeout /
+      // network) as 502 so v6-core retries, and a permanent one (4xx — a bad
+      // payload or an unprovisioned custom field/activity) as 422 so it is NOT
+      // retried forever. Other events ignore the result (fire-and-forget).
+      if (isSyncOrttoContact && !orttoResult.ok) {
         throw new StandardError({
           message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
-          httpStatusCode: 502,
+          httpStatusCode: orttoResult.retryable ? 502 : 422,
         });
       }
+    } else if (isSyncOrttoContact) {
+      // activityCreator produced nothing for an event that MUST upsert
+      // (e.g. the event fell out of ORTTO_EVENT_NAMES) — a misconfiguration,
+      // not a silent success.
+      throw new StandardError({
+        message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+        httpStatusCode: 500,
+      });
     }
     emailStatus = EMAIL_STATUSES.SENT;
+  } else if (isSyncOrttoContact) {
+    // Reached the ORTTO branch but with no segment validator (a seed/config
+    // error): fail rather than returning a false success.
+    throw new StandardError({
+      message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+      httpStatusCode: 500,
+    });
   }
 
   if (isOrttoSpecific) {

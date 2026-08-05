@@ -2,6 +2,8 @@ import { expect } from 'chai';
 import { activityCreator } from './notificationService';
 import { NOTIFICATIONS_EVENT_NAMES } from '../types/notifications';
 import { MICRO_SERVICES } from '../utils/utils';
+import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAndMetadataValidators';
+import { validateWithJoiSchema } from '../validators/schemaValidators';
 
 describe('activityCreator', () => {
   it('should create attributes for NOTIFY_REWARD_AMOUNT', () => {
@@ -142,5 +144,46 @@ describe('activityCreator', () => {
     expect(result.activities[0].attributes).to.not.have.property(
       'str:cm:lastname',
     );
+  });
+});
+
+describe('syncOrttoContact segment validator (giveth-v6-core#426)', () => {
+  const schema = SEGMENT_METADATA_SCHEMA_VALIDATOR.syncOrttoContact.segment!;
+
+  it('coerces email (trim + lowercase) and userId (→ integer) so the merge key is stable', () => {
+    const value = validateWithJoiSchema(
+      { email: '  Contact@Example.COM ', userId: '42' },
+      schema,
+    );
+    expect(value.email).to.equal('contact@example.com');
+    expect(value.userId).to.equal(42);
+    // The coerced userId stringifies to one canonical merge key regardless of
+    // the input's representation (' 42 ', '042', 42 all → '42').
+    expect(value.userId.toString()).to.equal('42');
+  });
+
+  it("rejects a malformed email (it is Ortto's identity field)", () => {
+    expect(() =>
+      validateWithJoiSchema({ email: 'not-an-email', userId: 42 }, schema),
+    ).to.throw();
+  });
+
+  it('rejects a non-integer or non-positive userId (would split one user into several contacts)', () => {
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: -1.5 }, schema),
+    ).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: 0 }, schema),
+    ).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: 'abc' }, schema),
+    ).to.throw();
+  });
+
+  it('requires both email and userId', () => {
+    expect(() => validateWithJoiSchema({ userId: 42 }, schema)).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com' }, schema),
+    ).to.throw();
   });
 });

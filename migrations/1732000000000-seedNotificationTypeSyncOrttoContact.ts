@@ -27,6 +27,17 @@ export class seedNotificationTypeSyncOrttoContact1732000000000
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Idempotent: NotificationType.name is UNIQUE and this migration gates
+    // `start:server:staging`, so a save() that INSERTs a duplicate (row already
+    // hand-seeded on staging, created via AdminJS, or left by a down()/re-apply
+    // cycle) would raise a duplicate-key error and stop the service booting.
+    // Skip when the row already exists.
+    const existing = await queryRunner.manager.findOne(NotificationType, {
+      where: { name: NOTIFICATION_TYPE_NAMES.SYNC_ORTTO_CONTACT },
+    });
+    if (existing) {
+      return;
+    }
     await queryRunner.manager.save(
       NotificationType,
       SyncOrttoContactNotificationType,
