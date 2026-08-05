@@ -13,7 +13,16 @@ export class OrttoMockAdapter implements OrttoAdapterInterface {
     data: any,
     microService: string,
   ): Promise<OrttoActivityResult> {
-    logger.debug('OrttoMockAdapter has been called', data, microService);
+    // Log only non-sensitive identifiers — the activity `data` carries contact
+    // PII (email / names / v6-user-id), so it must never be written to logs,
+    // even under EMAIL_ADAPTER=mock at debug level.
+    const activityIds = Array.isArray(data?.activities)
+      ? data.activities.map((a: any) => a?.activity_id)
+      : [];
+    logger.debug('OrttoMockAdapter has been called', {
+      microService,
+      activityIds,
+    });
     return this.nextResult;
   }
 }

@@ -298,7 +298,18 @@ export const sendNotification = async (
   message?: string;
 }> => {
   const { userWalletAddress, projectId } = body;
-  if (body.trackId && (await findNotificationByTrackId(body.trackId))) {
+  // giveth-v6-core#426: the contact sync must upsert or fail LOUDLY — it may
+  // never return a false success, or v6-core marks the user synced and stops
+  // retrying a contact that was never created.
+  const isSyncOrttoContact =
+    body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT;
+  // Never let a duplicate trackId short-circuit the sync into a false success.
+  // It carries no trackId today, but guard explicitly so that stays true.
+  if (
+    !isSyncOrttoContact &&
+    body.trackId &&
+    (await findNotificationByTrackId(body.trackId))
+  ) {
     // We dont throw error in this case but dont create new notification neither
     return {
       success: true,
@@ -362,12 +373,6 @@ export const sendNotification = async (
     segmentValidator: !!segmentValidator,
     eventName: body.eventName,
   });
-
-  // giveth-v6-core#426: the contact sync must upsert or fail LOUDLY — it may
-  // never return a false success, or v6-core marks the user synced and stops
-  // retrying a contact that was never created.
-  const isSyncOrttoContact =
-    body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT;
 
   if (
     ((shouldSendEmail && body.sendSegment) || isOrttoSpecific) &&
