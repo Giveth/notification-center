@@ -37,7 +37,16 @@ export class OrttoAdapter implements OrttoAdapterInterface {
       if (options?.timeoutMs && options.timeoutMs > 0) {
         config.timeout = options.timeoutMs;
       }
-      data.activities.map((a: any) => logger.debug('orttoActivityCall', a));
+      // Log only the activity ids, never the full activity: its `attributes` /
+      // `fields` carry contact PII (email, names, v6-user-id) and the default
+      // log level is DEBUG on a 30-day retained file (CWE-532). Matches the
+      // redaction applied on the error path below and in the mock adapter.
+      logger.debug('orttoActivityCall', {
+        microService,
+        activityIds: Array.isArray(data?.activities)
+          ? data.activities.map((a: any) => a?.activity_id)
+          : [],
+      });
       await axios.request(config);
       return { ok: true, retryable: false };
     } catch (e) {

@@ -67,19 +67,14 @@ export const activityCreator = (
       };
       break;
     case NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT:
+      // Identity-only: the sync carries just the email + the stable v6 user id
+      // (giveth-v6-core#426 sends no names). So the Ortto workspace only needs
+      // the two attributes below declared on the `sync-ortto-contact` activity —
+      // `str:cm:email` and `str:cm:v6-user-id`.
       attributes = {
         'str:cm:email': payload.email,
         'str:cm:v6-user-id': payload.userId?.toString(),
       };
-      // Names are optional (wallet-only / Turnkey profiles frequently have
-      // none); include them only when supplied so we never send `undefined`
-      // attributes to Ortto.
-      if (payload.firstName) {
-        attributes['str:cm:firstname'] = payload.firstName;
-      }
-      if (payload.lastName) {
-        attributes['str:cm:lastname'] = payload.lastName;
-      }
       break;
     case NOTIFICATIONS_EVENT_NAMES.SUPER_TOKENS_BALANCE_DEPLETED:
       attributes = {
@@ -367,7 +362,9 @@ export const sendNotification = async (
     },
     trackId: body.trackId,
     metadata: body.metadata,
-    payload: body.segment?.payload,
+    // Log only which segment keys were sent, never their values — the payload
+    // carries contact PII (email, names, v6-user-id) and this runs at DEBUG.
+    payloadKeys: body.segment?.payload ? Object.keys(body.segment.payload) : [],
     sendEmail: body.sendEmail,
     sendSegment: body.sendSegment,
     segmentValidator: !!segmentValidator,

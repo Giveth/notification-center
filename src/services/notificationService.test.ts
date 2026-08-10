@@ -56,7 +56,8 @@ describe('activityCreator', () => {
   });
 
   // giveth-v6-core#426 — the contact sync's cross-layer contract with v6-core.
-  it('builds the SYNC_ORTTO_CONTACT activity: dedicated inert activity, merges on the v6 user id, stamps the sourced-from-v6 marker', () => {
+  it('builds the SYNC_ORTTO_CONTACT activity: identity-only, dedicated inert activity, merges on the v6 user id, stamps the sourced-from-v6 marker', () => {
+    // Names in the payload are ignored — the sync is identity-only.
     const payload = {
       email: 'contact@example.com',
       userId: 42,
@@ -74,8 +75,6 @@ describe('activityCreator', () => {
           activity_id: 'act:cm:sync-ortto-contact',
           attributes: {
             'str:cm:email': 'contact@example.com',
-            'str:cm:firstname': 'Ada',
-            'str:cm:lastname': 'Lovelace',
             'str:cm:v6-user-id': '42',
           },
           fields: {
@@ -115,35 +114,6 @@ describe('activityCreator', () => {
         process.env.ENVIRONMENT = original;
       }
     }
-  });
-
-  it('omits optional names for the SYNC_ORTTO_CONTACT activity (nameless wallet/Turnkey profiles still sync)', () => {
-    const result = activityCreator(
-      { email: 'contact@example.com', userId: 99 },
-      NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
-      MICRO_SERVICES.givethio,
-    );
-    // The merge key, email, and marker survive even with no names supplied.
-    expect(result.activities[0].activity_id).to.equal(
-      'act:cm:sync-ortto-contact',
-    );
-    expect(result.merge_by).to.deep.equal(['str:cm:v6-user-id']);
-    expect(result.activities[0].fields).to.deep.equal({
-      'str::email': 'contact@example.com',
-      'str:cm:v6-user-id': '99',
-      'bol:cm:sourced-from-v6': true,
-    });
-    // Absent names are omitted entirely — no `undefined` attributes are sent.
-    expect(result.activities[0].attributes).to.deep.equal({
-      'str:cm:email': 'contact@example.com',
-      'str:cm:v6-user-id': '99',
-    });
-    expect(result.activities[0].attributes).to.not.have.property(
-      'str:cm:firstname',
-    );
-    expect(result.activities[0].attributes).to.not.have.property(
-      'str:cm:lastname',
-    );
   });
 });
 
