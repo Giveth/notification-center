@@ -5,9 +5,13 @@ import { errorMessagesEnum } from '../utils/errorMessages';
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
 const solanaWalletAddressRegex = /^[A-Za-z0-9]{43,44}$/;
 
+// Returns Joi's COERCED value (trimmed/lowercased/number-parsed per the schema)
+// so callers can forward the normalised payload rather than the raw input.
+// Existing callers that ignore the return value are unaffected.
 export const validateWithJoiSchema = (data: any, schema: ObjectSchema) => {
   const validationResult = schema.validate(data);
   throwHttpErrorIfJoiValidatorFails(validationResult);
+  return validationResult.value;
 };
 
 const throwHttpErrorIfJoiValidatorFails = (

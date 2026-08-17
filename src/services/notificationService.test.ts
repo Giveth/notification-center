@@ -2,6 +2,8 @@ import { expect } from 'chai';
 import { activityCreator } from './notificationService';
 import { NOTIFICATIONS_EVENT_NAMES } from '../types/notifications';
 import { MICRO_SERVICES } from '../utils/utils';
+import { SEGMENT_METADATA_SCHEMA_VALIDATOR } from '../utils/validators/segmentAndMetadataValidators';
+import { validateWithJoiSchema } from '../validators/schemaValidators';
 
 describe('activityCreator', () => {
   it('should create attributes for NOTIFY_REWARD_AMOUNT', () => {
@@ -51,5 +53,107 @@ describe('activityCreator', () => {
         merge_by: ['str::email'],
       }),
     );
+  });
+
+  // giveth-v6-core#426 — the contact sync's cross-layer contract with v6-core.
+  it('builds the SYNC_ORTTO_CONTACT activity: identity-only, dedicated inert activity, merges on the v6 user id, stamps the sourced-from-v6 marker', () => {
+    // Names in the payload are ignored — the sync is identity-only.
+    const payload = {
+      email: 'contact@example.com',
+      userId: 42,
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+    };
+    const result = activityCreator(
+      payload,
+      NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
+      MICRO_SERVICES.givethio,
+    );
+    expect(result).to.deep.equal({
+      activities: [
+        {
+          activity_id: 'act:cm:sync-ortto-contact',
+          attributes: {
+            'str:cm:email': 'contact@example.com',
+            'str:cm:v6-user-id': '42',
+          },
+          fields: {
+            'str::email': 'contact@example.com',
+            'str:cm:v6-user-id': '42',
+            'bol:cm:sourced-from-v6': true,
+          },
+        },
+      ],
+      merge_by: ['str:cm:v6-user-id'],
+    });
+  });
+
+  it('merges the SYNC_ORTTO_CONTACT person on the v6 user id regardless of ENVIRONMENT (AC4 on staging)', () => {
+    const original = process.env.ENVIRONMENT;
+    process.env.ENVIRONMENT = 'production';
+    try {
+      const result = activityCreator(
+        { email: 'contact@example.com', userId: 7 },
+        NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
+        MICRO_SERVICES.givethio,
+      );
+      // Never merges by email (that would create a duplicate on re-point), and
+      // never falls through to the generic prod block's 'str:cm:user-id'.
+      expect(result.merge_by).to.deep.equal(['str:cm:v6-user-id']);
+      expect(result.activities[0].fields).to.deep.equal({
+        'str::email': 'contact@example.com',
+        'str:cm:v6-user-id': '7',
+        'bol:cm:sourced-from-v6': true,
+      });
+    } finally {
+      // Restore exactly: if ENVIRONMENT was unset, delete it rather than
+      // assigning `undefined` (which would leave the string "undefined").
+      if (original === undefined) {
+        delete process.env.ENVIRONMENT;
+      } else {
+        process.env.ENVIRONMENT = original;
+      }
+    }
+  });
+});
+
+describe('syncOrttoContact segment validator (giveth-v6-core#426)', () => {
+  const schema = SEGMENT_METADATA_SCHEMA_VALIDATOR.syncOrttoContact.segment!;
+
+  it('coerces email (trim + lowercase) and userId (→ integer) so the merge key is stable', () => {
+    const value = validateWithJoiSchema(
+      { email: '  Contact@Example.COM ', userId: '42' },
+      schema,
+    );
+    expect(value.email).to.equal('contact@example.com');
+    expect(value.userId).to.equal(42);
+    // The coerced userId stringifies to one canonical merge key regardless of
+    // the input's representation (' 42 ', '042', 42 all → '42').
+    expect(value.userId.toString()).to.equal('42');
+  });
+
+  it("rejects a malformed email (it is Ortto's identity field)", () => {
+    expect(() =>
+      validateWithJoiSchema({ email: 'not-an-email', userId: 42 }, schema),
+    ).to.throw();
+  });
+
+  it('rejects a non-integer or non-positive userId (would split one user into several contacts)', () => {
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: -1.5 }, schema),
+    ).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: 0 }, schema),
+    ).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com', userId: 'abc' }, schema),
+    ).to.throw();
+  });
+
+  it('requires both email and userId', () => {
+    expect(() => validateWithJoiSchema({ userId: 42 }, schema)).to.throw();
+    expect(() =>
+      validateWithJoiSchema({ email: 'a@b.com' }, schema),
+    ).to.throw();
   });
 });

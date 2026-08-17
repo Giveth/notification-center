@@ -53,6 +53,7 @@ export enum NOTIFICATION_TYPE_NAMES {
   YOUR_PROJECT_GOT_A_RANK = 'Your project got a rank',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
+  SYNC_ORTTO_CONTACT = 'Sync Ortto contact',
 
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
 }

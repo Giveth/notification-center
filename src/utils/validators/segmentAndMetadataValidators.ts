@@ -157,6 +157,28 @@ const createOrttoProfileSegmentSchema = Joi.object({
   userId: Joi.number().required(),
 });
 
+// giveth-v6-core#426 contact sync. Identity-only: `email` + `userId` are the
+// only keys (no names — see the PR / SyncOrttoContactInput).
+//
+// `userId` is the STABLE Ortto merge key, so it must coerce to a single
+// canonical value: `Joi.number().integer().positive()` rejects `-1.5`/`4e1`
+// style inputs that would otherwise stringify into distinct merge keys and
+// split one v6 user across several Ortto contacts. `email` is Ortto's identity
+// field, so it is validated structurally and normalised (trim + lowercase) —
+// the caller must use the COERCED value (see validateWithJoiSchema) so these
+// transforms actually reach `activityCreator`. `tlds: { allow: false }` keeps
+// the structural check but skips the IANA TLD allowlist, so an unusual-but-real
+// TLD isn't rejected (Ortto arbitrates the address); a typo'd address still
+// fails downstream rather than being retried forever here.
+const syncOrttoContactSegmentSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .email({ tlds: { allow: false } })
+    .required(),
+  userId: Joi.number().integer().positive().required(),
+});
+
 const sendEmailConfirmationSchema = Joi.object({
   email: Joi.string().required(),
   verificationLink: Joi.string().required(),
@@ -197,6 +219,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   createOrttoProfile: {
     segment: createOrttoProfileSegmentSchema,
+    metadata: null,
+  },
+  syncOrttoContact: {
+    segment: syncOrttoContactSegmentSchema,
     metadata: null,
   },
   subscribeOnboarding: {

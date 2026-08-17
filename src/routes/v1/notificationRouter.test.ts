@@ -15,6 +15,8 @@ import { errorMessages, errorMessagesEnum } from '../../utils/errorMessages';
 import { findNotificationByTrackId } from '../../repositories/notificationRepository';
 import { generateRandomString } from '../../utils/utils';
 import { NOTIFICATION_TYPE_NAMES } from '../../types/general';
+import { getEmailAdapter } from '../../adapters/adapterFactory';
+import { OrttoMockAdapter } from '../../adapters/emailAdapter/orttoMockAdapter';
 
 describe('/notifications POST test cases', sendNotificationTestCases);
 describe('/notificationsBulk POST test cases', sendBulkNotificationsTestCases);
@@ -2388,3 +2390,82 @@ function sendBulkNotificationsTestCases() {
     }
   });
 }
+
+// giveth-v6-core#426: the contact sync must map the Ortto upsert outcome onto
+// the HTTP status (v6-core advances its per-user marker only on 2xx). Drives
+// the in-process mock adapter's result and asserts sendNotification's mapping —
+// the throw sites the four adapter unit tests don't reach. EMAIL_ADAPTER=mock
+// in test env, and the server runs in-process, so this singleton is the one the
+// request handler uses.
+describe('/notifications Sync Ortto contact 502/422 mapping', () => {
+  const syncBody = {
+    eventName: NOTIFICATION_TYPE_NAMES.SYNC_ORTTO_CONTACT,
+    sendEmail: false,
+    sendSegment: true,
+    segment: { payload: { email: 'sync-test@example.com', userId: 123 } },
+  };
+
+  let mock: OrttoMockAdapter;
+
+  beforeEach(() => {
+    mock = getEmailAdapter() as OrttoMockAdapter;
+  });
+
+  afterEach(() => {
+    mock.nextResult = { ok: true, retryable: false };
+  });
+
+  it('returns 502 when the Ortto upsert fails transiently (retryable)', async () => {
+    mock.nextResult = { ok: false, retryable: true };
+    try {
+      await axios.post(sendNotificationUrl, syncBody, {
+        headers: { authorization: getGivethIoBasicAuth() },
+      });
+      assert.isTrue(false, 'expected a 502');
+    } catch (e: any) {
+      assert.equal(e.response.status, 502);
+    }
+  });
+
+  it('returns 422 when the Ortto upsert fails permanently (non-retryable)', async () => {
+    mock.nextResult = { ok: false, retryable: false };
+    try {
+      await axios.post(sendNotificationUrl, syncBody, {
+        headers: { authorization: getGivethIoBasicAuth() },
+      });
+      assert.isTrue(false, 'expected a 422');
+    } catch (e: any) {
+      assert.equal(e.response.status, 422);
+    }
+  });
+
+  it('returns 200 on a confirmed upsert', async () => {
+    mock.nextResult = { ok: true, retryable: false };
+    const result = await axios.post(sendNotificationUrl, syncBody, {
+      headers: { authorization: getGivethIoBasicAuth() },
+    });
+    assert.equal(result.status, 200);
+  });
+
+  it('leaves other Ortto events fire-and-forget (200) even when the adapter reports failure', async () => {
+    mock.nextResult = { ok: false, retryable: true };
+    const result = await axios.post(
+      sendNotificationUrl,
+      {
+        eventName: NOTIFICATION_TYPE_NAMES.CREATE_ORTTO_PROFILE,
+        sendEmail: false,
+        sendSegment: true,
+        segment: {
+          payload: {
+            email: 'other@example.com',
+            userId: 456,
+            firstName: 'A',
+            lastName: 'B',
+          },
+        },
+      },
+      { headers: { authorization: getGivethIoBasicAuth() } },
+    );
+    assert.equal(result.status, 200);
+  });
+});
