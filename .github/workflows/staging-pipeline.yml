@@ -92,8 +92,16 @@ jobs:
           key: ${{ secrets.STAGING_PRIVATE_KEY_ALL }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             cd giveth-all
-            docker-compose stop notification-center
-            docker-compose pull notification-center
-            docker-compose up -d notification-center
+            # Use docker compose v2 (host has v2.40.0). The old `docker-compose`
+            # v1.29.2 crashes with `KeyError: 'ContainerConfig'` when recreating a
+            # BuildKit-format image (it choked on the redis-all dep), which left NC
+            # stopped-and-not-restarted while the run still went green — the failure
+            # was masked by the trailing `prune` (last command, exit 0). `set -e`
+            # makes a failed deploy fail RED; `-f docker-compose.staging.yml` pins the
+            # staging image tag deterministically; `--no-deps` avoids churning
+            # redis-all. Mirrors the prod (main) pipeline, which already uses v2.
+            docker compose -f docker-compose.staging.yml pull notification-center
+            docker compose -f docker-compose.staging.yml up -d --no-deps notification-center
             docker image prune -a --force
