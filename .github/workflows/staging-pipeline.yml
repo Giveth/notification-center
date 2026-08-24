@@ -7,9 +7,16 @@ on:
   pull_request:
     branches:
       - staging
+
+# Least-privilege GITHUB_TOKEN: deny everything at the workflow level, then grant
+# only what each job actually needs (see per-job `permissions` below).
+permissions: {}
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     services:
       # Label used to access the service container
       redis:
@@ -56,6 +63,9 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     if: github.event_name == 'push'
     steps:
       - name: Check out the repo
@@ -83,6 +93,8 @@ jobs:
   deploy:
     needs: publish
     runs-on: ubuntu-latest
+    # No GITHUB_TOKEN needed: the SSH action authenticates with a deploy key.
+    permissions: {}
     steps:
       - name: SSH and Redeploy
         uses: appleboy/ssh-action@v1.0.0
@@ -104,4 +116,6 @@ jobs:
             # redis-all. Mirrors the prod (main) pipeline, which already uses v2.
             docker compose -f docker-compose.staging.yml pull notification-center
             docker compose -f docker-compose.staging.yml up -d --no-deps notification-center
-            docker image prune -a --force
+            # Best-effort cleanup — never fail an already-successful deploy if prune
+            # errors (e.g. an image still in use); `set -e` would otherwise turn it red.
+            docker image prune -a --force || echo "Image cleanup failed (non-fatal)" >&2
