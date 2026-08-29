@@ -277,6 +277,12 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
+  // giveth-v6-core#439 AC4 — the GIVbacks-eligible badge grant. Same shape as
+  // the verified badge; only the Ortto `verified-status` differs.
+  givbacksEligibilityGranted: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
   projectUnverified: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
@@ -333,9 +339,14 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: null,
   },
+  // giveth-v6-core#439 AC9. `segment` was null, which is precisely why this
+  // type never produced an email: sendNotification() only calls Ortto when a
+  // segment validator exists for the type. v5 used it for in-app notifications
+  // only; v6 makes it the one supporter-facing email, so it needs the standard
+  // project payload.
   projectUpdateAddedWhoSupported: {
     metadata: projectTitleProjectLinkSchema,
-    segment: null,
+    segment: projectRelatedTrackerSchema,
   },
   projectUpdateAddedOwner: {
     metadata: projectTitleProjectLinkSchema,
