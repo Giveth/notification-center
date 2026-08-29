@@ -157,6 +157,20 @@ export const activityCreator = (
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
+    // giveth-v6-core#439 AC9: "a project you supported posted an update", sent
+    // to each donor of the project. The recipient here is the SUPPORTER, not
+    // the owner, so `email`/`userId` are theirs; `title`/`projectLink` describe
+    // the project they backed. `update` carries the update's title so the
+    // template can name it.
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT:
+      attributes = {
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectupdatelink': payload.projectLink + '?tab=updates',
+        'str:cm:projectupdatetitle': payload.update,
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED:
       attributes = {
         'str:cm:projecttitle': payload.title,
@@ -182,6 +196,19 @@ export const activityCreator = (
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
         'str:cm:verified-status': 'rejected',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
+    // giveth-v6-core#439 AC4: the GIVbacks-eligible badge is a SEPARATE badge
+    // from the verified one, so it gets its own `verified-status` value on the
+    // shared `project-verification` activity rather than reusing 'verified'
+    // (which would make the two grants indistinguishable to the template).
+    case NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED:
+      attributes = {
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'givbacks-eligible',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
