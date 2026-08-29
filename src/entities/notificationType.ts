@@ -32,6 +32,8 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_BADGE_REVOKE_LAST_WARNING: 'projectBadgeRevokeLastWarning',
   PROJECT_BADGE_UP_FOR_REVOKING: 'projectBadgeUpForRevoking',
   PROJECT_VERIFIED: 'projectVerified',
+  // giveth-v6-core#439 AC4 — the GIVbacks-eligible badge grant.
+  GIVBACKS_ELIGIBILITY_GRANTED: 'givbacksEligibilityGranted',
   PROJECT_UNVERIFIED: 'projectUnverified',
   PROJECT_UNVERIFIED_WHO_SUPPORTED: 'projectUnverifiedWhoSupported',
   PROJECT_ACTIVATED: 'projectActivated',
