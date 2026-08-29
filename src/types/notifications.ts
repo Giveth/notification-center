@@ -21,6 +21,9 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   PROJECT_UNVERIFIED = 'Project unverified',
   VERIFICATION_FORM_REJECTED = 'Form rejected',
+  // giveth-v6-core#439 AC4: the GIVbacks-eligible badge is its own badge in v6,
+  // with its own grant email. `PROJECT_VERIFIED` remains the verified badge.
+  GIVBACKS_ELIGIBILITY_GRANTED = 'GIVbacks eligibility granted',
   PROJECT_UNVERIFIED_USERS_WHO_SUPPORT = 'Project unverified - Users who supported',
   PROJECT_ACTIVATED = 'Project activated',
   PROJECT_ACTIVATED_USERS_WHO_SUPPORT = 'Project activated - Users who supported',
@@ -76,6 +79,19 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED]: 'project-verification',
+  // giveth-v6-core#439 AC4. Rides the existing `project-verification` activity
+  // rather than a new one: the template already branches on
+  // `str:cm:verified-status`, and this adds one more value
+  // ('givbacks-eligible') alongside verified / rejected / revoked. Nothing new
+  // has to be provisioned in the Ortto workspace beyond that template branch.
+  [NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED]:
+    'project-verification',
+  // giveth-v6-core#439 AC9: the ONLY supporter-facing email in v6 — "a project
+  // you supported posted an update". v5 registered this notification type but
+  // never gave it an Ortto activity, so it only ever produced an in-app
+  // notification; the mapping below is what lets it become an email.
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT]:
+    'project-update-added',
   [NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED]:
     'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING]:

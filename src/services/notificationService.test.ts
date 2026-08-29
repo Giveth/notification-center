@@ -157,3 +157,194 @@ describe('syncOrttoContact segment validator (giveth-v6-core#426)', () => {
     ).to.throw();
   });
 });
+
+/**
+ * giveth-v6-core#439 — the v6 event set's cross-layer contract with v6-core.
+ * Each of these events was unreachable before: without an ORTTO_EVENT_NAMES
+ * entry `activityCreator` returns undefined and no Ortto activity is ever sent,
+ * and without a non-null segment validator `sendNotification` never calls
+ * `activityCreator` in the first place.
+ */
+describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
+  const projectPayload = {
+    email: 'owner@example.com',
+    title: 'Clean Water',
+    slug: 'clean-water',
+    projectLink: 'https://giveth.io/project/clean-water',
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+    userId: 7,
+    OwnerId: 7,
+  };
+
+  // AC4: the GIVbacks-eligible badge is a SEPARATE badge from the verified one.
+  describe('GIVBACKS_ELIGIBILITY_GRANTED', () => {
+    it('rides the project-verification activity with its own verified-status', () => {
+      const result = activityCreator(
+        projectPayload,
+        NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED,
+        MICRO_SERVICES.givethio,
+      );
+
+      expect(result).to.not.equal(undefined);
+      expect(result.activities[0].activity_id).to.equal(
+        'act:cm:project-verification',
+      );
+      expect(result.activities[0].attributes).to.deep.equal({
+        'str:cm:projecttitle': 'Clean Water',
+        'str:cm:email': 'owner@example.com',
+        'str:cm:projectlink': 'https://giveth.io/project/clean-water',
+        'str:cm:verified-status': 'givbacks-eligible',
+        'str:cm:userid': '7',
+      });
+    });
+
+    it('is distinguishable from the verified badge, which shares the activity', () => {
+      const givbacks = activityCreator(
+        projectPayload,
+        NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED,
+        MICRO_SERVICES.givethio,
+      );
+      const verified = activityCreator(
+        projectPayload,
+        NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED,
+        MICRO_SERVICES.givethio,
+      );
+
+      expect(givoStatus(givbacks)).to.equal('givbacks-eligible');
+      expect(givoStatus(verified)).to.equal('verified');
+    });
+
+    it('has a segment validator, without which no Ortto call is ever made', () => {
+      const schema =
+        SEGMENT_METADATA_SCHEMA_VALIDATOR.givbacksEligibilityGranted.segment;
+      expect(schema).to.not.equal(null);
+      expect(() =>
+        validateWithJoiSchema(projectPayload, schema!),
+      ).to.not.throw();
+    });
+  });
+
+  // AC9: the only supporter-facing email in v6.
+  describe('PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT', () => {
+    const supporterPayload = {
+      ...projectPayload,
+      email: 'donor@example.com',
+      userId: 55,
+      update: 'We reached the first well',
+    };
+
+    it('builds a project-update-added activity pointing at the updates tab', () => {
+      const result = activityCreator(
+        supporterPayload,
+        NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
+        MICRO_SERVICES.givethio,
+      );
+
+      expect(result).to.not.equal(undefined);
+      expect(result.activities[0].activity_id).to.equal(
+        'act:cm:project-update-added',
+      );
+      expect(result.activities[0].attributes).to.deep.equal({
+        'str:cm:projecttitle': 'Clean Water',
+        'str:cm:email': 'donor@example.com',
+        'str:cm:projectupdatelink':
+          'https://giveth.io/project/clean-water?tab=updates',
+        'str:cm:projectupdatetitle': 'We reached the first well',
+        'str:cm:userid': '55',
+      });
+    });
+
+    it('addresses the SUPPORTER, not the project owner', () => {
+      const result = activityCreator(
+        supporterPayload,
+        NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
+        MICRO_SERVICES.givethio,
+      );
+      expect(result.activities[0].fields['str::email']).to.equal(
+        'donor@example.com',
+      );
+    });
+
+    it('has a segment validator that accepts the update title', () => {
+      const schema =
+        SEGMENT_METADATA_SCHEMA_VALIDATOR.projectUpdateAddedWhoSupported
+          .segment;
+      expect(schema).to.not.equal(null);
+      expect(() =>
+        validateWithJoiSchema(supporterPayload, schema!),
+      ).to.not.throw();
+    });
+  });
+
+  // AC2 / AC3 / AC5 / AC6 / AC7 ride event types v5 already wired end-to-end.
+  // Assert that here so a future edit to ORTTO_EVENT_NAMES or the validator map
+  // cannot silence one of them without a test failing.
+  const alreadyWired: Array<[string, NOTIFICATIONS_EVENT_NAMES, string]> = [
+    [
+      'AC1 donation received',
+      NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED,
+      'donationReceived',
+    ],
+    [
+      'AC2 project live',
+      NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED,
+      'draftedProjectPublishedValidator',
+    ],
+    ['AC3 listed', NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED, 'projectListed'],
+    [
+      'AC3 unlisted',
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED,
+      'projectUnlisted',
+    ],
+    [
+      'AC4 verified badge',
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED,
+      'projectVerified',
+    ],
+    [
+      'AC5 verified removed',
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED,
+      'projectUnverified',
+    ],
+    [
+      'AC5 givbacks revoked',
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED,
+      'projectBadgeRevoked',
+    ],
+    [
+      'AC6 rejected',
+      NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED,
+      'verificationFormRejected',
+    ],
+    [
+      'AC7 cancelled',
+      NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED,
+      'projectCancelled',
+    ],
+  ];
+
+  alreadyWired.forEach(([label, eventName, validatorName]) => {
+    it(`${label} reaches Ortto (activity + segment validator)`, () => {
+      const payload =
+        eventName === NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED
+          ? { ...projectPayload, amount: 5, token: 'ETH', verified: true }
+          : projectPayload;
+      const result = activityCreator(
+        payload,
+        eventName,
+        MICRO_SERVICES.givethio,
+      );
+      expect(result, `${label}: activityCreator returned nothing`).to.not.equal(
+        undefined,
+      );
+      expect(
+        SEGMENT_METADATA_SCHEMA_VALIDATOR[validatorName].segment,
+        `${label}: segment validator is null, so no Ortto call is made`,
+      ).to.not.equal(null);
+    });
+  });
+});
+
+const givoStatus = (result: any): string =>
+  result.activities[0].attributes['str:cm:verified-status'];

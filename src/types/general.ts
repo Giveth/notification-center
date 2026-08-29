@@ -47,6 +47,13 @@ export enum NOTIFICATION_TYPE_NAMES {
   VERIFICATION_FORM_GOT_DRAFT_BY_ADMIN = 'Verification form got draft by admin',
   PROJECT_UPDATE_ADDED = 'Project update added - Users who supported',
 
+  // giveth-v6-core#439 AC4. v6 splits what v5 called "the verified badge" into
+  // TWO independent badges with their own emails: `Project verified` stays the
+  // verified badge, and this one is the GIVbacks-eligible badge granted when an
+  // eligibility application is approved (or an admin flips the flag). Its
+  // removal counterpart is the existing `Project badge revoked`.
+  GIVBACKS_ELIGIBILITY_GRANTED = 'GIVbacks eligibility granted',
+
   // https://github.com/Giveth/impact-graph/issues/774#issuecomment-1542337083
   PROJECT_HAS_A_NEW_RANK = 'Your project has a new rank',
   PROJECT_HAS_RISEN_IN_THE_RANK = 'Your Project has risen in the rank',
