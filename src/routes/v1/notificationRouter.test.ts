@@ -2447,6 +2447,70 @@ describe('/notifications Sync Ortto contact 502/422 mapping', () => {
     assert.equal(result.status, 200);
   });
 
+  // giveth-v6-core#457 — the suppression must inherit the SAME confirm-or-fail
+  // contract. If it silently fell back to fire-and-forget, v6-core would clear
+  // `ortto_synced_email` for a contact that was never actually unsubscribed and
+  // nothing would ever notice.
+  describe('Suppress Ortto contact inherits the confirm-or-fail contract', () => {
+    const suppressBody = {
+      eventName: NOTIFICATION_TYPE_NAMES.SUPPRESS_ORTTO_CONTACT,
+      sendEmail: false,
+      sendSegment: true,
+      // Id-only: no email, by design.
+      segment: { payload: { userId: 123 } },
+    };
+
+    it('returns 502 when the Ortto write fails transiently (retryable)', async () => {
+      mock.nextResult = { ok: false, retryable: true };
+      try {
+        await axios.post(sendNotificationUrl, suppressBody, {
+          headers: { authorization: getGivethIoBasicAuth() },
+        });
+        assert.isTrue(false, 'expected a 502');
+      } catch (e: any) {
+        assert.equal(e.response.status, 502);
+      }
+    });
+
+    it('returns 422 when the Ortto write fails permanently (non-retryable)', async () => {
+      mock.nextResult = { ok: false, retryable: false };
+      try {
+        await axios.post(sendNotificationUrl, suppressBody, {
+          headers: { authorization: getGivethIoBasicAuth() },
+        });
+        assert.isTrue(false, 'expected a 422');
+      } catch (e: any) {
+        assert.equal(e.response.status, 422);
+      }
+    });
+
+    it('returns 200 on a confirmed suppression', async () => {
+      mock.nextResult = { ok: true, retryable: false };
+      const result = await axios.post(sendNotificationUrl, suppressBody, {
+        headers: { authorization: getGivethIoBasicAuth() },
+      });
+      assert.equal(result.status, 200);
+    });
+
+    it('400s a suppression with no segment payload rather than reporting a false success', async () => {
+      mock.nextResult = { ok: true, retryable: false };
+      try {
+        await axios.post(
+          sendNotificationUrl,
+          {
+            eventName: NOTIFICATION_TYPE_NAMES.SUPPRESS_ORTTO_CONTACT,
+            sendEmail: false,
+            sendSegment: true,
+          },
+          { headers: { authorization: getGivethIoBasicAuth() } },
+        );
+        assert.isTrue(false, 'expected a 400');
+      } catch (e: any) {
+        assert.equal(e.response.status, 400);
+      }
+    });
+  });
+
   it('leaves other Ortto events fire-and-forget (200) even when the adapter reports failure', async () => {
     mock.nextResult = { ok: false, retryable: true };
     const result = await axios.post(

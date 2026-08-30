@@ -185,6 +185,11 @@ export const errorMessages = {
     'Error in getting accessToken by authorization code',
   ORTTO_SPECIFIC: 'Ortto specific notification',
   ORTTO_CONTACT_SYNC_FAILED: 'Failed to upsert the Ortto contact',
+  // giveth-v6-core#457. Distinct from the sync message purely so logs and
+  // v6-core's error line say which direction failed.
+  ORTTO_CONTACT_SUPPRESS_FAILED: 'Failed to suppress the Ortto contact',
   ORTTO_CONTACT_SYNC_INVALID_PAYLOAD:
     'Ortto contact sync requires a segment payload',
+  // Shared by the sync and the #457 suppression — both are ORTTO-category
+  // writes that carry their identity in `segment.payload`.
 };

@@ -20,8 +20,8 @@ import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
 import { MICRO_SERVICES } from '../utils/utils';
 
-// Finite timeout applied ONLY to the giveth-v6-core#426 contact sync, so a
-// stalled Ortto connection fails promptly into its 502 retry path instead of
+// Finite timeout applied ONLY to the giveth-v6-core#426/#457 contact writes, so
+// a stalled Ortto connection fails promptly into its 502 retry path instead of
 // leaving the request pending. Sourced from ORTTO_REQUEST_TIMEOUT_MS with a
 // validated fallback so a missing/garbage value never disables it.
 const DEFAULT_ORTTO_SYNC_TIMEOUT_MS = 10_000;
@@ -31,6 +31,31 @@ const resolveOrttoSyncTimeoutMs = (): number => {
     ? parsed
     : DEFAULT_ORTTO_SYNC_TIMEOUT_MS;
 };
+
+/**
+ * The v6 contact WRITES (giveth-v6-core#426 upsert, #457 suppression). Both
+ * must be CONFIRMED, not fire-and-forget: v6-core moves a per-user marker only
+ * on a 2xx and stops retrying once it has, so a false success here strands a
+ * contact that was never created — or, worse for #457, one that was never
+ * unsubscribed and keeps receiving mail at an address Giveth stopped trusting.
+ *
+ * Everything downstream keys off membership in this set rather than a single
+ * event comparison: the trackId-dedup bypass, the missing-payload 400, sending
+ * Joi's coerced payload, the finite timeout, and the 502/422/500 mapping. Adding
+ * an event here is what makes it loud; forgetting to is how it would silently
+ * become fire-and-forget.
+ */
+const MUST_CONFIRM_ORTTO_EVENTS: ReadonlySet<string> = new Set([
+  NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
+  NOTIFICATIONS_EVENT_NAMES.SUPPRESS_ORTTO_CONTACT,
+]);
+
+// Human-readable reasons Ortto stores alongside the permission change and shows
+// in the contact's subscription history (`str::u-ctx` / `str::s-ctx`).
+const ORTTO_SUPPRESS_CONTEXT =
+  'Giveth v6: profile no longer has a verified canonical email';
+const ORTTO_RESUBSCRIBE_CONTEXT =
+  'Giveth v6: profile regained a verified canonical email';
 
 export const activityCreator = (
   payload: any,
@@ -73,6 +98,16 @@ export const activityCreator = (
       // `str:cm:email` and `str:cm:v6-user-id`.
       attributes = {
         'str:cm:email': payload.email,
+        'str:cm:v6-user-id': payload.userId?.toString(),
+      };
+      break;
+    case NOTIFICATIONS_EVENT_NAMES.SUPPRESS_ORTTO_CONTACT:
+      // giveth-v6-core#457. ID-only — no email, by design: the profile no
+      // longer has a canonical address, and the stale one v6 last synced is
+      // exactly what must not be written back. So the `suppress-ortto-contact`
+      // activity needs only ONE attribute declared in the Ortto workspace:
+      // `str:cm:v6-user-id`.
+      attributes = {
         'str:cm:v6-user-id': payload.userId?.toString(),
       };
       break;
@@ -279,6 +314,48 @@ export const activityCreator = (
             'str::email': payload.email,
             'str:cm:v6-user-id': payload.userId?.toString(),
             'bol:cm:sourced-from-v6': true,
+            // giveth-v6-core#457: undo a suppression v6 itself applied.
+            // `bol::p` is Ortto's email permission and it is STICKY, so a
+            // contact v6 unsubscribed would stay unmailable through every later
+            // re-point unless this flips it back. Spread conditionally, never
+            // sent as `false`: v6 only asks for this when its own
+            // `ortto_contact_suppressed_at` marker is set, and a sync that
+            // omitted the guard would re-subscribe people who opted out through
+            // Ortto's own unsubscribe link.
+            ...(payload.resubscribe === true
+              ? {
+                  'bol::p': true,
+                  'str::s-ctx': ORTTO_RESUBSCRIBE_CONTEXT,
+                }
+              : {}),
+          },
+        },
+      ],
+      merge_by: ['str:cm:v6-user-id'],
+    };
+  }
+  // giveth-v6-core#457: the suppression mirror. Same stable merge key, so it
+  // unsubscribes exactly the contact the sync created — never a stranger who
+  // happens to share the address, and never a duplicate. `bol::p: false` is
+  // Ortto's documented way to unsubscribe a person via the API, and it is
+  // preferred over archiving or deleting: those destroy the contact's history
+  // and subscription state, and a later re-verify would then build a BRAND-NEW
+  // contact — exactly the duplicate #426 AC4 exists to prevent. `str::u-ctx`
+  // is the human-readable reason Ortto shows next to the unsubscribe.
+  //
+  // Note what is NOT here: `str::email`. The person is addressed by id, and the
+  // only address v6 still holds is the one it has just stopped trusting.
+  if (orttoEventName === NOTIFICATIONS_EVENT_NAMES.SUPPRESS_ORTTO_CONTACT) {
+    return {
+      activities: [
+        {
+          activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+          attributes,
+          fields: {
+            'str:cm:v6-user-id': payload.userId?.toString(),
+            'bol:cm:sourced-from-v6': true,
+            'bol::p': false,
+            'str::u-ctx': ORTTO_SUPPRESS_CONTEXT,
           },
         },
       ],
@@ -320,15 +397,18 @@ export const sendNotification = async (
   message?: string;
 }> => {
   const { userWalletAddress, projectId } = body;
-  // giveth-v6-core#426: the contact sync must upsert or fail LOUDLY — it may
-  // never return a false success, or v6-core marks the user synced and stops
-  // retrying a contact that was never created.
-  const isSyncOrttoContact =
-    body.eventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT;
-  // Never let a duplicate trackId short-circuit the sync into a false success.
-  // It carries no trackId today, but guard explicitly so that stays true.
+  // giveth-v6-core#426/#457: a v6 contact write must land or fail LOUDLY — it
+  // may never return a false success, or v6-core moves its per-user marker and
+  // stops retrying a contact that was never created (#426) or never
+  // unsubscribed (#457). See MUST_CONFIRM_ORTTO_EVENTS.
+  const isOrttoContactWrite = MUST_CONFIRM_ORTTO_EVENTS.has(body.eventName);
+  const isSuppressOrttoContact =
+    body.eventName === NOTIFICATIONS_EVENT_NAMES.SUPPRESS_ORTTO_CONTACT;
+  // Never let a duplicate trackId short-circuit a contact write into a false
+  // success. Neither carries a trackId today, but guard explicitly so that
+  // stays true.
   if (
-    !isSyncOrttoContact &&
+    !isOrttoContactWrite &&
     body.trackId &&
     (await findNotificationByTrackId(body.trackId))
   ) {
@@ -404,20 +484,20 @@ export const sendNotification = async (
   ) {
     const emailData = body.segment?.payload;
     // Joi treats an absent object as valid, so a missing segment slips past the
-    // per-type validator. For the sync that is a bad request (400), not a
-    // silent success and not something to retry.
-    if (isSyncOrttoContact && !emailData) {
+    // per-type validator. For a v6 contact write that is a bad request (400),
+    // not a silent success and not something to retry.
+    if (isOrttoContactWrite && !emailData) {
       throw new StandardError({
         message: errorMessages.ORTTO_CONTACT_SYNC_INVALID_PAYLOAD,
         httpStatusCode: 400,
       });
     }
     const validatedPayload = validateWithJoiSchema(emailData, segmentValidator);
-    // Only the sync forwards Joi's COERCED payload (normalised email + integer
-    // userId → a single stable merge key); other events keep their exact prior
-    // input to avoid any behavioural drift.
+    // Only the v6 contact writes forward Joi's COERCED payload (normalised
+    // email + integer userId → a single stable merge key); other events keep
+    // their exact prior input to avoid any behavioural drift.
     const data = activityCreator(
-      isSyncOrttoContact ? validatedPayload : emailData,
+      isOrttoContactWrite ? validatedPayload : emailData,
       body.eventName as NOTIFICATIONS_EVENT_NAMES,
       microService,
     );
@@ -425,36 +505,42 @@ export const sendNotification = async (
       const orttoResult = await getEmailAdapter().callOrttoActivity(
         data,
         microService,
-        isSyncOrttoContact
+        isOrttoContactWrite
           ? { timeoutMs: resolveOrttoSyncTimeoutMs() }
           : undefined,
       );
-      // The sync needs a CONFIRMED upsert (v6-core advances its per-user marker
-      // only on a 2xx). Surface a transient Ortto failure (5xx / timeout /
-      // network) as 502 so v6-core retries, and a permanent one (4xx — a bad
-      // payload or an unprovisioned custom field/activity) as 422 so it is NOT
-      // retried forever. Other events ignore the result (fire-and-forget).
-      if (isSyncOrttoContact && !orttoResult.ok) {
+      // A v6 contact write needs a CONFIRMED result (v6-core advances its
+      // per-user marker only on a 2xx). Surface a transient Ortto failure (5xx /
+      // timeout / network) as 502 so v6-core retries, and a permanent one (4xx —
+      // a bad payload or an unprovisioned custom field/activity) as 422 so it is
+      // NOT retried forever. Other events ignore the result (fire-and-forget).
+      if (isOrttoContactWrite && !orttoResult.ok) {
         throw new StandardError({
-          message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+          message: isSuppressOrttoContact
+            ? errorMessages.ORTTO_CONTACT_SUPPRESS_FAILED
+            : errorMessages.ORTTO_CONTACT_SYNC_FAILED,
           httpStatusCode: orttoResult.retryable ? 502 : 422,
         });
       }
-    } else if (isSyncOrttoContact) {
-      // activityCreator produced nothing for an event that MUST upsert
+    } else if (isOrttoContactWrite) {
+      // activityCreator produced nothing for an event that MUST reach Ortto
       // (e.g. the event fell out of ORTTO_EVENT_NAMES) — a misconfiguration,
       // not a silent success.
       throw new StandardError({
-        message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+        message: isSuppressOrttoContact
+          ? errorMessages.ORTTO_CONTACT_SUPPRESS_FAILED
+          : errorMessages.ORTTO_CONTACT_SYNC_FAILED,
         httpStatusCode: 500,
       });
     }
     emailStatus = EMAIL_STATUSES.SENT;
-  } else if (isSyncOrttoContact) {
+  } else if (isOrttoContactWrite) {
     // Reached the ORTTO branch but with no segment validator (a seed/config
     // error): fail rather than returning a false success.
     throw new StandardError({
-      message: errorMessages.ORTTO_CONTACT_SYNC_FAILED,
+      message: isSuppressOrttoContact
+        ? errorMessages.ORTTO_CONTACT_SUPPRESS_FAILED
+        : errorMessages.ORTTO_CONTACT_SYNC_FAILED,
       httpStatusCode: 500,
     });
   }

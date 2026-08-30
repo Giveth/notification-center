@@ -57,6 +57,14 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   // canonical-email change re-points the same person instead of duplicating)
   // and stamps a durable "sourced from v6" marker.
   SYNC_ORTTO_CONTACT = 'Sync Ortto contact',
+  // v6 → Ortto contact SUPPRESSION (giveth-v6-core#457). The mirror of
+  // SYNC_ORTTO_CONTACT: it unsubscribes the same contact (merged on the same
+  // stable v6 user id) once v6 decides the profile no longer has a canonical
+  // email — an admin un-verified or blanked the address, the Turnkey/social
+  // wallet was cleared, or the legacy v5 sync overwrote is_email_verified.
+  // Without it the sync was one-way and a contact could keep receiving mail at
+  // an address Giveth had stopped considering verified.
+  SUPPRESS_ORTTO_CONTACT = 'Suppress Ortto contact',
   SEND_EMAIL_CONFIRMATION = 'Send email confirmation',
   SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW = 'Send email confirmation code flow',
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
@@ -106,6 +114,14 @@ export const ORTTO_EVENT_NAMES = {
   // could send a (duplicate) welcome email. This activity must exist in the
   // Ortto workspace with NO automation bound to it.
   [NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT]: 'sync-ortto-contact',
+  // Its own dedicated, equally inert activity (giveth-v6-core#457) rather than
+  // a second meaning for 'sync-ortto-contact': the two are opposite operations
+  // on the same contact, and an Ortto workspace that cannot tell an upsert from
+  // an unsubscribe in the contact's own timeline cannot audit either. Same
+  // rules apply — this activity must exist in the Ortto workspace with NO
+  // automation bound to it. An unprovisioned activity makes Ortto 4xx, which
+  // this service surfaces as a 422 (permanent) rather than a false success.
+  [NOTIFICATIONS_EVENT_NAMES.SUPPRESS_ORTTO_CONTACT]: 'suppress-ortto-contact',
   [NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION]:
     'verification-form-email-verification',
   [NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT]: 'notify-reward',

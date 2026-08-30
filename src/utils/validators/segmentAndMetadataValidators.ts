@@ -177,6 +177,22 @@ const syncOrttoContactSegmentSchema = Joi.object({
     .email({ tlds: { allow: false } })
     .required(),
   userId: Joi.number().integer().positive().required(),
+  // giveth-v6-core#457. Opt-in, and only ever sent when v6 is UNDOING its own
+  // suppression: it makes this upsert also set the Ortto email permission back
+  // to true. Absent (the overwhelmingly common case) the sync must not touch
+  // permission at all, so that a contact who unsubscribed through Ortto's own
+  // link is never silently re-subscribed by a routine re-point.
+  resubscribe: Joi.boolean(),
+});
+
+// giveth-v6-core#457 contact suppression. Deliberately ID-ONLY: the contact is
+// addressed by the stable v6 user id (the same merge key the sync uses), and
+// the only address v6 still holds at this point is the STALE one it has just
+// stopped trusting — accepting it here would invite writing it back onto the
+// Ortto person. `Joi.number().integer().positive()` for the same reason as the
+// sync: the id becomes the merge key, so it must coerce to one canonical value.
+const suppressOrttoContactSegmentSchema = Joi.object({
+  userId: Joi.number().integer().positive().required(),
 });
 
 const sendEmailConfirmationSchema = Joi.object({
@@ -223,6 +239,10 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
   },
   syncOrttoContact: {
     segment: syncOrttoContactSegmentSchema,
+    metadata: null,
+  },
+  suppressOrttoContact: {
+    segment: suppressOrttoContactSegmentSchema,
     metadata: null,
   },
   subscribeOnboarding: {
