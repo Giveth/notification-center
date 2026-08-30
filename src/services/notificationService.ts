@@ -317,11 +317,15 @@ export const activityCreator = (
             // giveth-v6-core#457: undo a suppression v6 itself applied.
             // `bol::p` is Ortto's email permission and it is STICKY, so a
             // contact v6 unsubscribed would stay unmailable through every later
-            // re-point unless this flips it back. Spread conditionally, never
-            // sent as `false`: v6 only asks for this when its own
-            // `ortto_contact_suppressed_at` marker is set, and a sync that
-            // omitted the guard would re-subscribe people who opted out through
-            // Ortto's own unsubscribe link.
+            // re-point unless this flips it back. Spread conditionally and never
+            // sent as `false`, so a sync that does not ask for it cannot touch
+            // permission at all. v6 asks only when its own
+            // `ortto_contact_suppressed_at` marker is set — a marker that
+            // records v6 SENT a suppression, not that v6 caused the unsubscribe,
+            // so a contact that had already opted out through Ortto's own link
+            // before losing its canonical email will be re-subscribed here.
+            // Known gap, accepted by the v6 side; closing it needs a permission
+            // read this service cannot make today.
             ...(payload.resubscribe === true
               ? {
                   'bol::p': true,
