@@ -341,7 +341,11 @@ export const activityCreator = (
   // giveth-v6-core#457: the suppression mirror. Same stable merge key, so it
   // unsubscribes exactly the contact the sync created — never a stranger who
   // happens to share the address, and never a duplicate. `bol::p: false` is
-  // Ortto's documented way to unsubscribe a person via the API, and it is
+  // Ortto's documented way to unsubscribe a person via the API — VERIFIED
+  // against the live workspace, where the permission flip landed between 5 and
+  // 45 seconds after the 2xx. A 200 here therefore means Ortto accepted the
+  // activity, not that the contact is already unsubscribed; do not read that
+  // gap as a failure. It is also
   // preferred over archiving or deleting: those destroy the contact's history
   // and subscription state, and a later re-verify would then build a BRAND-NEW
   // contact — exactly the duplicate #426 AC4 exists to prevent. `str::u-ctx`
