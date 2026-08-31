@@ -47,8 +47,31 @@ export class seedNotificationTypeSuppressOrttoContact1757000000000
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    // Mirror of up(): remove the row only if it still looks exactly like the one
+    // up() seeds. up() deliberately skips insertion when a row already exists —
+    // hand-seeded, created through AdminJS, or left by an earlier down()/re-apply
+    // cycle are all real cases here — so an unqualified DELETE by name would let
+    // a rollback destroy configuration this migration never created. Matching on
+    // the full seeded shape keeps a customised row untouched.
+    //
+    // Note this cascades: notification_setting.notificationTypeId is ON DELETE
+    // CASCADE, and createNotificationSettingsForNewUser() creates one setting per
+    // NotificationType for every new user address, so the settings rows go with
+    // it. That is correct for an ORTTO-category type, whose settings are never
+    // consulted (sendNotification skips them entirely), and it is what a rollback
+    // of this seed should mean.
     await queryRunner.query(
-      `DELETE FROM notification_type WHERE "name" = 'Suppress Ortto contact';`,
+      `DELETE FROM notification_type
+        WHERE "name" = $1
+          AND "microService" = $2
+          AND "category" = $3
+          AND "schemaValidator" = $4;`,
+      [
+        NOTIFICATION_TYPE_NAMES.SUPPRESS_ORTTO_CONTACT,
+        MICRO_SERVICES.givethio,
+        NOTIFICATION_CATEGORY.ORTTO,
+        SCHEMA_VALIDATORS_NAMES.SUPPRESS_ORTTO_CONTACT,
+      ],
     );
   }
 }
