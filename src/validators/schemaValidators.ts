@@ -64,6 +64,12 @@ export const sendNotificationValidator = Joi.object({
       userId: Joi.number(),
       projectLink: Joi.string().allow(null).allow(''),
 
+      // giveth-v6-core#457 Ortto contact sync: undo a v6-initiated suppression
+      // as part of this upsert. This outer validator is a whitelist of every
+      // payload key any event may send, so the per-event Joi schema below would
+      // never even be reached without the key listed here.
+      resubscribe: Joi.boolean(),
+
       // Email confirmation
       verificationLink: Joi.string().allow(null).allow(''),
 

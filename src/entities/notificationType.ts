@@ -16,6 +16,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW: 'sendUserEmailConfirmationCodeFlow',
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
   SYNC_ORTTO_CONTACT: 'syncOrttoContact',
+  SUPPRESS_ORTTO_CONTACT: 'suppressOrttoContact',
   SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
