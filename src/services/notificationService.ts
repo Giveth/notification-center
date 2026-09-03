@@ -238,12 +238,16 @@ export const activityCreator = (
     // from the verified one, so it gets its own `verified-status` value on the
     // shared `project-verification` activity rather than reusing 'verified'
     // (which would make the two grants indistinguishable to the template).
+    // The literal must match the Ortto template's branch value EXACTLY —
+    // it is camelCase there, not kebab-case like the activity ids. A mismatch
+    // fails silently: Ortto still returns 2xx for the activity, the template
+    // just matches no branch and sends nothing.
     case NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED:
       attributes = {
         'str:cm:projecttitle': payload.title,
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
-        'str:cm:verified-status': 'givbacks-eligible',
+        'str:cm:verified-status': 'givbacksEligible',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;

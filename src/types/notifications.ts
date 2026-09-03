@@ -90,7 +90,7 @@ export const ORTTO_EVENT_NAMES = {
   // giveth-v6-core#439 AC4. Rides the existing `project-verification` activity
   // rather than a new one: the template already branches on
   // `str:cm:verified-status`, and this adds one more value
-  // ('givbacks-eligible') alongside verified / rejected / revoked. Nothing new
+  // ('givbacksEligible') alongside verified / rejected / revoked. Nothing new
   // has to be provisioned in the Ortto workspace beyond that template branch.
   [NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED]:
     'project-verification',

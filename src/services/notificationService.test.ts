@@ -347,7 +347,7 @@ describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
         'str:cm:projecttitle': 'Clean Water',
         'str:cm:email': 'owner@example.com',
         'str:cm:projectlink': 'https://giveth.io/project/clean-water',
-        'str:cm:verified-status': 'givbacks-eligible',
+        'str:cm:verified-status': 'givbacksEligible',
         'str:cm:userid': '7',
       });
     });
@@ -364,7 +364,7 @@ describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
         MICRO_SERVICES.givethio,
       );
 
-      expect(givoStatus(givbacks)).to.equal('givbacks-eligible');
+      expect(givoStatus(givbacks)).to.equal('givbacksEligible');
       expect(givoStatus(verified)).to.equal('verified');
     });
 
