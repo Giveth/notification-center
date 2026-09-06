@@ -61,10 +61,6 @@ export enum NOTIFICATION_TYPE_NAMES {
   SUBSCRIBE_ONBOARDING = 'Subscribe onboarding',
   CREATE_ORTTO_PROFILE = 'Create Ortto profile',
   SYNC_ORTTO_CONTACT = 'Sync Ortto contact',
-  // giveth-v6-core#457 — the unsubscribe mirror of SYNC_ORTTO_CONTACT. Seeded
-  // by migration 1757000000000; v6-core 400s (INVALID_NOTIFICATION_TYPE) until
-  // that migration has run, which is why notification-center deploys FIRST.
-  SUPPRESS_ORTTO_CONTACT = 'Suppress Ortto contact',
 
   NOTIFY_REWARD_AMOUNT = 'Notify reward amount',
 }
