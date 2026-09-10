@@ -14,7 +14,7 @@ import { SendNotificationRequest } from '../types/requestResponses';
 import { StandardError } from '../types/StandardError';
 import {
   NOTIFICATIONS_EVENT_NAMES,
-  ORTTO_EVENT_NAMES,
+  resolveOrttoActivitySlug,
 } from '../types/notifications';
 import { getEmailAdapter } from '../adapters/adapterFactory';
 import { NOTIFICATION_CATEGORY } from '../types/general';
@@ -36,6 +36,13 @@ export const activityCreator = (
   payload: any,
   orttoEventName: NOTIFICATIONS_EVENT_NAMES,
   microService: string,
+  /**
+   * giveth-v6-core#439: resolve through `ORTTO_EVENT_NAMES_V6` first, so v6's
+   * events reach v6's own journeys. Absent/false keeps the legacy id, which is
+   * what v5 (impact-graph) sends over the same credential — see that map's
+   * docblock for why this is a flag and not an edit.
+   */
+  useV6Activities?: boolean,
 ): any => {
   let attributes;
   let date;
@@ -190,12 +197,43 @@ export const activityCreator = (
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
+    // giveth-v6-core#439 AC5: the VERIFIED BADGE being removed, which is a
+    // different event from an application being rejected (AC6) and has its own
+    // email. Both sent 'rejected', so a badge removal got the
+    // application-rejected template — whose reason slot is fed by
+    // `txt:cm:reason`, set only on the FORM_REJECTED branch, so it rendered
+    // empty — while the branch written for this case never ran at all.
+    //
+    // Read off the live journeys, not inferred (2026-09-10): BOTH
+    // `v6 Project Verification` and v5's `Project Verification` branch on
+    // `str:cm:verified-status` across verified / unverified / rejected /
+    // givbacksEligible / revoked, and the `unverified` arm is the one sending
+    // "Vouched Badge Removed". The literal must match that branch value
+    // EXACTLY; a mismatch fails silently, since the attribute is a free-text
+    // `str:` so Ortto returns 2xx, no branch matches and nothing sends.
+    //
+    // ⚠️ GATED ON THE FLAG, and this is the one attribute in this switch that
+    // is. Everything above it is shared, and impact-graph (v5) fires THIS event
+    // too — `NotificationCenterAdapter` with `sendEmail: true`, from the admin
+    // panel's verified -> unverified transition — without ever sending
+    // `orttoV6Activities`. So an ungated change here silently repoints v5's
+    // live production journey (2,298 delivered), which is the exact failure
+    // `ORTTO_EVENT_NAMES_V6` exists to prevent.
+    //
+    // ⚠️ v5 HAS THE SAME DEFECT AND IS DELIBERATELY LEFT WITH IT. Its
+    // `unverified` branch is switched ON and has sent 0 emails since the
+    // journey was published (2025-07-04) while its `rejected` branch has sent
+    // 135 — i.e. every v5 badge removal has been getting the wrong email, with
+    // an empty reason, for over a year. Dropping this gate fixes that. It is
+    // not dropped here because it changes which copy real v5 users receive,
+    // which belongs in a v5 change with its own review, not smuggled into a v6
+    // ticket. Both paths are pinned, so removing the gate is a deliberate act.
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
       attributes = {
         'str:cm:projecttitle': payload.title,
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
-        'str:cm:verified-status': 'rejected',
+        'str:cm:verified-status': useV6Activities ? 'unverified' : 'rejected',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
@@ -264,7 +302,11 @@ export const activityCreator = (
       logger.debug('activityCreator() invalid event name', orttoEventName);
       return;
   }
-  if (!ORTTO_EVENT_NAMES[orttoEventName]) {
+  const activitySlug = resolveOrttoActivitySlug(
+    orttoEventName,
+    useV6Activities,
+  );
+  if (!activitySlug) {
     logger.debug('activityCreator() invalid ORTTO_EVENT_NAMES', orttoEventName);
     return;
   }
@@ -277,7 +319,7 @@ export const activityCreator = (
     return {
       activities: [
         {
-          activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+          activity_id: `act:cm:${activitySlug}`,
           attributes,
           fields: {
             'str::email': payload.email,
@@ -307,7 +349,7 @@ export const activityCreator = (
   return {
     activities: [
       {
-        activity_id: `act:cm:${ORTTO_EVENT_NAMES[orttoEventName]}`,
+        activity_id: `act:cm:${activitySlug}`,
         attributes,
         fields,
       },
@@ -424,6 +466,7 @@ export const sendNotification = async (
       isSyncOrttoContact ? validatedPayload : emailData,
       body.eventName as NOTIFICATIONS_EVENT_NAMES,
       microService,
+      body.orttoV6Activities,
     );
     if (data) {
       const orttoResult = await getEmailAdapter().callOrttoActivity(

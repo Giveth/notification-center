@@ -42,6 +42,12 @@ export const sendNotificationValidator = Joi.object({
   sendDappNotification: Joi.boolean(),
   sendEmail: Joi.boolean(),
   sendSegment: Joi.boolean(),
+  // giveth-v6-core#439: route this event to the `v6-*` Ortto activity (and so
+  // to v6's own journey) instead of the legacy one v5 shares. Optional, and
+  // must stay so — impact-graph never sends it. Declaring it here is load
+  // bearing: this schema rejects unknown keys, so an undeclared flag would 400
+  // every v6 notification rather than being ignored.
+  orttoV6Activities: Joi.boolean(),
   email: Joi.string().allow(null).allow(''),
   creationTime: Joi.number(),
   userWalletAddress: Joi.alternatives().try(
