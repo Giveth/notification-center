@@ -113,3 +113,96 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW]:
     'email-verification-code',
 };
+
+/**
+ * giveth-v6-core#439 — the v6 Ortto activity ids.
+ *
+ * v6 has its OWN set of Ortto journeys ("v6 Donation Received", "v6 Project
+ * Live", …), each triggered by a `v6-`-prefixed activity, so that v6's copy,
+ * footer and one-click-unsubscribe (issue #438) are independent of v5's live
+ * journeys. This map is the overlay that reaches them.
+ *
+ * It CANNOT be a straight edit of `ORTTO_EVENT_NAMES`, and that is the whole
+ * reason this second table exists: impact-graph (v5) sends the SAME
+ * `NOTIFICATIONS_EVENT_NAMES` values over the SAME `givethio` credential, so
+ * re-pointing an entry there would silently move v5's production email onto a
+ * journey that is switched off. Measured 2026-09-10 on the live Ortto
+ * workspace: the legacy journeys bound to those ids are `on` and delivering
+ * (DonationReceived 28,599 delivered, Project Listed 5,044, Project Created
+ * 3,844, Project Verification 2,298), while every `v6 *` journey is `off` with
+ * `entered: 0`.
+ *
+ * The discriminator is the caller's explicit `orttoV6Activities` flag: additive,
+ * and ABSENT falls back to the legacy id, so v5 is untouched by construction.
+ *
+ * A v6 `microService` would have been the stronger discriminator — unforgeable,
+ * no cross-repo wire key, and it would make the stored rows attributable per
+ * app. It was not chosen because `findNotificationTypeByEventName` filters on
+ * `microService` and the ~68 seeded `NotificationType` rows v6 uses are all
+ * `givethio`, so it needs a seed migration re-pointing or duplicating them
+ * first. That is a SCOPE decision, not an impossibility: this repo seeds
+ * per-microService types routinely (`givEconomyNotificationMicroService` has
+ * its own), and adding a credential is one more migration of a kind it writes
+ * often. Revisit it rather than treating the flag as settled.
+ *
+ * Deliberately PARTIAL — an event with no entry here keeps resolving to its
+ * existing activity, because a `v6-` id that exists nowhere in the workspace
+ * would 400. Three reasons for being absent, none of them an oversight:
+ *
+ *   - NOT SENT BY v6 (the GIVpower rank events): inert either way.
+ *   - SENDS NO EMAIL: `Sync Ortto contact` is ORTTO-category and upserts a
+ *     contact, so it has no journey to reach.
+ *   - TRANSACTIONAL, AND SHARING v5's JOURNEY IS CORRECT:
+ *     **`Send email confirmation`**, the GIVbacks eligibility form's
+ *     contact-email confirmation. It is NOT one of #439's emails — #439's
+ *     always-send item is the ACCOUNT email code (AC10/AC11), which is
+ *     `SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW` and does have `v6 Email
+ *     Verification`. Its only variable content is the verify link, which v6
+ *     supplies itself (`buildVerifyEmailLink` -> `resolveDappBaseUrl`), so the
+ *     URL is already v6's. And it must NOT gain #438's unsubscribe footer: it
+ *     is flow-critical and always-send, exactly as `v6 Email Verification`'s
+ *     own description states. A v6 copy of this journey would differ from v5's
+ *     in nothing and add a second template to keep in step.
+ *
+ * The five verification events share ONE activity, exactly as they do in the
+ * legacy map, and are told apart by `str:cm:verified-status` alone. FIVE branch
+ * values, one per event — verified / unverified / rejected / givbacksEligible /
+ * revoked. The four-value reading, which omits `unverified`, is the bug: it
+ * collapsed AC5's badge removal onto AC6's 'rejected' so the removal sent the
+ * application-rejected email with an empty reason. See that event's own comment
+ * in notificationService.ts, and note v5's journey has the same five.
+ */
+export const ORTTO_EVENT_NAMES_V6: Partial<
+  Record<NOTIFICATIONS_EVENT_NAMES, string>
+> = {
+  [NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED]: 'v6-donation-received',
+  [NOTIFICATIONS_EVENT_NAMES.DRAFTED_PROJECT_ACTIVATED]: 'v6-project-live',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_LISTED]: 'v6-project-listed',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_UNLISTED]: 'v6-project-unlisted',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_CANCELLED]: 'v6-project-cancelled',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED]: 'v6-project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED]: 'v6-project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED]: 'v6-project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED]:
+    'v6-project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED]:
+    'v6-project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT]:
+    'v6-project-update',
+  [NOTIFICATIONS_EVENT_NAMES.SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW]:
+    'v6-email-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING]: 'v6-update-warning',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_LAST_WARNING]:
+    'v6-update-last-warning',
+};
+
+/**
+ * Which Ortto activity an event resolves to. `undefined` means the event has no
+ * activity at all and no Ortto call may be made for it.
+ */
+export const resolveOrttoActivitySlug = (
+  eventName: NOTIFICATIONS_EVENT_NAMES,
+  useV6Activities?: boolean,
+): string | undefined =>
+  (useV6Activities ? ORTTO_EVENT_NAMES_V6[eventName] : undefined) ??
+  ORTTO_EVENT_NAMES[eventName];
