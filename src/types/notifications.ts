@@ -13,6 +13,13 @@ export enum NOTIFICATIONS_EVENT_NAMES {
   PROJECT_BOOSTED = 'Project boosted',
   PROJECT_BOOSTED_BY_PROJECT_OWNER = 'Project boosted by project owner',
   PROJECT_VERIFIED = 'Project verified',
+  // v5 ONLY. impact-graph still fires this (NotificationCenterAdapter
+  // `projectGivbacksEligible`, sendEmail: true) and v5 stays live alongside v6,
+  // so the event, its `projectGivbacksEligible` validator and its ORTTO-category
+  // seed row must all keep existing. v6 uses GIVBACKS_ELIGIBILITY_GRANTED below
+  // instead; the two are deliberately separate so v6's copy can change without
+  // touching v5's live journey.
+  PROJECT_GIVBACKS_ELIGIBLE = 'Project givbacks eligible',
   PROJECT_VERIFIED_USERS_WHO_SUPPORT = 'Project verified - Users who supported',
 
   // https://github.com/Giveth/impact-graph/issues/624#issuecomment-1240364389
@@ -78,6 +85,7 @@ export const ORTTO_EVENT_NAMES = {
   [NOTIFICATIONS_EVENT_NAMES.MADE_DONATION]: 'donation-made',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_VERIFIED]: 'project-verification',
+  [NOTIFICATIONS_EVENT_NAMES.PROJECT_GIVBACKS_ELIGIBLE]: 'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKED]: 'project-verification',
   // giveth-v6-core#439 AC4. Rides the existing `project-verification` activity
   // rather than a new one: the template already branches on
@@ -86,12 +94,6 @@ export const ORTTO_EVENT_NAMES = {
   // has to be provisioned in the Ortto workspace beyond that template branch.
   [NOTIFICATIONS_EVENT_NAMES.GIVBACKS_ELIGIBILITY_GRANTED]:
     'project-verification',
-  // giveth-v6-core#439 AC9: the ONLY supporter-facing email in v6 — "a project
-  // you supported posted an update". v5 registered this notification type but
-  // never gave it an Ortto activity, so it only ever produced an in-app
-  // notification; the mapping below is what lets it become an email.
-  [NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT]:
-    'project-update-added',
   [NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED]:
     'project-verification',
   [NOTIFICATIONS_EVENT_NAMES.PROJECT_BADGE_REVOKE_WARNING]:
@@ -149,7 +151,9 @@ export const ORTTO_EVENT_NAMES = {
  * existing activity, because a `v6-` id that exists nowhere in the workspace
  * would 400. Three reasons for being absent, none of them an oversight:
  *
- *   - NOT SENT BY v6 (the GIVpower rank events): inert either way.
+ *   - NOT SENT BY v6 (the GIVpower rank events, and `Project givbacks
+ *     eligible`, which is v5's GIVbacks-badge event — v6 sends
+ *     `GIVbacks eligibility granted` instead): inert either way.
  *   - SENDS NO EMAIL: `Sync Ortto contact` is ORTTO-category and upserts a
  *     contact, so it has no journey to reach.
  *   - TRANSACTIONAL, AND SHARING v5's JOURNEY IS CORRECT:
@@ -163,6 +167,14 @@ export const ORTTO_EVENT_NAMES = {
  *     is flow-critical and always-send, exactly as `v6 Email Verification`'s
  *     own description states. A v6 copy of this journey would differ from v5's
  *     in nothing and add a second template to keep in step.
+ *
+ * ONE event runs the other way: `Project update added - Users who supported`
+ * appears ONLY here and has no legacy id at all. v5 has no Ortto activity for
+ * it (it produces an in-app notification only, and impact-graph sends it with
+ * neither `sendEmail` nor `sendSegment`), so giving it a legacy id would create
+ * a v5 email that has never existed — a trap waiting for the first v5 caller
+ * that sets `sendEmail`. Without the flag it resolves to nothing and no Ortto
+ * call is made, which is exactly v5's current behaviour.
  *
  * The five verification events share ONE activity, exactly as they do in the
  * legacy map, and are told apart by `str:cm:verified-status` alone. FIVE branch
