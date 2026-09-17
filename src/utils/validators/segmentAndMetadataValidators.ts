@@ -277,7 +277,14 @@ export const SEGMENT_METADATA_SCHEMA_VALIDATOR: {
     metadata: projectTitleProjectLinkSchema,
     segment: projectRelatedTrackerSchema,
   },
-  // giveth-v6-core#439 AC4 — the GIVbacks-eligible badge grant. Same shape as
+  // v5 ONLY — impact-graph's `Project givbacks eligible` row points at this
+  // key. Kept while v5 runs alongside v6; without it `sendNotification` finds
+  // no segment validator and never calls Ortto.
+  projectGivbacksEligible: {
+    metadata: projectTitleProjectLinkSchema,
+    segment: projectRelatedTrackerSchema,
+  },
+  // giveth-v6-core#439 AC4 — v6's GIVbacks-eligible badge grant. Same shape as
   // the verified badge; only the Ortto `verified-status` differs.
   givbacksEligibilityGranted: {
     metadata: projectTitleProjectLinkSchema,
