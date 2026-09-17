@@ -32,7 +32,11 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_BADGE_REVOKE_LAST_WARNING: 'projectBadgeRevokeLastWarning',
   PROJECT_BADGE_UP_FOR_REVOKING: 'projectBadgeUpForRevoking',
   PROJECT_VERIFIED: 'projectVerified',
-  // giveth-v6-core#439 AC4 — the GIVbacks-eligible badge grant.
+  // v5 ONLY — the schemaValidator stored on impact-graph's seeded
+  // `Project givbacks eligible` row. v5 stays live alongside v6, so this key
+  // must keep resolving or that email silently stops.
+  PROJECT_GIVBACKS_ELIGIBLE: 'projectGivbacksEligible',
+  // giveth-v6-core#439 AC4 — v6's own GIVbacks-eligible badge grant.
   GIVBACKS_ELIGIBILITY_GRANTED: 'givbacksEligibilityGranted',
   PROJECT_UNVERIFIED: 'projectUnverified',
   PROJECT_UNVERIFIED_WHO_SUPPORTED: 'projectUnverifiedWhoSupported',
