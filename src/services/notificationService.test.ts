@@ -228,6 +228,50 @@ describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
     });
   });
 
+  /**
+   * v5 is NOT being switched off when v6 goes live — both run side by side
+   * until v6 is proven — so impact-graph's own GIVbacks-badge event has to
+   * keep working exactly as it does today. It is a DIFFERENT event from v6's
+   * GIVBACKS_ELIGIBILITY_GRANTED above, backed by a different seeded
+   * notification_type row (`Project givbacks eligible`, ORTTO category,
+   * schemaValidator `projectGivbacksEligible`) that is live in the shared
+   * database right now.
+   *
+   * Three things have to line up or the email dies silently, and all three are
+   * asserted here: the enum member (else `activityCreator` hits `default:`),
+   * the legacy activity mapping (else it returns undefined), and the validator
+   * key (else `sendNotification` finds no segment validator and skips Ortto
+   * entirely). Deleting any one of them is a one-line change that no other
+   * test would catch.
+   */
+  describe('PROJECT_GIVBACKS_ELIGIBLE (v5)', () => {
+    it("reaches v5's legacy project-verification activity", () => {
+      const result = activityCreator(
+        projectPayload,
+        NOTIFICATIONS_EVENT_NAMES.PROJECT_GIVBACKS_ELIGIBLE,
+        MICRO_SERVICES.givethio,
+      );
+
+      expect(result).to.not.equal(undefined);
+      expect(result.activities[0].activity_id).to.equal(
+        'act:cm:project-verification',
+      );
+      expect(
+        result.activities[0].attributes['str:cm:verified-status'],
+      ).to.equal('givbacksEligible');
+    });
+
+    it('keeps the validator key its seeded notification_type row points at', () => {
+      const schema =
+        SEGMENT_METADATA_SCHEMA_VALIDATOR.projectGivbacksEligible?.segment;
+      expect(schema).to.not.equal(undefined);
+      expect(schema).to.not.equal(null);
+      expect(() =>
+        validateWithJoiSchema(projectPayload, schema!),
+      ).to.not.throw();
+    });
+  });
+
   // AC9: the only supporter-facing email in v6.
   describe('PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT', () => {
     const supporterPayload = {
@@ -237,16 +281,17 @@ describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
       update: 'We reached the first well',
     };
 
-    it('builds a project-update-added activity pointing at the updates tab', () => {
+    it('builds a v6-project-update activity pointing at the updates tab', () => {
       const result = activityCreator(
         supporterPayload,
         NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
         MICRO_SERVICES.givethio,
+        true,
       );
 
       expect(result).to.not.equal(undefined);
       expect(result.activities[0].activity_id).to.equal(
-        'act:cm:project-update-added',
+        'act:cm:v6-project-update',
       );
       expect(result.activities[0].attributes).to.deep.equal({
         'str:cm:projecttitle': 'Clean Water',
@@ -263,10 +308,29 @@ describe('v6 event-triggered emails (giveth-v6-core#439)', () => {
         supporterPayload,
         NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
         MICRO_SERVICES.givethio,
+        true,
       );
       expect(result.activities[0].fields['str::email']).to.equal(
         'donor@example.com',
       );
+    });
+
+    /**
+     * v5 stays live alongside v6, and this event is the one v6 email that has
+     * NO v5 counterpart: impact-graph fires it for every donor of the project
+     * (in-app only, no `sendEmail`/`sendSegment`) and Ortto has no legacy
+     * activity for it. Giving it a legacy id would invent a v5 email that has
+     * never existed, waiting on the first v5 caller that sets `sendEmail`. So
+     * without the flag it must resolve to nothing at all.
+     */
+    it('makes NO Ortto call on the v5 path', () => {
+      expect(
+        activityCreator(
+          supporterPayload,
+          NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
+          MICRO_SERVICES.givethio,
+        ),
+      ).to.equal(undefined);
     });
 
     it('has a segment validator that accepts the update title', () => {
@@ -509,15 +573,15 @@ describe('ORTTO_EVENT_NAMES_V6 overlay', () => {
         ),
       ),
     ).to.equal('act:cm:v6-project-update');
+    // No legacy counterpart on purpose — see 'makes NO Ortto call on the v5
+    // path' above.
     expect(
-      activityId(
-        activityCreator(
-          supporterPayload,
-          NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
-          MICRO_SERVICES.givethio,
-        ),
+      activityCreator(
+        supporterPayload,
+        NOTIFICATIONS_EVENT_NAMES.PROJECT_ADD_AN_UPDATE_USERS_WHO_SUPPORT,
+        MICRO_SERVICES.givethio,
       ),
-    ).to.equal('act:cm:project-update-added');
+    ).to.equal(undefined);
   });
 
   it('AC10/AC11 verification code: v6 reaches its own journey', () => {
@@ -685,31 +749,30 @@ describe('project-verification verified-status routing', () => {
    * This switch's attributes are SHARED — only the activity id is overlaid —
    * and impact-graph fires PROJECT_UNVERIFIED itself (NotificationCenterAdapter,
    * `sendEmail: true`, from the admin panel's verified -> unverified) without
-   * the flag. So a value changed here reaches v5's live journey, 2,298
-   * delivered. An assertion on the v6 path alone pins the CHANGED v5 path as
-   * correct and the regression is invisible by construction; this case is what
-   * makes it visible.
+   * the flag. v5 stays live alongside v6, so a value changed here reaches v5's
+   * live journey, 2,298 delivered. An assertion on the v6 path alone would pin
+   * a changed v5 path as correct and the regression would be invisible by
+   * construction; this case is what makes it visible.
    *
-   * v5 keeps 'rejected' even though its own `unverified` branch is switched ON
-   * with 0 sends against `rejected`'s 135 — v5 has the same defect. Fixing it
-   * changes which copy real v5 users receive and belongs in a v5 change.
+   * Both paths send 'unverified', which is what v5 has always sent. The two
+   * apps differ in the ACTIVITY they reach, never in this value.
    */
-  it('leaves the v5 path on its existing value', () => {
+  it('sends the same value on the v5 path as on the v6 path', () => {
     expect(
       statusOf(NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED, false),
-    ).to.equal('rejected');
+    ).to.equal('unverified');
     expect(
       statusOf(NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED, true),
     ).to.equal('unverified');
   });
 
   /**
-   * PROJECT_UNVERIFIED is the ONLY attribute anywhere in this switch that may
-   * differ between v5 and v6. Everything else is shared on purpose, so gating
-   * a second thing by copy-paste silently forks v5's routing.
+   * NO attribute anywhere in this switch may differ between v5 and v6 — v5 is
+   * still live, and `activityCreator`'s attributes are shared on purpose.
+   * Gating one by copy-paste silently forks v5's routing.
    *
    * Deliberately NOT written over the `expected` table or over
-   * `str:cm:verified-status`: that covers 4 of the switch's 23 arms and one
+   * `str:cm:verified-status`: that covers 5 of the switch's arms and one
    * attribute out of all of them, so gating `str:cm:donationamount` on
    * DONATION_RECEIVED, or `txt:cm:reason` anywhere, would fork v5 and still
    * pass. It walks EVERY event the switch handles and compares the WHOLE
@@ -718,7 +781,7 @@ describe('project-verification verified-status routing', () => {
    * `activity_id` is excluded because overlaying it is the entire point of
    * `ORTTO_EVENT_NAMES_V6`; only `attributes` must match.
    */
-  it('keeps every attribute of every other event identical for v5 and v6', () => {
+  it('keeps every attribute of every event identical for v5 and v6', () => {
     // A union of every field any arm of the switch reads, so one payload
     // satisfies all 23. `date` is fixed — the one arm that builds a Date reads
     // it from here, never from the clock, so the two calls stay comparable.
@@ -753,9 +816,7 @@ describe('project-verification verified-status routing', () => {
         ?.activities?.[0]?.attributes;
 
     const handled = Object.values(NOTIFICATIONS_EVENT_NAMES).filter(
-      eventName =>
-        eventName !== NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED &&
-        attributesOf(eventName, false) !== undefined,
+      eventName => attributesOf(eventName, false) !== undefined,
     );
 
     // Guards the loop itself: an `activityCreator` that started returning
