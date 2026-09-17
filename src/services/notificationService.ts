@@ -187,6 +187,21 @@ export const activityCreator = (
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
+    // v5 ONLY — impact-graph's GIVbacks-badge grant, unchanged from before
+    // giveth-v6-core#439. It resolves to the LEGACY `project-verification`
+    // activity (it has no `ORTTO_EVENT_NAMES_V6` entry and v5 never sends the
+    // flag), so it keeps hitting v5's live journey exactly as it does today.
+    // v6 sends GIVBACKS_ELIGIBILITY_GRANTED instead — same
+    // `verified-status` literal, different event, different journey.
+    case NOTIFICATIONS_EVENT_NAMES.PROJECT_GIVBACKS_ELIGIBLE:
+      attributes = {
+        'str:cm:projecttitle': payload.title,
+        'str:cm:email': payload.email,
+        'str:cm:projectlink': payload.projectLink,
+        'str:cm:verified-status': 'givbacksEligible',
+        'str:cm:userid': payload.userId?.toString(),
+      };
+      break;
     case NOTIFICATIONS_EVENT_NAMES.VERIFICATION_FORM_REJECTED:
       attributes = {
         'str:cm:projecttitle': payload.title,
@@ -199,10 +214,9 @@ export const activityCreator = (
       break;
     // giveth-v6-core#439 AC5: the VERIFIED BADGE being removed, which is a
     // different event from an application being rejected (AC6) and has its own
-    // email. Both sent 'rejected', so a badge removal got the
-    // application-rejected template — whose reason slot is fed by
-    // `txt:cm:reason`, set only on the FORM_REJECTED branch, so it rendered
-    // empty — while the branch written for this case never ran at all.
+    // email. The two are told apart by `str:cm:verified-status` alone —
+    // 'unverified' here, 'rejected' on the FORM_REJECTED branch, which is also
+    // the only branch that sets `txt:cm:reason`.
     //
     // Read off the live journeys, not inferred (2026-09-10): BOTH
     // `v6 Project Verification` and v5's `Project Verification` branch on
@@ -212,28 +226,21 @@ export const activityCreator = (
     // EXACTLY; a mismatch fails silently, since the attribute is a free-text
     // `str:` so Ortto returns 2xx, no branch matches and nothing sends.
     //
-    // ⚠️ GATED ON THE FLAG, and this is the one attribute in this switch that
-    // is. Everything above it is shared, and impact-graph (v5) fires THIS event
-    // too — `NotificationCenterAdapter` with `sendEmail: true`, from the admin
-    // panel's verified -> unverified transition — without ever sending
-    // `orttoV6Activities`. So an ungated change here silently repoints v5's
-    // live production journey (2,298 delivered), which is the exact failure
-    // `ORTTO_EVENT_NAMES_V6` exists to prevent.
-    //
-    // ⚠️ v5 HAS THE SAME DEFECT AND IS DELIBERATELY LEFT WITH IT. Its
-    // `unverified` branch is switched ON and has sent 0 emails since the
-    // journey was published (2025-07-04) while its `rejected` branch has sent
-    // 135 — i.e. every v5 badge removal has been getting the wrong email, with
-    // an empty reason, for over a year. Dropping this gate fixes that. It is
-    // not dropped here because it changes which copy real v5 users receive,
-    // which belongs in a v5 change with its own review, not smuggled into a v6
-    // ticket. Both paths are pinned, so removing the gate is a deliberate act.
+    // NOT gated on `useV6Activities`, deliberately. impact-graph (v5) fires
+    // this event too — `NotificationCenterAdapter.projectUnVerified` with
+    // `sendEmail: true`, from the admin panel's verified -> unverified
+    // transition — and v5 stays live alongside v6. Sending anything other than
+    // 'unverified' without the flag would change which copy v5's real users
+    // receive (it would give them the application-rejected template with an
+    // empty reason), which is not this ticket's to change. Both apps send the
+    // same literal to their own journey; only the ACTIVITY id differs, and
+    // that is what `ORTTO_EVENT_NAMES_V6` handles.
     case NOTIFICATIONS_EVENT_NAMES.PROJECT_UNVERIFIED:
       attributes = {
         'str:cm:projecttitle': payload.title,
         'str:cm:email': payload.email,
         'str:cm:projectlink': payload.projectLink,
-        'str:cm:verified-status': useV6Activities ? 'unverified' : 'rejected',
+        'str:cm:verified-status': 'unverified',
         'str:cm:userid': payload.userId?.toString(),
       };
       break;
