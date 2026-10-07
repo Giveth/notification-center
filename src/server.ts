@@ -1,5 +1,4 @@
 import express, { Application } from 'express';
-import swaggerUi from 'swagger-ui-express';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -58,15 +57,15 @@ export const initServer = async () => {
   app.use(cors(corsOptions));
 
   app.use(bodyParser.json());
-  app.use(
-    '/docs',
-    swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: '/swagger.json',
-      },
-    }),
-  );
+  // app.use(
+  //   '/docs',
+  //   swaggerUi.serve,
+  //   swaggerUi.setup(undefined, {
+  //     swaggerOptions: {
+  //       url: '/swagger.json',
+  //     },
+  //   }),
+  // );
 
   app.use(v1Router);
 
