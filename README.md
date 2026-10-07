@@ -1,95 +1,173 @@
-It's forked from https://github.com/Giveth/apiGive
 # Notification Center
-This is a microservice for managing notifications for both https://giveth.io and other Dapps notifications
 
-[Used Technologies](#Used_Technologies)
+## 1. Project Overview
 
-[Installation](#Installation)
+### Purpose
+The Notification Center is a microservice designed to manage notifications for Giveth.io and other DApps. It provides a centralized system for handling various types of notifications across different platforms.
 
-[Test](#Test)
+### Key Features
+- Centralized notification management
+- Support for multiple DApps
+- RESTful API interface
+- Real-time notification delivery
+- Customizable notification settings
 
-[Logs](#Logs)
+### Live Links
+- Production: [https://notification.giveth.io/](https://notification.giveth.io/)
+- Staging: [https://notification.serve.giveth.io/](https://notification.serve.giveth.io/)
 
-[Migrations](#Migrations)
+## 2. Architecture Overview
 
-[References](#References)
-
-### Used_Technologies
-* Nodejs **v16** (You can use `nvm use` command to load appropriate Node version by `nvm`)
-* Typescript **v4.5.2**
-* DB: postgres **v14.2**
-* DB ORM: TypeORM **v0.3.6**
-* Redis **v5.0.9**
-* API protocol : REST
-* Web application: Express **v4.17.3**
-* Deployment: docker-compose **v3.3**
-* API Documentation: Swagger
-* Test framework: Mocha **v9.2.2**
-* CI/CD tools : [GitHub Actions](https://github.com/Giveth/notification-center/blob/staging/.github/workflows/CI-CD.yml)
-
-### Installation and Run
-
-* `git clone git@github.com:Giveth/notification-center.git`
-* `cd notification-center`
-* `npm ci`
-* Bringing up database, you can install that in other way, but I suggest
-  using docker `docker-compose -f docker-compose-local-postgres-redis.ym up -d`
-* Creat a file named `development.env` based on [Env example file](./config/example.env) and put it in `./config`
-* Run [Migrations](#Migrations)
-* `npm start`
-* Now you can browse [Swagger](http:localhost:3040/docs)
-
-### Test
-You should have a postgress instance up in order to running tests so you can use  [Local DB docker-compose](./docker-compose-local-postgres-redis.ym)
-* `npm run test`
-
-### Logs
-
-In localhost and test we put logs in console and file but in production and staging we just use file for writing logs You can see logs beautifully with this command
-
-* `npm i -g bunyan`
-* `tail -f logs/notification-center.log | bunyan`
-
-### Migrations
-
-#### Create new Migration file
-
-```
-typeorm migration:create ./migrations/createNotificationTable
+### System Diagram
+```mermaid
+graph TD
+    A[Client Applications] --> B[Notification Center API]
+    B --> C[PostgreSQL Database]
+    B --> D[Redis Cache]
+    B --> E[External Services]
+    E --> G[Ortto Email Services]
 ```
 
+### Tech Stack
+- **Runtime**: Node.js v16
+- **Language**: TypeScript v4.5.2
+- **Database**: PostgreSQL v14.2
+- **ORM**: TypeORM v0.3.6
+- **Caching**: Redis v5.0.9
+- **API Framework**: Express v4.17.3
+- **Containerization**: Docker Compose v3.3
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Mocha v9.2.2
+- **CI/CD**: GitHub Actions
 
-#### Then you need to run the migrations like so
+### Data Flow
+1. Client applications send notification requests to the API
+2. Requests are validated and processed through middleware
+3. Notifications are stored in PostgreSQL
+4. Real-time notifications are cached in Redis
+5. Notifications are delivered to appropriate users through Ortto API to send emails and manage tags
 
-```
-npm run db:migrate:run:local
+## 3. Getting Started
+
+### Prerequisites
+- Node.js v16 (use `nvm use` to load appropriate version)
+- Docker and Docker Compose
+- PostgreSQL v14.2
+- Redis v5.0.9
+
+### Installation Steps
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:Giveth/notification-center.git
+   cd notification-center
+   ```
+
+2. Install dependencies:
+   ```bash
+   yarn i
+   ```
+
+3. Set up the development environment:
+   ```bash
+   docker-compose -f docker-compose-local-postgres-redis.yml up -d
+   ```
+
+4. Configure environment variables:
+   - Copy `config/example.env` to `config/development.env`
+   - Update the values in `development.env` as needed
+
+5. Run database migrations:
+   ```bash
+   yarn run db:migrate:run:local
+   ```
+
+6. Start the development server:
+   ```bash
+   yarn start
+   ```
+
+7. Access the API documentation at [http://localhost:3040/docs](http://localhost:3040/docs)
+
+## 4. Usage Instructions
+
+### Running the Application
+- Development: `yarn start`
+- Staging: `yarn run start:server:staging`
+- Production: `yarn run start:server:production`
+
+### Testing
+```bash
+# Run all tests
+yarn run test
+
+# Run specific test files
+yarn run test:notificationRepository
+yarn run test:notificationSettingRepository
 ```
 
-#### If you want to revert last migration
+### Database Management
+- Create new migration:
+  ```bash
+  typeorm migration:create ./migrations/createNotificationTable
+  ```
+- Run migrations:
+  ```bash
+  yarn run db:migrate:run:local
+  ```
+- Revert last migration:
+  ```bash
+  yarn run db:migrate:revert:local
+  ```
 
-```
-npm run db:migrate:revert:local
-```
+## 5. Deployment Process
 
-#### Create Third party in DB
-As we can't put inserting third parties in migration, I put a query sample here, we can use it in prod
+### Environments
+- **Development**: Local development environment
+- **Staging**: Pre-production testing environment
+- **Production**: Live production environment
 
-```
-  INSERT INTO public.third_party(
-  "microService", secret, "isActive")
-  VALUES ('givethio', 'givethio_secret', true);
-```
+### Deployment Steps
+1. Build the application:
+   ```bash
+   yarn run build
+   ```
 
-#### Local test
-If you use mock jwt authentication adapter you can use accessToken
-```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNBZGRyZXNzIjoiMHgxMUJFNTVGNGVBNDFFOTlBM2ZiMDZBRGRBNTA3ZDk5ZDdiYjBhNTcxIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDIyLTA5LTIzVDA4OjA5OjA2LjQ1N1oiLCJqdGkiOiIxNjYxMzI4NTQ2NDU3LTc1YzNhNGI2YWUiLCJpYXQiOjE2NjEzMjg1NDYsImV4cCI6MTY2MzkyMDU0Nn0.Tdd2f7bCMtg3F1ojX1AQQpJ7smTU7vR7Nixromr0ju4
-```
+2. Run database migrations:
+   ```bash
+   yarn run db:migrate:run:production
+   ```
+
+3. Start the server:
+   ```bash
+   yarn run start:server:production
+   ```
+
+### CI/CD Integration
+The project uses GitHub Actions for continuous integration and deployment. The workflow is defined in `.github/workflows/{main-staging}-pipeline.yml`.
+
+## 6. Troubleshooting
+
+### Common Issues
+1. **Database Connection Issues**
+   - Verify PostgreSQL is running
+   - Check environment variables
+   - Ensure migrations are up to date
+
+2. **Redis Connection Issues**
+   - Verify Redis is running
+   - Check Redis configuration
+   - Ensure proper network connectivity
+
+### Logs and Debugging
+- Install bunyan for better log visualization:
+  ```bash
+  yarn i -g bunyan
+  ```
+- View logs:
+  ```bash
+  tail -f logs/notification-center.log | bunyan
+  ```
 
 ## References
-
-I used these articles for writing project
-
-* https://blog.logrocket.com/linting-typescript-using-eslint-and-prettier
-
-* https://rsbh.dev/blog/rest-api-with-express-typescript
+- [Linting TypeScript using ESLint and Prettier](https://blog.logrocket.com/linting-typescript-using-eslint-and-prettier)
+- [REST API with Express TypeScript](https://rsbh.dev/blog/rest-api-with-express-typescript)

@@ -24,6 +24,13 @@ export interface SendNotificationRequest {
    */
   sendSegment: boolean;
   /**
+   * giveth-v6-core#439 — resolve this event through `ORTTO_EVENT_NAMES_V6`,
+   * reaching v6's own Ortto journey rather than the legacy journey v5 shares
+   * over the same credential. Optional; absent keeps the legacy activity.
+   * @example true
+   */
+  orttoV6Activities?: boolean;
+  /**
    * @example 1667992708000
    * @description milliseconds
    */

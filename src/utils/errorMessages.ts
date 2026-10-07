@@ -184,4 +184,7 @@ export const errorMessages = {
   ERROR_IN_GETTING_ACCESS_TOKEN_BY_AUTHORIZATION_CODE:
     'Error in getting accessToken by authorization code',
   ORTTO_SPECIFIC: 'Ortto specific notification',
+  ORTTO_CONTACT_SYNC_FAILED: 'Failed to upsert the Ortto contact',
+  ORTTO_CONTACT_SYNC_INVALID_PAYLOAD:
+    'Ortto contact sync requires a segment payload',
 };

@@ -15,6 +15,7 @@ export const SCHEMA_VALIDATORS_NAMES = {
   SEND_EMAIL_CONFIRMATION: 'sendEmailConfirmation',
   SEND_USER_EMAIL_CONFIRMATION_CODE_FLOW: 'sendUserEmailConfirmationCodeFlow',
   CREATE_ORTTO_PROFILE: 'createOrttoProfile',
+  SYNC_ORTTO_CONTACT: 'syncOrttoContact',
   SUBSCRIBE_ONBOARDING: 'subscribeOnboarding',
   SUPERFLUID: 'userSuperTokensCritical',
   ADMIN_MESSAGE: 'adminMessage',
@@ -31,7 +32,12 @@ export const SCHEMA_VALIDATORS_NAMES = {
   PROJECT_BADGE_REVOKE_LAST_WARNING: 'projectBadgeRevokeLastWarning',
   PROJECT_BADGE_UP_FOR_REVOKING: 'projectBadgeUpForRevoking',
   PROJECT_VERIFIED: 'projectVerified',
+  // v5 ONLY — the schemaValidator stored on impact-graph's seeded
+  // `Project givbacks eligible` row. v5 stays live alongside v6, so this key
+  // must keep resolving or that email silently stops.
   PROJECT_GIVBACKS_ELIGIBLE: 'projectGivbacksEligible',
+  // giveth-v6-core#439 AC4 — v6's own GIVbacks-eligible badge grant.
+  GIVBACKS_ELIGIBILITY_GRANTED: 'givbacksEligibilityGranted',
   PROJECT_UNVERIFIED: 'projectUnverified',
   PROJECT_UNVERIFIED_WHO_SUPPORTED: 'projectUnverifiedWhoSupported',
   PROJECT_ACTIVATED: 'projectActivated',

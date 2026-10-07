@@ -23,3 +23,5 @@ config/production.env
 
 *.log
 *.log.*
+
+.cursor/*
