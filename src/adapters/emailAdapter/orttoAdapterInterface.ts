@@ -20,10 +20,25 @@ export interface CallOrttoActivityOptions {
   timeoutMs?: number;
 }
 
+// A person field and the value a contact must hold in it to match.
+export interface OrttoContactMatch {
+  fieldId: string;
+  value: string;
+}
+
 export interface OrttoAdapterInterface {
   callOrttoActivity(
     data: any,
     microService: string,
     options?: CallOrttoActivityOptions,
   ): Promise<OrttoActivityResult>;
+
+  // impact-graph#2348: whether the contact matching `match` has been claimed by
+  // v6 (carries `bol:cm:sourced-from-v6`). `false` when no matching contact
+  // carries it — including when there is no matching contact at all — and
+  // `undefined` when the lookup itself failed, so the caller can fail safe.
+  isV6ClaimedContact(
+    match: OrttoContactMatch,
+    microService: string,
+  ): Promise<boolean | undefined>;
 }

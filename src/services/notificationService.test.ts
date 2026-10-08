@@ -1,5 +1,11 @@
 import { expect } from 'chai';
-import { activityCreator } from './notificationService';
+import {
+  activityCreator,
+  ORTTO_MERGE_STRATEGY_APPEND_ONLY,
+  protectV6ClaimedContact,
+} from './notificationService';
+import { getEmailAdapter } from '../adapters/adapterFactory';
+import { OrttoMockAdapter } from '../adapters/emailAdapter/orttoMockAdapter';
 import {
   NOTIFICATIONS_EVENT_NAMES,
   ORTTO_EVENT_NAMES_V6,
@@ -59,7 +65,7 @@ describe('activityCreator', () => {
   });
 
   // giveth-v6-core#426 — the contact sync's cross-layer contract with v6-core.
-  it('builds the SYNC_ORTTO_CONTACT activity: identity-only, dedicated inert activity, merges on the v6 user id, stamps the sourced-from-v6 marker', () => {
+  it('builds the SYNC_ORTTO_CONTACT activity: identity-only, dedicated inert activity, merges on the v6 user id then the email, stamps the sourced-from-v6 marker', () => {
     // Names in the payload are ignored — the sync is identity-only.
     const payload = {
       email: 'contact@example.com',
@@ -87,7 +93,9 @@ describe('activityCreator', () => {
           },
         },
       ],
-      merge_by: ['str:cm:v6-user-id'],
+      // giveth-v6-core#486: the email is the fallback, so a first sync claims
+      // the person's existing legacy contact instead of creating a twin.
+      merge_by: ['str:cm:v6-user-id', 'str::email'],
     });
   });
 
@@ -100,9 +108,13 @@ describe('activityCreator', () => {
         NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
         MICRO_SERVICES.givethio,
       );
-      // Never merges by email (that would create a duplicate on re-point), and
-      // never falls through to the generic prod block's 'str:cm:user-id'.
-      expect(result.merge_by).to.deep.equal(['str:cm:v6-user-id']);
+      // The v6 id comes FIRST (a re-point must update the contact it already
+      // owns, not whichever one holds the new address), and it never falls
+      // through to the generic prod block's 'str:cm:user-id'.
+      expect(result.merge_by).to.deep.equal([
+        'str:cm:v6-user-id',
+        'str::email',
+      ]);
       expect(result.activities[0].fields).to.deep.equal({
         'str::email': 'contact@example.com',
         'str:cm:v6-user-id': '7',
@@ -117,6 +129,165 @@ describe('activityCreator', () => {
         process.env.ENVIRONMENT = original;
       }
     }
+  });
+});
+
+const withEnv = async (
+  overrides: Record<string, string | undefined>,
+  run: () => unknown,
+) => {
+  const originals: Record<string, string | undefined> = {};
+  for (const [key, value] of Object.entries(overrides)) {
+    originals[key] = process.env[key];
+    if (value === undefined) delete process.env[key];
+    else process.env[key] = value;
+  }
+  try {
+    await run();
+  } finally {
+    for (const [key, value] of Object.entries(originals)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+};
+
+const donationReceivedPayload = {
+  isRecurringDonation: false,
+  title: 'Project',
+  amount: 10,
+  token: 'DAI',
+  email: 'owner@example.com',
+  projectLink: 'https://giveth.io/project/p',
+  verified: true,
+  transactionLink: 'https://explorer/tx',
+  userId: 42,
+};
+
+describe('one matching rule for every v6 path (giveth-v6-core#486)', () => {
+  it('addresses a v6 email by its recipient email in production, never by v5 user id', async () => {
+    await withEnv({ ENVIRONMENT: 'production' }, () => {
+      const result = activityCreator(
+        donationReceivedPayload,
+        NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED,
+        MICRO_SERVICES.givethio,
+        true,
+      );
+      expect(result.merge_by).to.deep.equal(['str::email']);
+      expect(result.activities[0].fields).to.deep.equal({
+        'str::email': 'owner@example.com',
+      });
+      expect(result).to.not.have.property('merge_strategy');
+    });
+  });
+
+  it('addresses a v6 email the same way outside production', async () => {
+    await withEnv({ ENVIRONMENT: 'staging' }, () => {
+      const result = activityCreator(
+        donationReceivedPayload,
+        NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED,
+        MICRO_SERVICES.givethio,
+        true,
+      );
+      expect(result.merge_by).to.deep.equal(['str::email']);
+    });
+  });
+
+  it('leaves the v5 production path keyed on the v5 user id (impact-graph#2348 AC4)', async () => {
+    await withEnv({ ENVIRONMENT: 'production' }, () => {
+      const result = activityCreator(
+        donationReceivedPayload,
+        NOTIFICATIONS_EVENT_NAMES.DONATION_RECEIVED,
+        MICRO_SERVICES.givethio,
+      );
+      expect(result.merge_by).to.deep.equal(['str:cm:user-id']);
+      expect(result.activities[0].fields).to.deep.equal({
+        'str::email': 'owner@example.com',
+        'str:cm:user-id': '42',
+      });
+    });
+  });
+});
+
+describe('protectV6ClaimedContact (impact-graph#2348)', () => {
+  const originalAdapter = process.env.EMAIL_ADAPTER;
+  let mock: OrttoMockAdapter;
+
+  const v5ProductionActivity = () => ({
+    activities: [
+      {
+        activity_id: 'act:cm:donation-received',
+        attributes: {},
+        fields: { 'str::email': 'v5@example.com', 'str:cm:user-id': '42' },
+      },
+    ],
+    merge_by: ['str:cm:user-id'],
+  });
+
+  before(() => {
+    process.env.EMAIL_ADAPTER = 'mock';
+    mock = getEmailAdapter() as OrttoMockAdapter;
+  });
+
+  after(() => {
+    if (originalAdapter === undefined) delete process.env.EMAIL_ADAPTER;
+    else process.env.EMAIL_ADAPTER = originalAdapter;
+  });
+
+  beforeEach(() => {
+    // The factory hands out a singleton; reset its knobs between tests.
+    mock.claimedValues = new Set();
+    mock.claimLookupFails = false;
+    mock.claimLookups = [];
+  });
+
+  it('AC2: a v6-claimed contact gets the activity append-only, so its address and ids stay v6s', async () => {
+    const data: any = v5ProductionActivity();
+    mock.claimedValues.add('42');
+    await protectV6ClaimedContact(data, MICRO_SERVICES.givethio);
+    expect(data.merge_strategy).to.equal(ORTTO_MERGE_STRATEGY_APPEND_ONLY);
+    // AC1: the activity (and the email it triggers) still goes out unchanged.
+    expect(data.activities[0].fields).to.deep.equal({
+      'str::email': 'v5@example.com',
+      'str:cm:user-id': '42',
+    });
+    expect(mock.claimLookups).to.deep.equal([
+      { fieldId: 'str:cm:user-id', value: '42' },
+    ]);
+  });
+
+  it('AC4: an unclaimed contact gets the request byte-for-byte as before', async () => {
+    const data = v5ProductionActivity();
+    await protectV6ClaimedContact(data, MICRO_SERVICES.givethio);
+    expect(data).to.deep.equal(v5ProductionActivity());
+  });
+
+  it('fails safe to append-only when the lookup fails', async () => {
+    const data: any = v5ProductionActivity();
+    mock.claimLookupFails = true;
+    await protectV6ClaimedContact(data, MICRO_SERVICES.givethio);
+    expect(data.merge_strategy).to.equal(ORTTO_MERGE_STRATEGY_APPEND_ONLY);
+  });
+
+  it('skips the lookup when the request merges by email (the address cannot change)', async () => {
+    const data = {
+      activities: [{ fields: { 'str::email': 'a@example.com' } }],
+      merge_by: ['str::email'],
+    };
+    await protectV6ClaimedContact(data, MICRO_SERVICES.givethio);
+    expect(mock.claimLookups).to.deep.equal([]);
+    expect(data).to.not.have.property('merge_strategy');
+  });
+
+  it('skips the lookup for the v6 contact sync', async () => {
+    const data = activityCreator(
+      { email: 'c@example.com', userId: 7 },
+      NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT,
+      MICRO_SERVICES.givethio,
+    );
+    await protectV6ClaimedContact(data, MICRO_SERVICES.givethio);
+    expect(mock.claimLookups).to.deep.equal([]);
+    expect(data).to.not.have.property('merge_strategy');
   });
 });
 

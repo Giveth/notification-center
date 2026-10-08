@@ -2,6 +2,7 @@ import { logger } from '../../utils/logger';
 import {
   OrttoActivityResult,
   OrttoAdapterInterface,
+  OrttoContactMatch,
 } from './orttoAdapterInterface';
 
 export class OrttoMockAdapter implements OrttoAdapterInterface {
@@ -24,5 +25,19 @@ export class OrttoMockAdapter implements OrttoAdapterInterface {
       activityIds,
     });
     return this.nextResult;
+  }
+
+  // Lets a test say which contacts v6 has claimed (by the matched value), or
+  // make the lookup fail outright; by default nothing is claimed.
+  public claimedValues = new Set<string>();
+  public claimLookupFails = false;
+  public claimLookups: OrttoContactMatch[] = [];
+
+  async isV6ClaimedContact(
+    match: OrttoContactMatch,
+  ): Promise<boolean | undefined> {
+    this.claimLookups.push(match);
+    if (this.claimLookupFails) return undefined;
+    return this.claimedValues.has(match.value);
   }
 }

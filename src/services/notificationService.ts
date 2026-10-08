@@ -322,6 +322,14 @@ export const activityCreator = (
   // canonical-email change re-points the SAME Ortto person instead of creating
   // a duplicate. It also stamps the durable `bol:cm:sourced-from-v6` marker so
   // v6-managed contacts stay distinguishable from legacy v5-sourced ones.
+  //
+  // giveth-v6-core#486: the email is the FALLBACK merge key. A person v6 has
+  // never synced has no `str:cm:v6-user-id` on any contact, so the first sync
+  // finds their legacy v5 contact by address and claims it (stamping the v6 id
+  // and marker onto it) instead of creating a duplicate beside it. Every later
+  // sync then matches on the v6 id first, so a re-point still updates that same
+  // contact. Ortto's activity API takes the second merge_by entry as exactly
+  // this: used only when the first matches no one.
   if (orttoEventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT) {
     return {
       activities: [
@@ -335,14 +343,22 @@ export const activityCreator = (
           },
         },
       ],
-      merge_by: ['str:cm:v6-user-id'],
+      merge_by: ['str:cm:v6-user-id', 'str::email'],
     };
   }
   const fields = {
     'str::email': payload.email,
   };
   const merge_by = [];
+  // giveth-v6-core#486: a v6 email is addressed by its recipient's EMAIL on
+  // every environment, never by `str:cm:user-id`. That field is v5's merge key
+  // and holds v5 user ids; v6 would fill it with a v6 id, landing on whichever
+  // legacy contact carries that number (a different person once v6 mints ids of
+  // its own) and overwriting its address. Merging by email lands on the very
+  // contact the #426 sync keeps on the same address, and never changes any
+  // contact's address — only the sync does that.
   if (
+    useV6Activities !== true &&
     process.env.ENVIRONMENT === 'production' &&
     orttoEventName !== NOTIFICATIONS_EVENT_NAMES.SEND_EMAIL_CONFIRMATION &&
     orttoEventName !== NOTIFICATIONS_EVENT_NAMES.NOTIFY_REWARD_AMOUNT &&
@@ -363,6 +379,44 @@ export const activityCreator = (
     ],
     merge_by,
   };
+};
+
+// v5's (impact-graph's) merge key: it holds v5 user ids.
+const V5_MERGE_KEY = 'str:cm:user-id';
+// Ortto's "append only" merge strategy: person fields that already have a
+// value are left alone; only empty ones are filled. The activity itself (its
+// attributes, and any journey it triggers) is recorded either way.
+export const ORTTO_MERGE_STRATEGY_APPEND_ONLY = 1;
+
+/**
+ * impact-graph#2348: a v5 event must not change the identity of a contact v6
+ * has claimed. Only the production v5 path needs this: it merges on v5's user
+ * id and sends `str::email`, which would overwrite the address v6 computed for
+ * the person. (Merging by email can't change an address — it IS the address —
+ * and v6 events never merge on `str:cm:user-id`.)
+ *
+ * When the contact carries v6's marker, the activity is sent "append only", so
+ * it still lands on the contact and still triggers its email, but the address
+ * stays v6's. When the lookup fails the same applies: protecting v6's address
+ * outweighs one missed address update on an unclaimed contact. An unclaimed
+ * contact gets the request exactly as before.
+ */
+export const protectV6ClaimedContact = async (
+  data: any,
+  microService: string,
+): Promise<void> => {
+  if (!Array.isArray(data?.merge_by) || !data.merge_by.includes(V5_MERGE_KEY)) {
+    return;
+  }
+  const v5UserId = data.activities?.[0]?.fields?.[V5_MERGE_KEY];
+  if (!v5UserId) return;
+  const claimed = await getEmailAdapter().isV6ClaimedContact(
+    { fieldId: V5_MERGE_KEY, value: String(v5UserId) },
+    microService,
+  );
+  if (claimed !== false) {
+    data.merge_strategy = ORTTO_MERGE_STRATEGY_APPEND_ONLY;
+  }
 };
 
 export const sendNotification = async (
@@ -476,6 +530,7 @@ export const sendNotification = async (
       body.orttoV6Activities,
     );
     if (data) {
+      await protectV6ClaimedContact(data, microService);
       const orttoResult = await getEmailAdapter().callOrttoActivity(
         data,
         microService,

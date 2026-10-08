@@ -4,6 +4,7 @@ import {
   CallOrttoActivityOptions,
   OrttoActivityResult,
   OrttoAdapterInterface,
+  OrttoContactMatch,
 } from './orttoAdapterInterface';
 import { MICRO_SERVICES } from '../../utils/utils';
 
@@ -17,16 +18,12 @@ export class OrttoAdapter implements OrttoAdapterInterface {
       if (!data) {
         throw new Error('callOrttoActivity input data is empty');
       }
-      const apiKey =
-        microService === MICRO_SERVICES.qacc
-          ? process.env.QACC_ORTTO_API_KEY
-          : process.env.ORTTO_API_KEY;
       const config: Record<string, any> = {
         method: 'post',
         maxBodyLength: Infinity,
         url: process.env.ORTTO_ACTIVITY_API,
         headers: {
-          'X-Api-Key': apiKey as string,
+          'X-Api-Key': resolveOrttoApiKey(microService),
           'Content-Type': 'application/json',
         },
         data,
@@ -76,4 +73,86 @@ export class OrttoAdapter implements OrttoAdapterInterface {
       return { ok: false, retryable, status, responseBody };
     }
   }
+
+  async isV6ClaimedContact(
+    match: OrttoContactMatch,
+    microService: string,
+  ): Promise<boolean | undefined> {
+    const url = resolveOrttoPersonGetUrl();
+    if (!url) {
+      logger.error('isV6ClaimedContact: no Ortto person-get URL configured', {
+        microService,
+      });
+      return undefined;
+    }
+    try {
+      const response = await axios.request({
+        method: 'post',
+        url,
+        headers: {
+          'X-Api-Key': resolveOrttoApiKey(microService),
+          'Content-Type': 'application/json',
+        },
+        timeout: resolveOrttoLookupTimeoutMs(),
+        data: {
+          // More than one is possible while duplicates exist (#486); the
+          // contact counts as claimed if ANY match carries the marker, since
+          // an update could land on any of them.
+          limit: 10,
+          fields: [match.fieldId, V6_SOURCED_MARKER],
+          filter: {
+            '$str::is': { field_id: match.fieldId, value: match.value },
+          },
+        },
+      });
+      const contacts = response?.data?.contacts;
+      return (
+        Array.isArray(contacts) &&
+        contacts.some(
+          (contact: any) => contact?.fields?.[V6_SOURCED_MARKER] === true,
+        )
+      );
+    } catch (e) {
+      // Never log the matched value — it identifies a person.
+      logger.error('isV6ClaimedContact error', {
+        microService,
+        fieldId: match.fieldId,
+        status: axios.isAxiosError(e) ? e.response?.status : undefined,
+        message: e instanceof Error ? e.message : String(e),
+      });
+      return undefined;
+    }
+  }
 }
+
+// The durable marker giveth-v6-core#426 stamps on every contact v6 manages.
+const V6_SOURCED_MARKER = 'bol:cm:sourced-from-v6';
+
+const DEFAULT_ORTTO_LOOKUP_TIMEOUT_MS = 10_000;
+
+const resolveOrttoLookupTimeoutMs = (): number => {
+  const parsed = Number(process.env.ORTTO_REQUEST_TIMEOUT_MS);
+  return Number.isFinite(parsed) && parsed > 0
+    ? parsed
+    : DEFAULT_ORTTO_LOOKUP_TIMEOUT_MS;
+};
+
+const resolveOrttoApiKey = (microService: string): string =>
+  (microService === MICRO_SERVICES.qacc
+    ? process.env.QACC_ORTTO_API_KEY
+    : process.env.ORTTO_API_KEY) as string;
+
+// `ORTTO_PERSON_GET_API` when set; otherwise the person-get endpoint on the
+// same Ortto host the activity API already points at, so an instance that can
+// send activities can look contacts up without new configuration.
+export const resolveOrttoPersonGetUrl = (): string | undefined => {
+  if (process.env.ORTTO_PERSON_GET_API) {
+    return process.env.ORTTO_PERSON_GET_API;
+  }
+  if (!process.env.ORTTO_ACTIVITY_API) return undefined;
+  try {
+    return new URL('/v1/person/get', process.env.ORTTO_ACTIVITY_API).toString();
+  } catch {
+    return undefined;
+  }
+};
