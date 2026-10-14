@@ -279,6 +279,19 @@ describe('protectV6ClaimedContact (impact-graph#2348)', () => {
     expect(data).to.not.have.property('merge_strategy');
   });
 
+  it('skips the lookup for every caller but giveth.io (qacc writes to its own workspace)', async () => {
+    mock.claimedValues.add('42');
+    for (const microService of [
+      MICRO_SERVICES.qacc,
+      MICRO_SERVICES.notifyReward,
+    ]) {
+      const data = v5ProductionActivity();
+      await protectV6ClaimedContact(data, microService);
+      expect(data).to.deep.equal(v5ProductionActivity());
+    }
+    expect(mock.claimLookups).to.deep.equal([]);
+  });
+
   it('skips the lookup for the v6 contact sync', async () => {
     const data = activityCreator(
       { email: 'c@example.com', userId: 7 },

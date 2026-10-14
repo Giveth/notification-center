@@ -93,7 +93,9 @@ export class OrttoAdapter implements OrttoAdapterInterface {
           'X-Api-Key': resolveOrttoApiKey(microService),
           'Content-Type': 'application/json',
         },
-        timeout: resolveOrttoLookupTimeoutMs(),
+        // Its own short timeout, not the activity's: every v5 email waits on
+        // this lookup, and a slow one fails safe (append-only) anyway.
+        timeout: ORTTO_CLAIM_LOOKUP_TIMEOUT_MS,
         data: {
           // More than one is possible while duplicates exist (#486); the
           // contact counts as claimed if ANY match carries the marker, since
@@ -128,14 +130,9 @@ export class OrttoAdapter implements OrttoAdapterInterface {
 // The durable marker giveth-v6-core#426 stamps on every contact v6 manages.
 const V6_SOURCED_MARKER = 'bol:cm:sourced-from-v6';
 
-const DEFAULT_ORTTO_LOOKUP_TIMEOUT_MS = 10_000;
-
-const resolveOrttoLookupTimeoutMs = (): number => {
-  const parsed = Number(process.env.ORTTO_REQUEST_TIMEOUT_MS);
-  return Number.isFinite(parsed) && parsed > 0
-    ? parsed
-    : DEFAULT_ORTTO_LOOKUP_TIMEOUT_MS;
-};
+// How long a v5 email may wait on the v6-claim lookup before it is sent
+// append-only (the safe side) instead.
+export const ORTTO_CLAIM_LOOKUP_TIMEOUT_MS = 2_500;
 
 const resolveOrttoApiKey = (microService: string): string =>
   (microService === MICRO_SERVICES.qacc

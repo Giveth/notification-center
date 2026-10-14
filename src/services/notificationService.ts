@@ -323,13 +323,14 @@ export const activityCreator = (
   // a duplicate. It also stamps the durable `bol:cm:sourced-from-v6` marker so
   // v6-managed contacts stay distinguishable from legacy v5-sourced ones.
   //
-  // giveth-v6-core#486: the email is the FALLBACK merge key. A person v6 has
-  // never synced has no `str:cm:v6-user-id` on any contact, so the first sync
-  // finds their legacy v5 contact by address and claims it (stamping the v6 id
-  // and marker onto it) instead of creating a duplicate beside it. Every later
-  // sync then matches on the v6 id first, so a re-point still updates that same
-  // contact. Ortto's activity API takes the second merge_by entry as exactly
-  // this: used only when the first matches no one.
+  // giveth-v6-core#486: the email is listed as a second merge key, but do not
+  // rely on it to find a legacy contact. Ortto's activities/create docs call it
+  // a backup for when the first field is "not available", which may mean
+  // absent from the request — and this request always carries the v6 id. So
+  // v6-core claims the person's existing contact itself before sending this
+  // (person/merge by v6 id, then email, with `find_strategy` 0, which Ortto
+  // does document as trying each key in turn), and this activity then matches
+  // that contact on the v6 id.
   if (orttoEventName === NOTIFICATIONS_EVENT_NAMES.SYNC_ORTTO_CONTACT) {
     return {
       activities: [
@@ -393,7 +394,9 @@ export const ORTTO_MERGE_STRATEGY_APPEND_ONLY = 1;
  * has claimed. Only the production v5 path needs this: it merges on v5's user
  * id and sends `str::email`, which would overwrite the address v6 computed for
  * the person. (Merging by email can't change an address — it IS the address —
- * and v6 events never merge on `str:cm:user-id`.)
+ * and v6 events never merge on `str:cm:user-id`.) Only giveth.io's own sends
+ * are checked: every other caller either merges by email or, like qacc, writes
+ * to a separate workspace v6 never marks — so they never pay for the lookup.
  *
  * When the contact carries v6's marker, the activity is sent "append only", so
  * it still lands on the contact and still triggers its email, but the address
@@ -405,6 +408,7 @@ export const protectV6ClaimedContact = async (
   data: any,
   microService: string,
 ): Promise<void> => {
+  if (microService !== MICRO_SERVICES.givethio) return;
   if (!Array.isArray(data?.merge_by) || !data.merge_by.includes(V5_MERGE_KEY)) {
     return;
   }

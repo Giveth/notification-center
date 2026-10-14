@@ -1,6 +1,6 @@
 import * as http from 'http';
 import { expect } from 'chai';
-import { OrttoAdapter } from './orttoAdapter';
+import { ORTTO_CLAIM_LOOKUP_TIMEOUT_MS, OrttoAdapter } from './orttoAdapter';
 import { MICRO_SERVICES } from '../../utils/utils';
 
 // giveth-v6-core#426: the contact sync needs callOrttoActivity to distinguish a
@@ -213,6 +213,32 @@ describe('OrttoAdapter.isV6ClaimedContact', () => {
         MICRO_SERVICES.givethio,
       ),
     ).to.equal(undefined);
+  });
+
+  it('gives up after its own short timeout, not the activity one, so the email is not held up', async () => {
+    const origTimeout = process.env.ORTTO_REQUEST_TIMEOUT_MS;
+    process.env.ORTTO_REQUEST_TIMEOUT_MS = '60000';
+    let pending: http.ServerResponse | undefined;
+    respond = res => {
+      pending = res; // never answers
+    };
+    const started = Date.now();
+    try {
+      expect(
+        await new OrttoAdapter().isV6ClaimedContact(
+          match,
+          MICRO_SERVICES.givethio,
+        ),
+      ).to.equal(undefined);
+      const elapsed = Date.now() - started;
+      expect(elapsed).to.be.at.least(ORTTO_CLAIM_LOOKUP_TIMEOUT_MS - 100);
+      expect(elapsed).to.be.below(ORTTO_CLAIM_LOOKUP_TIMEOUT_MS + 1_500);
+    } finally {
+      pending?.end('{}');
+      if (origTimeout === undefined)
+        delete process.env.ORTTO_REQUEST_TIMEOUT_MS;
+      else process.env.ORTTO_REQUEST_TIMEOUT_MS = origTimeout;
+    }
   });
 
   it('prefers ORTTO_PERSON_GET_API when it is set', async () => {
