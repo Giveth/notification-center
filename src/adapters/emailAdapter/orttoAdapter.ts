@@ -85,6 +85,15 @@ export class OrttoAdapter implements OrttoAdapterInterface {
       });
       return undefined;
     }
+    // Its own short limit, not the activity's: every v5 email waits on this
+    // lookup, and a slow one fails safe (append-only) anyway. Axios' `timeout`
+    // is only a socket idle timeout (it misses DNS / connect, and a body that
+    // trickles in), so a wall-clock abort is what actually bounds the wait.
+    const abort = new AbortController();
+    const abortTimer = setTimeout(
+      () => abort.abort(),
+      ORTTO_CLAIM_LOOKUP_TIMEOUT_MS,
+    );
     try {
       const response = await axios.request({
         method: 'post',
@@ -93,9 +102,8 @@ export class OrttoAdapter implements OrttoAdapterInterface {
           'X-Api-Key': resolveOrttoApiKey(microService),
           'Content-Type': 'application/json',
         },
-        // Its own short timeout, not the activity's: every v5 email waits on
-        // this lookup, and a slow one fails safe (append-only) anyway.
         timeout: ORTTO_CLAIM_LOOKUP_TIMEOUT_MS,
+        signal: abort.signal,
         data: {
           // More than one is possible while duplicates exist (#486); the
           // contact counts as claimed if ANY match carries the marker, since
@@ -108,12 +116,25 @@ export class OrttoAdapter implements OrttoAdapterInterface {
         },
       });
       const contacts = response?.data?.contacts;
-      return (
+      const claimed =
         Array.isArray(contacts) &&
         contacts.some(
           (contact: any) => contact?.fields?.[V6_SOURCED_MARKER] === true,
-        )
-      );
+        );
+      if (claimed) return true;
+      // `false` means every matching contact was seen and none is claimed. A
+      // reply without a contacts list, or with more matches than one page
+      // holds, leaves unseen contacts that might be — so it is unknown.
+      if (!Array.isArray(contacts) || response?.data?.has_more === true) {
+        logger.error('isV6ClaimedContact: incomplete Ortto response', {
+          microService,
+          fieldId: match.fieldId,
+          hasContacts: Array.isArray(contacts),
+          hasMore: response?.data?.has_more,
+        });
+        return undefined;
+      }
+      return false;
     } catch (e) {
       // Never log the matched value — it identifies a person.
       logger.error('isV6ClaimedContact error', {
@@ -123,6 +144,8 @@ export class OrttoAdapter implements OrttoAdapterInterface {
         message: e instanceof Error ? e.message : String(e),
       });
       return undefined;
+    } finally {
+      clearTimeout(abortTimer);
     }
   }
 }
