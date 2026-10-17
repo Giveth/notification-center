@@ -215,6 +215,65 @@ describe('OrttoAdapter.isV6ClaimedContact', () => {
     ).to.equal(undefined);
   });
 
+  it('is undefined when it could not see every match, so the caller can fail safe', async () => {
+    respond = reply({
+      contacts: [{ id: 'a', fields: { 'bol:cm:sourced-from-v6': false } }],
+      has_more: true,
+    });
+    expect(
+      await new OrttoAdapter().isV6ClaimedContact(
+        match,
+        MICRO_SERVICES.givethio,
+      ),
+    ).to.equal(undefined);
+    respond = reply({});
+    expect(
+      await new OrttoAdapter().isV6ClaimedContact(
+        match,
+        MICRO_SERVICES.givethio,
+      ),
+    ).to.equal(undefined);
+  });
+
+  it('is still true when a claimed contact shows up on a partial page', async () => {
+    respond = reply({
+      contacts: [{ id: 'a', fields: { 'bol:cm:sourced-from-v6': true } }],
+      has_more: true,
+    });
+    expect(
+      await new OrttoAdapter().isV6ClaimedContact(
+        match,
+        MICRO_SERVICES.givethio,
+      ),
+    ).to.equal(true);
+  });
+
+  it('gives up on a reply that keeps trickling in, which the socket idle timeout alone never ends', async () => {
+    let pending: http.ServerResponse | undefined;
+    let drip: NodeJS.Timeout | undefined;
+    respond = res => {
+      pending = res;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.write(' ');
+      drip = setInterval(() => res.write(' '), 200);
+    };
+    const started = Date.now();
+    try {
+      expect(
+        await new OrttoAdapter().isV6ClaimedContact(
+          match,
+          MICRO_SERVICES.givethio,
+        ),
+      ).to.equal(undefined);
+      const elapsed = Date.now() - started;
+      expect(elapsed).to.be.at.least(ORTTO_CLAIM_LOOKUP_TIMEOUT_MS - 100);
+      expect(elapsed).to.be.below(ORTTO_CLAIM_LOOKUP_TIMEOUT_MS + 1_500);
+    } finally {
+      clearInterval(drip);
+      pending?.end('{}');
+    }
+  });
+
   it('gives up after its own short timeout, not the activity one, so the email is not held up', async () => {
     const origTimeout = process.env.ORTTO_REQUEST_TIMEOUT_MS;
     process.env.ORTTO_REQUEST_TIMEOUT_MS = '60000';
