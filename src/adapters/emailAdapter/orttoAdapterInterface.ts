@@ -36,7 +36,8 @@ export interface OrttoAdapterInterface {
   // impact-graph#2348: whether the contact matching `match` has been claimed by
   // v6 (carries `bol:cm:sourced-from-v6`). `false` when no matching contact
   // carries it — including when there is no matching contact at all — and
-  // `undefined` when the lookup itself failed, so the caller can fail safe.
+  // `undefined` when the lookup failed or could not see every match, so the
+  // caller can fail safe.
   isV6ClaimedContact(
     match: OrttoContactMatch,
     microService: string,
