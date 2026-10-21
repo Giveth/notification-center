@@ -29,6 +29,27 @@ notificationRouter.post(
 );
 
 notificationRouter.post(
+  '/thirdParty/userErasure',
+  authenticateThirdPartyServiceToken,
+  async (req: Request, res: Response, next) => {
+    const { microService } = res.locals;
+    try {
+      const result = await notificationsController.purgeErasedUserData(
+        req.body,
+        { microService },
+      );
+      return sendStandardResponse({ res, result });
+    } catch (e) {
+      // Never log the body: it is the erased account's wallets and emails.
+      logger.error('/thirdParty/userErasure error', {
+        error: (e as Error)?.message,
+      });
+      next(e);
+    }
+  },
+);
+
+notificationRouter.post(
   '/thirdParty/notificationsBulk',
   authenticateThirdPartyServiceToken,
   async (req: Request, res: Response, next) => {
