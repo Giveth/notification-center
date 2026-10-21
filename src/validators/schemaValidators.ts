@@ -26,6 +26,23 @@ const throwHttpErrorIfJoiValidatorFails = (
   }
 };
 
+// Giveth v6 account erasure (giveth-v6-core#501). A delete-by-match, so the
+// values are matched as stored data and never validated as formats: an erased
+// account's wallets go whatever chain they are on, and its emails go whatever
+// shape the legacy data gave them (a strict email check would reject the
+// request forever and the purge would never finish). The core sends at most
+// 100 of each per request; the caps only bound the request size.
+export const userErasureValidator = Joi.object({
+  walletAddresses: Joi.array()
+    .items(Joi.string().trim().min(1).max(200))
+    .max(1000)
+    .required(),
+  emails: Joi.array()
+    .items(Joi.string().trim().min(1).max(320))
+    .max(1000)
+    .required(),
+});
+
 export const countUnreadValidator = Joi.object({
   walletAddress: Joi.alternatives().try(
     Joi.string().required().pattern(ethereumWalletAddressRegex),
