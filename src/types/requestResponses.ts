@@ -84,6 +84,27 @@ export interface SendNotificationResponse extends BaseNotificationResponse {
   message?: string;
 }
 
+export interface UserErasureRequest {
+  /**
+   * Every wallet address of the erased account (any case).
+   * @example ["0x1111111111111111111111111111111111111111"]
+   */
+  walletAddresses: string[];
+
+  /**
+   * Every email address of the erased account (any case).
+   * @example ["someone@example.com"]
+   */
+  emails: string[];
+}
+
+export interface UserErasureResponse {
+  success: boolean;
+  notifications: number;
+  notificationSettings: number;
+  userAddresses: number;
+}
+
 export interface GetNotificationsResponse extends BaseNotificationResponse {
   notifications: Notification[];
   count: number;
