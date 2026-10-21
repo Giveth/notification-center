@@ -16,6 +16,7 @@ import {
   countUnreadValidator,
   sendBulkNotificationValidator,
   sendNotificationValidator,
+  userErasureValidator,
   validateWithJoiSchema,
 } from '../../validators/schemaValidators';
 import {
@@ -26,6 +27,8 @@ import {
   SendNotificationResponse,
   SendNotificationRequest,
   sendBulkNotificationRequest,
+  UserErasureRequest,
+  UserErasureResponse,
 } from '../../types/requestResponses';
 import { errorMessages } from '../../utils/errorMessages';
 import {
@@ -36,6 +39,7 @@ import {
 } from '../../repositories/notificationRepository';
 import { UserAddress } from '../../entities/userAddress';
 import { createNewUserAddressIfNotExists } from '../../repositories/userAddressRepository';
+import { purgeErasedUserData } from '../../repositories/userErasureRepository';
 import { sendNotification } from '../../services/notificationService';
 import { StandardError } from '../../types/StandardError';
 
@@ -65,6 +69,38 @@ export class NotificationsController {
       });
       throw e;
     }
+  }
+
+  /**
+   * Giveth v6 account erasure (giveth-v6-core#501): delete the calling
+   * micro-service's notifications and notification settings for an erased
+   * account's wallets and emails. Idempotent.
+   */
+  @Post('/thirdParty/userErasure')
+  @Security('basicAuth')
+  public async purgeErasedUserData(
+    @Body()
+    body: UserErasureRequest,
+    @Inject()
+    params: {
+      microService: string;
+    },
+  ): Promise<UserErasureResponse> {
+    const { walletAddresses, emails } = validateWithJoiSchema(
+      body,
+      userErasureValidator,
+    );
+    const result = await purgeErasedUserData({
+      walletAddresses,
+      emails,
+      microService: params.microService,
+    });
+    // Counts only: the request itself is personal data and is never logged.
+    logger.info('purgeErasedUserData() done', {
+      microService: params.microService,
+      ...result,
+    });
+    return { success: true, ...result };
   }
 
   @Post('/thirdParty/notificationsBulk')
